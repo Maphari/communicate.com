@@ -1,0 +1,26 @@
+.features-container {
+  padding: 2.5rem 4.5rem;
+
+  &__header {
+    position: relative;
+    &::after {
+      @include after-element;
+    }
+    &__h1 {
+      font-size: 35px;
+      font-weight: 900;
+      color: $GRAY-COLOR;
+    }
+  }
+
+  &__info {
+    &-more {
+      &__head {
+        position: relative;
+        &::after {
+          @include after-element;
+        }
+      }
+    }
+  }
+}

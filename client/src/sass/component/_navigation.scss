@@ -1,0 +1,142 @@
+.navigation-container {
+  width: 100%;
+  height: 100dvh;
+  background: url("https://images.pexels.com/photos/7706567/pexels-photo-7706567.jpeg?auto=compress&cs=tinysrgb&dpr=1");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  position: relative;
+  padding: 2.5rem 4.5rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 95vw;
+    height: 100dvh;
+    background: linear-gradient(to right, rgb(0, 0, 0), rgba(255, 0, 0, 0));
+    z-index: 50;
+    opacity: 0.7;
+  }
+
+  &__header {
+    position: inherit;
+    z-index: 100;
+    color: $WHITE-COLOR;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: $SECONDARY-FONT-POPPINS;
+
+    &-main {
+      font-size: 24px;
+      font-weight: 900;
+    }
+    &-links {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.7rem;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.link {
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.active-nav {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 90%;
+    left: 40%;
+    width: 20%;
+    height: 5px;
+    background-color: $PRIMARY-COLOR;
+    animation: load 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+    border-radius: 50px;
+
+    @keyframes load {
+      0% {
+        left: 0;
+      }
+      100% {
+        left: 40%;
+      }
+    }
+  }
+}
+.head {
+  position: relative;
+  z-index: 100;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    height: 0.2rem;
+    width: 100%;
+    background-color: $PRIMARY-COLOR;
+    z-index: 100;
+    border-radius: 50px;
+  }
+}
+.showcase-container {
+  font-family: $PRIMARY-FONT-LATO;
+  color: $WHITE-COLOR;
+  margin: 7rem 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  &__header {
+    font-size: 60px;
+    font-weight: 900;
+  }
+
+  p {
+    opacity: 0.5;
+    font-weight: 400;
+  }
+}
+
+.glassy-background {
+  position: relative;
+  z-index: 100;
+  overflow: hidden;
+  width: 40vw;
+  padding: 1.5rem;
+}
+
+.glassy-background::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0.255),
+    rgba(255, 255, 255, 0.1)
+  );
+}
+
+.glassy-background::after {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  filter: blur(10px);
+}

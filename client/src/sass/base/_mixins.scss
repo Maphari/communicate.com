@@ -1,0 +1,10 @@
+@mixin after-element {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 5%;
+  height: 0.4rem;
+  background-color: $PRIMARY-COLOR;
+  border-radius: 50px;
+}

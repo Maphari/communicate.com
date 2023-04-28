@@ -1,0 +1,12 @@
+.vehicleShowcase-container {
+  padding: 2.5rem 4.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  img {
+    width: 40rem;
+  }
+}

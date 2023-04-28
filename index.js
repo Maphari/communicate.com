@@ -4,9 +4,12 @@ import mongoose from "mongoose";
 import privateKeys from "./privateKeys/privateKeys.js";
 import cookieSession from "cookie-session";
 import passport from "passport";
+import route from "./routes/authRoutes.js";
 const app = express();
 
 mongoose.connect(privateKeys.MONGODB_URI);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(
   cookieSession({
     name: "session",
@@ -14,8 +17,7 @@ app.use(
     keys: [privateKeys.SESSION_KEY],
   })
 );
-app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(route);
 app.listen(privateKeys.PORT);

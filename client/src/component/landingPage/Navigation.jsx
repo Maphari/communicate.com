@@ -24,13 +24,13 @@ export function Navigation() {
 
           <div className="flex items-center flex-wrap gap-2 navigation-container__header-buttons">
             <Link
-              to=""
+              to="/account/login"
               className="p-2 font-medium hover:text-yellow-500 rounded link"
             >
               Login
             </Link>
             <Link
-              to=""
+              to="/account/register"
               className="p-2 font-medium hover:bg-yellow-600 bg-yellow-500 text-white transition-all duration-700 ease-out"
             >
               Create accout

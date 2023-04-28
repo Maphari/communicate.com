@@ -1,7 +1,51 @@
 @media (width <= 61.25rem) {
+  .process-container,
+  .whychoose-container,
+  .vehicleShowcase-container {
+    padding: 2.5rem 2rem;
+  }
+
+  .whychoose-container__body-header {
+    font-size: 6vw;
+  }
+
+  .features-container__info {
+    margin: 0;
+  }
+  .whychoose-containerr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .whychoose-container {
+    text-align: center;
+  }
+  .vehicleShowcase-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    &__inner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+      h1 {
+        text-align: center;
+      }
+    }
+    img {
+      min-width: 10rem;
+    }
+  }
+  .goals-container__inner {
+    padding: 2.5rem 2rem;
+  }
   .navigation-container {
     padding: 1.5rem;
-    height: auto !important;
 
     &__header-links,
     &__header-buttons {
@@ -61,7 +105,7 @@
     .navigation-container {
       height: auto;
       &::before {
-        height: auto;
+        height: 100%;
       }
 
       &__bottom {
@@ -94,12 +138,6 @@
 @media (width <= 55.875rem) {
   .features-container {
     padding: 2rem;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    flex-wrap: wrap;
   }
   .footer-container {
     padding: 2rem;

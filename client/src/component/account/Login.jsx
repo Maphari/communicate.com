@@ -1,14 +1,14 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 // BOOTSTRAP IMPORTS
 import { InputGroup, Form, Col } from "react-bootstrap";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { toast } from "react-toastify";
 import GoogleLogoImage from "../../assets/google-logo.png";
 import SpotifyLogoImage from "../../assets/spotify-logo.png";
-import axios from "axios";
 
-export const Register = () => {
+export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -68,30 +68,35 @@ export const Register = () => {
     });
   };
 
-  const handleCreateUser = async (e) => {
+  const handleLogIn = async (e) => {
     try {
       e.preventDefault();
-
-      const user = await fetch("/api/v1/auth/signup_user", {
+      const res = await fetch("/api/v1/auth/signin_user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = await user.json();
+      const data = await res.json();
 
-      if (data?.exist === true) {
-        toastNotificationError("User already exists login");
-        navigate("/account/login");
+      if (data.exist === false) {
+        toastNotificationError(data.errorMessage);
+        navigate("/account/register", { replace: true });
       } else if (data?.session) {
-        toastNotificationSuccess(data?.message);
-        localStorage.setItem("sessionID", data?.session);
+        localStorage.setItem("sessionID", data.session);
+        toastNotificationSuccess(data.message);
         navigate("/home", { replace: true });
       } else {
-        toastNotificationError(data?.message);
-        navigate("/account/register", { replace: true });
+        toastNotificationError(data.errorMessage);
+        navigate("/account/login", { replace: true });
       }
     } catch (error) {
-      setMessageERROR(error.message);
+      if (error.response && error.response.status === 401) {
+        setMessageERROR("Invalid username or password");
+      } else {
+        setMessageERROR(
+          "An unexpected error occurred. Please try again later. Or refresh the page"
+        );
+      }
     }
   };
 
@@ -109,7 +114,6 @@ export const Register = () => {
     localStorage.setItem("spotify-token", clientid);
   }
 
-
   useEffect(() => {
     if (userToken || spotifyToken || googleToken) {
       navigate("/home", { replace: true });
@@ -120,12 +124,12 @@ export const Register = () => {
     <>
       <div className="signup-container">
         <Form
-          onSubmit={handleCreateUser}
+          onSubmit={handleLogIn}
           className="drop-shadow-2xl rounded was-validated"
         >
           <div className="signup-container__top">
             <div className="mb-3">
-              <h1 className="signup-container__top-header">Create account</h1>
+              <h1 className="signup-container__top-header">Login</h1>
               <p className="signup-container__top-para">
                 Please provide you details
               </p>
@@ -188,10 +192,9 @@ export const Register = () => {
               <span className="text-sky-600">terms</span> and{" "}
               <span className="text-sky-600">conditions</span>
             </p>
-
             <button
               type="submit"
-              className=" bg-yellow-500 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-yellow-600"
+              className=" bg-yellow-500 hover:bg-yellow-600 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg"
             >
               <i className="fa-solid fa-envelope text-lg"></i>
               <span className="text-md">Continue with email</span>
@@ -217,12 +220,12 @@ export const Register = () => {
               </div>
             </div>
             <div className="flex items-center justify-center gap-1 p-2 mb-2">
-              <p>Already have an account with us ?</p>
+              <p>Don't have an account with us ?</p>
               <Link
-                to="/account/login"
+                to="/account/register"
                 className="text-md text-yellow-500 hover:text-yellow-600 font-bold"
               >
-                login
+                Register
               </Link>
             </div>
           </div>

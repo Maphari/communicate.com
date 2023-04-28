@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 import passport from "passport";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import privateKeys from "../privateKeys/privateKeys";
+import privateKeys from "../privateKeys/privateKeys.js";
 const route = express.Router();
-const User = mongoose.model("User");
+const User = mongoose.model("user");
 
 // GOOGLE AUTHENTICATION ROUTES
 route.get(
@@ -42,7 +42,7 @@ route.post("/api/v1/auth/signup_user", async function (req, res) {
         password: password,
       });
 
-      const token = jwt.sign({ userId: newUser._id }, process.env.MY_SECRET, {
+      const token = jwt.sign({ userId: newUser._id }, privateKeys.MY_SECRET, {
         expiresIn: "24",
       });
       newUser.clientID = token;
@@ -60,7 +60,7 @@ route.post("/api/v1/auth/signup_user", async function (req, res) {
         user: newUser,
       });
     } else {
-      const token = jwt.sign({ userId: user._id }, process.env.MY_SECRET, {
+      const token = jwt.sign({ userId: user._id }, privateKeys.MY_SECRET, {
         expiresIn: "24h",
       });
       user.clientID = token;

@@ -1,48 +1,51 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
+import bcrypt from "bcrypt";
 
 const userSchema = new Schema({
   clientID: String,
-  ProfilePicture: String,
   name: String,
+  profilePicture: String,
   email: {
     type: String,
-    required: [true, "Email is required"],
-    unique: [true, "Email is already taken"],
+    required: [true, "email is required"],
+    unique: [true, "Email already taken"],
     lowecase: true,
     validate: {
-      validator: function (email) {
-        const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-        return emailRegex.test(email);
+      validator: (email) => {
+        return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
       },
-      message: "Please provide a valid email address",
+      message: "Please enter a valid email address",
     },
   },
   password: {
     type: String,
-    required: [true, "Password is required"],
-    minlength: [8, "Password must be at least 8 characters"],
     validate: {
-      validator: function (password) {
-        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password);
+      validator: (password) => {
+        return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/.test(
+          password
+        );
       },
-      message: "Please enter a valid password",
+      message:
+        "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character",
     },
   },
 });
 
-// Hash the password before saving it to the database
-userSchema.pre("save", async function (next) {
-  try {
-    if (!this.isModified("password")) {
-      return next();
-    }
-    const hashed = await bcrypt.hash(this.password, 10);
-    this.password = hashed;
-    return next();
-  } catch (err) {
-    return next(err);
-  }
+userSchema.pre("save", function (next) {
+  const user = this;
+  // only hash the password if it has been modified or is new
+  if (!user.isModified("password")) return next();
+  // generate a salt
+  bcrypt.genSalt(10, function (err, salt) {
+    if (err) return next(err);
+    // hash the password using our new salt
+    bcrypt.hash(user.password, salt, function (err, hash) {
+      if (err) return next(err);
+      // override the cleartext password with the hashed one
+      user.password = hash;
+      next();
+    });
+  });
 });
-
 mongoose.model("user", userSchema);

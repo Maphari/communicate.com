@@ -5,7 +5,7 @@ import passportGoogle from "passport-google-oauth20";
 const SpotifyStrategy = passportSpotify.Strategy;
 const GoogleStrategy = passportGoogle.Strategy;
 import mongoose from "mongoose";
-const User = mongoose.model("User");
+const User = mongoose.model("user");
 import jwt from "jsonwebtoken";
 
 passport.serializeUser((user, done) => {
@@ -31,7 +31,7 @@ passport.use(
       if (user) {
         done(null, user);
       } else {
-        const token = jwt.sign({ userId: profile.id}, process.env.MY_SECRET, {
+        const token = jwt.sign({ userId: profile.id}, privateKeys.MY_SECRET, {
           expiresIn: "24",
         });
         const newUser = new User({
@@ -58,7 +58,7 @@ passport.use(
       if (user) {
         done(null, user);
       } else {
-        const token = jwt.sign({ userId: profile.id}, process.env.MY_SECRET, {
+        const token = jwt.sign({ userId: profile.id}, privateKeys.MY_SECRET, {
           expiresIn: "24",
         });
         const newUser = new User({

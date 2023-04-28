@@ -52,9 +52,9 @@ export function Features() {
           </div>
         </section>
 
-        <section className="features-container__info mt-20 flex items-center flex-wrap gap-[7rem]">
+        <section className="features-container__info mt-20 mb-10 flex items-center flex-wrap gap-[7rem]">
           <img
-            src="https://images.pexels.com/photos/7706447/pexels-photo-7706447.jpeg?auto=compress&cs=tinysrgb&dpr=1"
+            src="https://images.pexels.com/photos/6407576/pexels-photo-6407576.jpeg?auto=compress&cs=tinysrgb"
             alt="person taking parcel"
             className="w-[20rem] h-[27rem] object-cover"
           />
@@ -90,7 +90,7 @@ export function Features() {
                   <span className="text-yellow-500">trusted brand</span> since
                   day one{" "}
                 </h1>
-                <div className="flex items-center gap-3 flex-wrap">
+                <div className="trusted flex items-center gap-3 flex-wrap">
                   <div className="w-10 h-10 bg-yellow-500"></div>
                   <div className="w-10 h-10 bg-yellow-500"></div>
                   <div className="w-10 h-10 bg-yellow-500"></div>

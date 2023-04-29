@@ -9,10 +9,16 @@ import { Home } from "./authrnticatedPages/Home";
 import Loader from "./animation/Loder";
 import "react-toastify/dist/ReactToastify.css";
 
-const Router = () => {
-  const userToken = localStorage.getItem("sessionID");
-  const googleToken = localStorage.getItem("google-token");
-  const spotifyToken = localStorage.getItem("spotify-token");
+export default function App() {
+  const userSession = localStorage.getItem("session");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loader = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    return () => clearTimeout(loader);
+  }, []);
 
   return (
     <>
@@ -28,61 +34,44 @@ const Router = () => {
         pauseOnHover
         theme="light"
       />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            !userToken || !googleToken || !spotifyToken ? (
-              <LandingPage />
-            ) : (
-              <Navigate to="/home" replace={true} />
-            )
-          }
-        />
-        <Route
-          path="/account/register"
-          element={
-            !userToken || !googleToken || !spotifyToken ? (
-              <Register />
-            ) : (
-              <Navigate to="/home" replace={true} />
-            )
-          }
-        />
-        <Route
-          path="/account/login"
-          element={
-            !userToken || !googleToken || !spotifyToken ? (
-              <Login />
-            ) : (
-              <Navigate to="/home" replace={true} />
-            )
-          }
-        />
-        <Route
-          path="/home"
-          element={
-            userToken || spotifyToken || googleToken ? (
-              <Home />
-            ) : (
-              <Navigate to="/" replace={true} />
-            )
-          }
-        />
-      </Routes>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Routes>
+          <Route
+            path="/"
+            element={
+              !userSession ? (
+                <LandingPage />
+              ) : (
+                <Navigate to="/home" replace={true} />
+              )
+            }
+          />
+          <Route
+            path="/account/register"
+            element={
+              !userSession ? (
+                <Register />
+              ) : (
+                <Navigate to="/home" replace={true} />
+              )
+            }
+          />
+          <Route
+            path="/account/login"
+            element={
+              !userSession ? <Login /> : <Navigate to="/home" replace={true} />
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              userSession ? <Home /> : <Navigate to="/" replace={true} />
+            }
+          />
+        </Routes>
+      )}
     </>
   );
-};
-
-export default function App() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loader = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    return () => clearTimeout(loader);
-  }, []);
-
-  return loading ? <Loader /> : <Router />;
 }

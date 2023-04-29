@@ -17,9 +17,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const userLanguage = navigator.language;
-  const userToken = localStorage.getItem("sessionID");
-  const googleToken = localStorage.getItem("google-token");
-  const spotifyToken = localStorage.getItem("spotify-token");
+  const userSession = localStorage.getItem("session");
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -82,9 +80,9 @@ export const Login = () => {
         toastNotificationError(data.errorMessage);
         navigate("/account/register", { replace: true });
       } else if (data?.session) {
-        localStorage.setItem("sessionID", data.session);
+        localStorage.setItem("session", data.session);
         toastNotificationSuccess(data.message);
-        navigate("/home", { replace: true });
+        window.location.href = "/home";
       } else {
         toastNotificationError(data.errorMessage);
         navigate("/account/login", { replace: true });
@@ -104,21 +102,21 @@ export const Login = () => {
     window.open("/api/v1/auth/google", "_self");
     const res = await axios.get("/api/auth/passport_success");
     const clientid = res?.data?.user?.clientID;
-    localStorage.setItem("google-token", clientid);
+    localStorage.setItem("session", clientid);
   }
 
   async function handleSpotifyLogin() {
     window.open("/api/v1/auth/spotify", "_self");
     const res = await axios.get("/api/auth/passport_success");
     const clientid = res?.data?.user?.clientID;
-    localStorage.setItem("spotify-token", clientid);
+    localStorage.setItem("session", clientid);
   }
 
   useEffect(() => {
-    if (userToken || spotifyToken || googleToken) {
+    if (userSession) {
       navigate("/home", { replace: true });
     }
-  }, [userToken, spotifyToken, googleToken, navigate]);
+  }, [userSession, navigate]);
 
   return (
     <>

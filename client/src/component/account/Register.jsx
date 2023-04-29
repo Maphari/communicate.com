@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 // BOOTSTRAP IMPORTS
 import { InputGroup, Form, Col } from "react-bootstrap";
 import { useState } from "react";
@@ -17,9 +17,7 @@ export const Register = () => {
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const userLanguage = navigator.language;
-  const userToken = localStorage.getItem("sessionID");
-  const googleToken = localStorage.getItem("google-token");
-  const spotifyToken = localStorage.getItem("spotify-token");
+  const userSession = localStorage.getItem("session");
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -84,8 +82,8 @@ export const Register = () => {
         navigate("/account/login");
       } else if (data?.session) {
         toastNotificationSuccess(data?.message);
-        localStorage.setItem("sessionID", data?.session);
-        navigate("/home", { replace: true });
+        localStorage.setItem("session", data?.session);
+        window.location.href = "/home";
       } else {
         toastNotificationError(data?.message);
         navigate("/account/register", { replace: true });
@@ -99,22 +97,21 @@ export const Register = () => {
     window.open("/api/v1/auth/google", "_self");
     const res = await axios.get("/api/auth/passport_success");
     const clientid = res?.data?.user?.clientID;
-    localStorage.setItem("google-token", clientid);
+    localStorage.setItem("session", clientid);
   }
 
   async function handleSpotifyLogin() {
     window.open("/api/v1/auth/spotify", "_self");
     const res = await axios.get("/api/auth/passport_success");
     const clientid = res?.data?.user?.clientID;
-    localStorage.setItem("spotify-token", clientid);
+    localStorage.setItem("session", clientid);
   }
 
-
   useEffect(() => {
-    if (userToken || spotifyToken || googleToken) {
+    if (userSession) {
       navigate("/home", { replace: true });
     }
-  }, [userToken, spotifyToken, googleToken, navigate]);
+  }, [userSession, navigate]);
 
   return (
     <>

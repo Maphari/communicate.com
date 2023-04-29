@@ -11,9 +11,7 @@ export default class DataToSendProvider extends Component {
 
   async componentDidMount() {
     // GETTING STORED TOKENS ON LOCAL STORAGE
-    const googleToken = localStorage.getItem("google-token");
-    const spotifyToken = localStorage.getItem("spotify-token");
-    const userToken = localStorage.getItem("sessionID");
+    const userSession = localStorage.getItem("session");
     const passportAuthenticationData = await axios.get(
       "/api/auth/passport_success"
     );
@@ -22,10 +20,9 @@ export default class DataToSendProvider extends Component {
     );
 
     const isEmailAndPassowrdAuthenticated =
-      userToken === emailAndPassowrdAuthenticatedData?.data?.user?.session;
+      userSession === emailAndPassowrdAuthenticatedData?.data?.user?.session;
     const isPassowrdAuthenticated =
-      googleToken === passportAuthenticationData?.data?.session ||
-      spotifyToken === passportAuthenticationData?.data?.session;
+      userSession === passportAuthenticationData?.data?.session;
 
     if (isEmailAndPassowrdAuthenticated) {
       this.setState({ data: emailAndPassowrdAuthenticatedData?.data?.user });

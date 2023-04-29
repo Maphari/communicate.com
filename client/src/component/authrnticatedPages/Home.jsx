@@ -1,11 +1,20 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Dashboard } from "./homeComponents/Dashboard";
 
 export const Home = () => {
-  const userToken = localStorage.getItem("sessionID");
-  const googleToken = localStorage.getItem("google-token");
-  const spotifyToken = localStorage.getItem("spotify-token");
+  const userSession = localStorage.getItem("session");
   const navigate = useNavigate();
 
-  return <h1>home</h1>;
+  useEffect(() => {
+    if (!userSession) {
+      navigate("/account/login", { replace: true });
+    }
+  }, [userSession, navigate]);
+
+  return (
+    <>
+      <Dashboard />
+    </>
+  );
 };

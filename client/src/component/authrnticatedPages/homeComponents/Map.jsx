@@ -4,7 +4,7 @@ import MapboxSupported from "mapbox-gl-supported";
 import PEIVATEKEYS from "../../../../../privateKeys/privateKeys";
 
 export const Map = (props) => {
-  const { latitude, longitude } = props;
+  const { defaultCoords, searchCoords } = props;
   const mapContainerRef = useRef(null); // create a ref to the map container
 
   useEffect(() => {
@@ -20,16 +20,14 @@ export const Map = (props) => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current, // use the ref to the map container
       style: "mapbox://styles/phumudzo001/clgus2d0v006501qy9ri978xf",
-      center: [longitude, latitude],
+      center: defaultCoords,
       zoom: 13,
     });
     // create a new NavigationControl and add it to the map
     const nav = new mapboxgl.NavigationControl();
     map.addControl(nav, "top-right");
 
-    const marker = new mapboxgl.Marker()
-      .setLngLat([longitude, latitude])
-      .addTo(map);
+    const marker = new mapboxgl.Marker().setLngLat(defaultCoords).addTo(map);
   }, []);
 
   return <div ref={mapContainerRef} className="w-full h-full rounded" />;

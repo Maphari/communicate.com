@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { Routes, Route } from "react-router-dom";
 import { LandingPage } from "./landingPage/LandingPage";
 import { Register } from "./account/Register";
 import { Login } from "./account/Login";
 import { Home } from "./authrnticatedPages/Home";
+import { BankAccount } from "./authrnticatedPages/homeComponents/BankAccount";
+import { HelperRegister } from "./authrnticatedPages/helper/account/HeleperRegister";
+import { Profile } from "./authrnticatedPages/homeComponents/Profile";
 import Loader from "./animation/Loder";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -70,6 +73,9 @@ export default function App() {
               userSession ? <Home /> : <Navigate to="/" replace={true} />
             }
           />
+          <Route path="/helper/account_register" element={<HelperRegister />} />
+          <Route path="/bank_account" element={<BankAccount />} />
+          <Route />
         </Routes>
       )}
     </>

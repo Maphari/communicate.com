@@ -8,7 +8,7 @@ export const Nav = () => {
   const location = useLocation();
 
   const sliceUsername = (username) => {
-    return username.toUpperCase().slice(0, 2);
+    return username?.toUpperCase().slice(0, 2);
   };
 
   return (
@@ -36,9 +36,9 @@ export const Nav = () => {
               Bank Account
             </Link>
             <Link
-              to="/become_hepler"
+              to="/helper/account_register"
               className={`px-2 py-1  rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[500] opacity-90  ${
-                location.pathname === "/become_hepler" ? "nav-link-active" : ""
+                location.pathname === "/helper/account_register" ? "nav-link-active" : ""
               }`}
             >
               Become Hepler

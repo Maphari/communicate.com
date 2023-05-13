@@ -31,7 +31,7 @@ export function Navigation() {
             </Link>
             <Link
               to="/account/register"
-              className="p-2 font-medium hover:bg-yellow-600 bg-yellow-500 text-white transition-all duration-700 ease-out"
+              className="p-[0.6rem] rounded inline-block font-medium hover:bg-yellow-600 bg-yellow-500 text-white transition-all duration-700 ease-out"
             >
               Create accout
             </Link>
@@ -60,7 +60,7 @@ export function Navigation() {
         </motion.section>
 
         <motion.section className="navigation-container__bottom relative z-[100] text-white my-5 ">
-          <div className="glassy-background">
+          <div className="glassy-background rounded">
             <header>
               <h1 className="text-2xl font-bold mb-2">
                 Subscribe to our{" "}
@@ -70,27 +70,13 @@ export function Navigation() {
                 <input
                   type="email"
                   placeholder="Enter email address"
-                  className="p-2 outline-none text-gray-500 flex items-center flex-1"
+                  className="p-3 outline-none text-gray-500 flex items-center flex-1 rounded-l"
                 />
-                <button className="p-2 bg-yellow-500 font-medium hover:bg-yellow-600 transition-all duration-700 ease-linear">
+                <button className="p-3 font-[600] bg-yellow-500 hover:bg-yellow-600 transition-all duration-700 ease-linear rounded-r">
                   Subscribe
                 </button>
               </form>
             </header>
-          </div>
-        </motion.section>
-        <motion.section className="stat relative z-[100] text-white flex items-center gap-4 flex-wrap">
-          <div className="flex items-baseline flex-wrap gap-1">
-            <h1 className="text-5xl font-bold">200+</h1>
-            <p className="font-bold text-yellow-500 text-lg">Subscribers</p>
-          </div>
-          <div className="flex items-baseline flex-wrap gap-1">
-            <h1 className="text-5xl font-bold">100+</h1>
-            <p className="font-bold text-yellow-500 text-lg">Helper</p>
-          </div>
-          <div className="flex items-baseline flex-wrap gap-1">
-            <h1 className="text-5xl font-bold">50+</h1>
-            <p className="font-bold text-yellow-500 text-lg">Warehouse</p>
           </div>
         </motion.section>
       </motion.nav>

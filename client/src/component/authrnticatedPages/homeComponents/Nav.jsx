@@ -11,6 +11,7 @@ export const Nav = () => {
     return username?.toUpperCase().slice(0, 2);
   };
 
+
   return (
     <>
       <section className="nav-container border-b bg-white relative z-[99999]">
@@ -35,19 +36,12 @@ export const Nav = () => {
             >
               Bank Account
             </Link>
+
             <Link
-              to="/helper/account_register"
-              className={`px-2 py-1  rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[500] opacity-90  ${
-                location.pathname === "/helper/account_register" ? "nav-link-active" : ""
-              }`}
+              to="/profile"
+              className="rounded-full transition-all duration-500 ease-linear border py-[5px] px-2 flex items-center justify-center hover:text-black hover:bg-yellow-400"
             >
-              Become Hepler
-            </Link>
-            <Link
-              to=""
-              className="h-10 w-10 transition-all duration-500 ease-linear bg-yellow-500 flex items-center justify-center font-black rounded-full hover:text-black hover:bg-yellow-400"
-            >
-              {sliceUsername(data?.user?.email)}
+              {data?.user?.email}
             </Link>
           </div>
         </header>

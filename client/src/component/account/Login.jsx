@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 // BOOTSTRAP IMPORTS
 import { InputGroup, Form, Col } from "react-bootstrap";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import GoogleLogoImage from "../../assets/google-logo.png";
 import SpotifyLogoImage from "../../assets/spotify-logo.png";
+import { DataToSendContext } from "../context/DataToSendContext";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,6 +19,7 @@ export const Login = () => {
   const currentYear = new Date().getFullYear();
   const userLanguage = navigator.language;
   const userSession = localStorage.getItem("session");
+  const { data } = useContext(DataToSendContext);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -66,6 +68,20 @@ export const Login = () => {
     });
   };
 
+  const toastNotificationInfo = (message) => {
+    toast.info(message, {
+      toastId: "session-expired",
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
+
   const handleLogIn = async (e) => {
     try {
       e.preventDefault();
@@ -99,24 +115,24 @@ export const Login = () => {
   };
 
   async function handleGoogleLogin() {
-    window.open("/api/v1/auth/google", "_self");
     const res = await axios.get("/api/auth/passport_success");
     const clientid = res?.data?.user?.clientID;
-    localStorage.setItem("session", clientid);
+    if (clientid) {
+      window.open("/api/v1/auth/google", "_self");
+      localStorage.setItem("session", clientid);
+    } else {
+      toastNotificationError("account not found register");
+      navigate("/account/register");
+    }
   }
 
-  async function handleSpotifyLogin() {
-    window.open("/api/v1/auth/spotify", "_self");
-    const res = await axios.get("/api/auth/passport_success");
-    const clientid = res?.data?.user?.clientID;
-    localStorage.setItem("session", clientid);
-  }
 
   useEffect(() => {
     if (userSession) {
       navigate("/home", { replace: true });
     }
   }, [userSession, navigate]);
+
 
   return (
     <>
@@ -205,15 +221,6 @@ export const Login = () => {
                   className="text-md hover:text-gray-950"
                 >
                   Continue with google
-                </a>
-              </div>
-              <div className="flex items-center justify-center gap-1 border p-2 mb-2   hover:cursor-pointer rounded-lg hover:bg-gray-200">
-                <img src={SpotifyLogoImage} alt="google logo" className="w-7" />
-                <a
-                  onClick={handleSpotifyLogin}
-                  className="text-md hover:text-gray-950"
-                >
-                  Continue with spotify
                 </a>
               </div>
             </div>

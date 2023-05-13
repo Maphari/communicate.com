@@ -17,7 +17,7 @@ export const WhyChoose = () => {
             pricing and has a wide coverage area, making it an attractive option
             for those looking for an affordable delivery solution.
           </p>
-          <button>Join us</button>
+          <button className="rounded bg-yellow-500 hover:bg-yellow-600">Join us</button>
         </section>
       </section>
     </>

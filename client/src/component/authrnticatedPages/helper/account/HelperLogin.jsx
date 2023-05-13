@@ -1,23 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 // BOOTSTRAP IMPORTS
 import { InputGroup, Form, Col } from "react-bootstrap";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import GoogleLogoImage from "../../assets/google-logo.png";
-import SpotifyLogoImage from "../../assets/spotify-logo.png";
-import axios from "axios";
+import { DataToSendContext } from "../../../context/DataToSendContext";
 
-export const Register = () => {
+export const HelperLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [messageERROR, setMessageERROR] = useState("");
-  const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const userLanguage = navigator.language;
-  const userSession = localStorage.getItem("session");
+  const navigate = useNavigate();
+  const helperSession = localStorage.getItem("helper-session");
+  const { helperData } = useContext(DataToSendContext);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -66,56 +65,64 @@ export const Register = () => {
     });
   };
 
-  const handleCreateUser = async (e) => {
+  const toastNotificationInfo = (message) => {
+    toast.info(message, {
+      toastId: "session-expired",
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
+
+  const handleLogIn = async (e) => {
     try {
       e.preventDefault();
-
-      const user = await fetch("/api/v1/auth/signup_user", {
+      const helper = await fetch("/api/v1/auth/helper/login_user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = await user.json();
+      const data = await helper.json();
 
-      if (data?.exist === true) {
-        toastNotificationError("User already exists login");
-        navigate("/account/login");
+      if (data?.exist === false) {
+        toastNotificationError(data?.errorMessage);
+        navigate("/helper/account_register");
       } else if (data?.session) {
         toastNotificationSuccess(data?.message);
-        localStorage.setItem("session", data?.session);
-        window.location.href = "/home";
+        localStorage.setItem("helper-session", data?.session);
+        window.location.href = "/account/helper";
       } else {
-        toastNotificationError(data?.message);
-        navigate("/account/register", { replace: true });
+        toastNotificationError(data?.errorMessage);
+        navigate("/account/helper_register", { replace: true });
       }
     } catch (error) {
-      setMessageERROR(error.message);
+      setMessageERROR(
+        "An unexpected error occurred. Please try again later. Or refresh the page"
+      );
     }
   };
 
-  async function handleGoogleLogin() {
-    window.open("/api/v1/auth/google", "_self");
-    const res = await axios.get("/api/auth/passport_success");
-    const clientid = res?.data?.user?.clientID;
-    localStorage.setItem("session", clientid);
-  }
-
   useEffect(() => {
-    if (userSession) {
-      navigate("/home", { replace: true });
+    if (helperSession) {
+      navigate("/account/helper", { replace: true });
     }
-  }, [userSession, navigate]);
+  }, [helperSession, navigate]);
 
   return (
     <>
       <div className="signup-container">
         <Form
-          onSubmit={handleCreateUser}
+          onSubmit={handleLogIn}
           className="drop-shadow-2xl rounded was-validated"
         >
           <div className="signup-container__top">
             <div className="mb-3">
-              <h1 className="signup-container__top-header">Create account</h1>
+              <h1 className="signup-container__top-header">Login for helper</h1>
               <p className="signup-container__top-para">
                 Please provide you details
               </p>
@@ -178,32 +185,20 @@ export const Register = () => {
               <span className="text-sky-600">terms</span> and{" "}
               <span className="text-sky-600">conditions</span>
             </p>
-
             <button
               type="submit"
-              className=" bg-yellow-500 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-yellow-600"
+              className=" bg-yellow-500 hover:bg-yellow-600 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg"
             >
               <i className="fa-solid fa-envelope text-lg"></i>
               <span className="text-md">Continue with email</span>
             </button>
-            <div className="mt-2">
-              <div className="flex items-center justify-center gap-1 border p-2 mb-2   hover:cursor-pointer rounded-lg hover:bg-gray-200">
-                <img src={GoogleLogoImage} alt="google logo" className="w-5" />
-                <a
-                  onClick={handleGoogleLogin}
-                  className="text-md hover:text-gray-950"
-                >
-                  Continue with google
-                </a>
-              </div>
-            </div>
             <div className="flex items-center justify-center gap-1 p-2 mb-2">
-              <p>Already have an account with us ?</p>
+              <p>Don't have an account with us ?</p>
               <Link
-                to="/account/login"
+                to="/helper/account_register"
                 className="text-md text-yellow-500 hover:text-yellow-600 font-bold"
               >
-                login
+                Register
               </Link>
             </div>
           </div>

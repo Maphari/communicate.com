@@ -1,8 +1,6 @@
 import privateKeys from "../privateKeys/privateKeys.js";
 import passport from "passport";
-import passportSpotify from "passport-spotify";
 import passportGoogle from "passport-google-oauth20";
-const SpotifyStrategy = passportSpotify.Strategy;
 const GoogleStrategy = passportGoogle.Strategy;
 import mongoose from "mongoose";
 const User = mongoose.model("user");
@@ -43,26 +41,3 @@ passport.use(
   )
 );
 
-passport.use(
-  new SpotifyStrategy(
-    {
-      clientID: privateKeys.SPOTIFT_CLIENTID,
-      clientSecret: privateKeys.SPOTIFY_SECRET,
-      callbackURL: "/api/v1/auth/spotify/callback",
-    },
-    async (accessToken, refreshToken, expirire_in, profile, done) => {
-      const user = await User.findOne(profile.id);
-      if (user) {
-        done(null, user);
-      } else {
-        const newUser = new User({
-          clientID: profile.id,
-          profilePicture: profile.photos ? profile.photos[0].value : null,
-          name: profile.displayName,
-          email: profile.emails ? profile.emails[0].value : null,
-        }).save();
-        done(null, newUser);
-      }
-    }
-  )
-);

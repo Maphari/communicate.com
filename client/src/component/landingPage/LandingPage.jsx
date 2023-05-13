@@ -4,7 +4,6 @@ import { Features } from "./Features";
 import { Process } from "./Process";
 import { WhyChoose } from "./WhyChoose";
 import { VehicleShowcase } from "./VehicleShowcase";
-import { Goals } from "./Goals";
 import { Fotter } from "./Fotter";
 
 export function LandingPage() {
@@ -15,7 +14,6 @@ export function LandingPage() {
       <Process />
       <WhyChoose />
       <VehicleShowcase />
-      <Goals />
       <Fotter />
     </>
   );

@@ -1,24 +1,34 @@
-import React, { useEffect } from "react";
-// BOOTSTRAP IMPORTS
+import React, { useEffect, useContext } from "react";
 import { InputGroup, Form, Col } from "react-bootstrap";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import GoogleLogoImage from "../../assets/google-logo.png";
-import SpotifyLogoImage from "../../assets/spotify-logo.png";
-import axios from "axios";
+import { DataToSendContext } from "../../../context/DataToSendContext";
 
-export const Register = () => {
+export const HelperRegister = () => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
+  const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [mobileError, setMobileError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [messageERROR, setMessageERROR] = useState("");
-  const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const userLanguage = navigator.language;
-  const userSession = localStorage.getItem("session");
+  const navigate = useNavigate();
+  const helperSession = localStorage.getItem("helper-session");
+  const { helperData } = useContext(DataToSendContext);
 
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    if (!username.trim()) {
+      setUsernameError("Username is required");
+    } else {
+      setUsernameError("");
+    }
+  };
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
     if (!email) {
@@ -27,6 +37,15 @@ export const Register = () => {
       setEmailError("Enter a valid email address");
     } else {
       setEmailError("");
+    }
+  };
+  const handleMobileChange = (e) => {
+    setMobile(e.target.value);
+
+    if (!mobile) {
+      setMobileError("Mobile number is required");
+    } else {
+      setMobileError("");
     }
   };
   const handlePasswordChange = (e) => {
@@ -66,56 +85,63 @@ export const Register = () => {
     });
   };
 
+  const toastNotificationInfo = (message) => {
+    toast.info(message, {
+      toastId: "session-expired",
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
+
   const handleCreateUser = async (e) => {
     try {
       e.preventDefault();
-
-      const user = await fetch("/api/v1/auth/signup_user", {
+      const helper = await fetch("/api/v1/auth/helper/register_user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, email, mobile, password }),
       });
-      const data = await user.json();
+      const data = await helper.json();
 
       if (data?.exist === true) {
-        toastNotificationError("User already exists login");
-        navigate("/account/login");
+        toastNotificationError("User already registered");
+        navigate("/account/helper_login", { replace: true });
       } else if (data?.session) {
         toastNotificationSuccess(data?.message);
-        localStorage.setItem("session", data?.session);
-        window.location.href = "/home";
+        localStorage.setItem("helper-session", data?.session);
+        window.location.href = "/account/helper";
       } else {
-        toastNotificationError(data?.message);
-        navigate("/account/register", { replace: true });
+        toastNotificationError(data?.errorMessage);
+        navigate("/account/helper_register", { replace: true });
       }
     } catch (error) {
       setMessageERROR(error.message);
     }
   };
-
-  async function handleGoogleLogin() {
-    window.open("/api/v1/auth/google", "_self");
-    const res = await axios.get("/api/auth/passport_success");
-    const clientid = res?.data?.user?.clientID;
-    localStorage.setItem("session", clientid);
-  }
-
   useEffect(() => {
-    if (userSession) {
-      navigate("/home", { replace: true });
-    }
-  }, [userSession, navigate]);
+    if (helperSession) {
+      navigate("/account/helper", { replace: true });
+    } 
+  }, [helperSession, navigate]);
 
   return (
     <>
-      <div className="signup-container">
+      <section className="signup-container">
         <Form
           onSubmit={handleCreateUser}
           className="drop-shadow-2xl rounded was-validated"
         >
           <div className="signup-container__top">
             <div className="mb-3">
-              <h1 className="signup-container__top-header">Create account</h1>
+              <h1 className="signup-container__top-header">
+                Register for helper
+              </h1>
               <p className="signup-container__top-para">
                 Please provide you details
               </p>
@@ -123,6 +149,31 @@ export const Register = () => {
             {messageERROR && (
               <p className="text-red-500 mb-1">{messageERROR}</p>
             )}
+            <InputGroup as={Col} hasValidation className="mb-3">
+              <InputGroup.Text id="basic-addon1" className="rounded-none">
+                <i className="fa-solid fa-user"></i>
+              </InputGroup.Text>
+              <Form.Control
+                className="rounded-none"
+                placeholder="John Doe"
+                type="text"
+                aria-label="username"
+                aria-labelledby="basic-addon1"
+                name="username"
+                value={username}
+                onChange={handleUsernameChange}
+                isValid={!!usernameError}
+                isInvalid={usernameError && usernameError}
+                required
+              />
+              {usernameError ? (
+                <Form.Control.Feedback type="invalid">
+                  {usernameError}
+                </Form.Control.Feedback>
+              ) : (
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              )}
+            </InputGroup>
             <InputGroup as={Col} hasValidation className="mb-3">
               <InputGroup.Text id="basic-addon2" className="rounded-none">
                 <i className="fa-solid fa-envelope"></i>
@@ -148,6 +199,32 @@ export const Register = () => {
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               )}
             </InputGroup>
+            <InputGroup as={Col} hasValidation className="mb-3">
+              <InputGroup.Text id="basic-addon4" className="rounded-none">
+                <i className="fa-solid fa-phone"></i>
+              </InputGroup.Text>
+              <Form.Control
+                className="rounded-none"
+                placeholder="+27 79 123 1234"
+                type="tel"
+                aria-label="tel"
+                aria-labelledby="basic-addon4"
+                name="tel"
+                value={mobile}
+                onChange={handleMobileChange}
+                isValid={!!mobileError}
+                isInvalid={mobileError && mobileError}
+                required
+              />
+              {mobileError ? (
+                <Form.Control.Feedback type="invalid">
+                  {mobileError}
+                </Form.Control.Feedback>
+              ) : (
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              )}
+            </InputGroup>
+
             <InputGroup as={Col} hasValidation>
               <InputGroup.Text id="basic-addon3" className="rounded-none">
                 <i className="fa-solid fa-lock"></i>
@@ -184,23 +261,12 @@ export const Register = () => {
               className=" bg-yellow-500 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-yellow-600"
             >
               <i className="fa-solid fa-envelope text-lg"></i>
-              <span className="text-md">Continue with email</span>
+              <span className="text-md">Continue</span>
             </button>
-            <div className="mt-2">
-              <div className="flex items-center justify-center gap-1 border p-2 mb-2   hover:cursor-pointer rounded-lg hover:bg-gray-200">
-                <img src={GoogleLogoImage} alt="google logo" className="w-5" />
-                <a
-                  onClick={handleGoogleLogin}
-                  className="text-md hover:text-gray-950"
-                >
-                  Continue with google
-                </a>
-              </div>
-            </div>
             <div className="flex items-center justify-center gap-1 p-2 mb-2">
               <p>Already have an account with us ?</p>
               <Link
-                to="/account/login"
+                to="/helper/account_login"
                 className="text-md text-yellow-500 hover:text-yellow-600 font-bold"
               >
                 login
@@ -213,7 +279,7 @@ export const Register = () => {
           copyright &copy;
           <span>{currentYear}</span> <span>{userLanguage}</span>
         </p>
-      </div>
+      </section>
     </>
   );
 };

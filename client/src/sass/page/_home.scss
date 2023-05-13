@@ -31,6 +31,7 @@
   flex-wrap: wrap;
   padding-top: 3.6rem;
   height: 100dvh;
+  overflow: hidden;
 
   &__content {
     display: flex;
@@ -40,8 +41,6 @@
   }
 
   &__map {
-    width: 70%;
-    margin: 0.7rem;
-    padding: 0.7rem;
+    width: 75%;
   }
 }

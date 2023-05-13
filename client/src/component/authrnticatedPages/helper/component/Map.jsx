@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import PRIVATEKEY from "../../../../../privateKeys/privateKeys";
+import PRIVATEKEY from "../../../../../../privateKeys/privateKeys";
 import mapboxgl from "mapbox-gl";
 import MapboxSupported from "@mapbox/mapbox-gl-supported";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
@@ -10,7 +10,6 @@ export const Map = (props) => {
   const mapContainerRef = useRef(null); // create a ref to the map container
   const directionsRef = useRef(null); // create a ref to the directions control
   const [routeProgress, setRouteProgress] = useState(null);
-  let pickupMarker, destinationMarker;
 
   useEffect(() => {
     mapboxgl.accessToken = PRIVATEKEY.MAPBOX_API_KEY;
@@ -41,6 +40,8 @@ export const Map = (props) => {
       return;
     }
 
+    let pickupMarker, destinationMarker;
+
     if (centerPickupPoint) {
       pickupMarker = new mapboxgl.Marker({ color: "#eab308" })
         .setLngLat(centerPickupPoint)
@@ -68,13 +69,13 @@ export const Map = (props) => {
           interactive: false,
           controls: {
             inputs: false,
-            instructions: false,
+            instructions: true,
             profileSwitcher: true,
           },
         });
 
         // Add the Mapbox Directions plugin to the map
-        map.addControl(directions, "bottom-left");
+        map.addControl(directions, "top-left");
 
         // Set the pickup and destination points for the directions object
         directions.setOrigin(centerPickupPoint);
@@ -84,32 +85,26 @@ export const Map = (props) => {
         directions.on("route", (event) => {
           // Get the route from the directions object
           const route = event.route[0];
-
-          // Check if the "directions" layer already exists on the map
-          if (map.getLayer("directions")) {
-            map.removeLayer("directions");
-
-            // Add the route to the map as a layer
-            map.addLayer({
-              id: "new-directions",
-              type: "line",
-              source: {
-                type: "geojson",
-                data: {
-                  type: "Feature",
-                  geometry: {
-                    type: "LineString",
-                    coordinates: route.geometry.coordinates,
-                  },
+          // Add the route to the map as a layer
+          map.addLayer({
+            id: "directions",
+            type: "line",
+            source: {
+              type: "geojson",
+              data: {
+                type: "Feature",
+                geometry: {
+                  type: "LineString",
+                  coordinates: route.geometry.coordinates,
                 },
               },
-              paint: {
-                "line-color": "yellow",
-                "line-width": 8,
-                "line-opacity": 0.8,
-              },
-            });
-          }
+            },
+            paint: {
+              "line-color": "#fff",
+              "line-width": 8,
+              "line-opacity": 0.8,
+            },
+          });
         });
 
         // Inside the useEffect that creates the Mapbox Directions object, add a listener for the routeProgress event, and update the routeProgress state variable:
@@ -154,12 +149,13 @@ export const Map = (props) => {
           clearTimeout(timeoutId);
           // Remove the directions object and the directions layer from the map
           map.removeControl(directions);
+          map.removeLayer("directions");
           // Remove the destination marker and geofence listener from the map
           destinationMarker.remove();
         };
       }
     }
-  }, [centerPickupPoint, centerDestinationPoint, map]);
+  }, [map, centerPickupPoint, centerDestinationPoint]);
 
   return <div ref={mapContainerRef} className="w-full h-full"></div>;
 };

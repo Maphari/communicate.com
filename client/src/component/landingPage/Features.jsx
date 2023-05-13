@@ -18,7 +18,7 @@ export function Features() {
         </motion.header>
 
         <section className="flex items-center gap-2 flex-wrap mt-5 mb-10">
-          <div className="bg-slate-100 py-3 px-4 max-w-[20rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
+          <div className="bg-slate-100 rounded py-3 px-4 max-w-[20rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-credit-card text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Easy payments</h1>
             <p className="opacity-80 mb-2">
@@ -26,7 +26,7 @@ export function Features() {
               better place for you to deliver things.
             </p>
           </div>
-          <div className="bg-slate-100 py-3 px-4 max-w-[20rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
+          <div className="bg-slate-100 py-3 rounded px-4 max-w-[20rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-map text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Interactive map</h1>
             <p className="opacity-80 mb-2">
@@ -34,7 +34,7 @@ export function Features() {
               tell us where to pick up your item and deliver.
             </p>
           </div>
-          <div className="bg-slate-100 py-3 px-4 max-w-[20rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
+          <div className="bg-slate-100 rounded py-3 px-4 max-w-[20rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-user text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Choose the deliver</h1>
             <p className="opacity-80 mb-2">
@@ -42,7 +42,7 @@ export function Features() {
               deliver we dont choose for you.
             </p>
           </div>
-          <div className="bg-slate-100 py-3 px-4 max-w-[20rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
+          <div className="bg-slate-100 rounded py-3 px-4 max-w-[20rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-car text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Choose the vehicle</h1>
             <p className="opacity-80 mb-2">
@@ -54,7 +54,7 @@ export function Features() {
 
         <section className="features-container__info mt-20 mb-10 flex items-center flex-wrap gap-[7rem]">
           <img
-            src="https://images.pexels.com/photos/6407576/pexels-photo-6407576.jpeg?auto=compress&cs=tinysrgb"
+            src="https://images.pexels.com/photos/7706449/pexels-photo-7706449.jpeg?auto=compress&cs=tinysrgb"
             alt="person taking parcel"
             className="w-[20rem] h-[27rem] object-cover"
           />
@@ -83,7 +83,7 @@ export function Features() {
                 click of a button the your package is taken care of by out hard
                 working professionals.
               </p>
-              <button className="mb-4 text-white font-[600] p-2 bg-yellow-500 transition-all duration-700 ease-linear hover:bg-yellow-600">Learn more</button>
+              <button className="mb-4 text-white font-[600] rounded p-2 bg-yellow-500 transition-all duration-700 ease-linear hover:bg-yellow-600">Learn more</button>
               <div>
                 <h1 className="font-[800] mb-3 text-2xl">
                   Meet our{" "}

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import mapboxgl from "mapbox-gl";
-import MapboxSupported from "mapbox-gl-supported";
+import React, { useEffect, useState, useContext } from "react";
+import { DataToSendContext } from "../../context/DataToSendContext";
 import { Link } from "react-router-dom";
 import { Nav } from "./Nav";
 import { Map } from "./Map";
@@ -8,8 +7,16 @@ import Loader from "../../animation/Loder";
 import axios from "axios";
 import PRIVATEKEY from "../../../../../privateKeys/privateKeys";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setPickupFirstName,
+  setPickupLastName,
+  setPickupEmail,
+  setPickupPhoneNumber,
+  setPickupInstructions,
+} from "../../redux/requests/requestSlice";
 
-export const Dashboard = () => {
+const Dashboard = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [pickup, setPickup] = useState("");
@@ -23,6 +30,10 @@ export const Dashboard = () => {
     useState([]);
   const [currentSearchDestinationCoords, setCurrentSearchDestinationCoords] =
     useState([]);
+  const { data } = useContext(DataToSendContext);
+  const requesterUsername = data?.user?.email;
+  const requestForm = useSelector((state) => state.request);
+  const dispatch = useDispatch();
 
   const toastNotificationError = (message) => {
     toast.error(message, {
@@ -47,6 +58,8 @@ export const Dashboard = () => {
     setExactLocation(isExactLocation);
     // taking the exact coords for clicked pickup point point
     setCurrentSearchLocationCoords(exactPickupCoords?.center);
+    setLongitude(currentSearchLocationCoords[0]);
+    setLatitude(currentSearchLocationCoords[1]);
   };
   // setting destination point to the new selected point
   const handleSearchDestination = (
@@ -69,6 +82,8 @@ export const Dashboard = () => {
     setIsClickedLocation(isLocationClicked);
     // taking the exact coords for clicked pickup point point
     setCurrentSearchLocationCoords(exactLocationCoords?.center);
+    setLongitude(currentSearchLocationCoords[0]);
+    setLatitude(currentSearchLocationCoords[1]);
   };
   // setting current user destination  coords to the new selected point
   const handleCurrentDestination = (
@@ -89,6 +104,39 @@ export const Dashboard = () => {
   ) => {
     setIsClickedLocation(isLocationClicked);
     setIsClickedDestination(isDestinationClicked);
+  };
+
+  const handlePickupInformationSubmit = async () => {
+    try {
+      const createdRequest = await fetch("/api/request_pickup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          requesterUsername,
+          pickup,
+          destination,
+          pickupFirstName: requestForm.pickupFirstName,
+          pickupLastName,
+          pickupEmail,
+          pickupPhoneNumber,
+          pickupInstruction,
+        }),
+      });
+      const request = await createdRequest.json();
+    } catch (error) {
+      toastNotificationError(error.message);
+    }
+  };
+  const pickupCoords = (longitude, latitude) => {
+    return [longitude, latitude];
+  };
+  const destinationCoords = (longitude, latitude) => {
+    return currentSearchDestinationCoords &&
+      currentSearchDestinationCoords.length === 2 &&
+      !isNaN(longitude) &&
+      !isNaN(latitude)
+      ? currentSearchDestinationCoords
+      : null;
   };
 
   useEffect(() => {
@@ -149,7 +197,9 @@ export const Dashboard = () => {
     getExactLocation();
   }, [latitude, longitude]);
 
-  console.log(currentSearchLocationCoords)
+  useEffect(() => {
+    setPickup(exactLocation?.place_name);
+  }, []);
 
   if (!longitude && !latitude) {
     return <Loader />;
@@ -161,10 +211,8 @@ export const Dashboard = () => {
           <section className="dashboard-container__content">
             <header className="w-full">
               <form className="w-full" onSubmit={(e) => e.preventDefault()}>
-                <h1 className="mb-2 opacity-70 font-bold text-md">
-                  Where to pick up
-                </h1>
-                <div className="flex items-center border mb-3 relative">
+                <h1 className="mb-2 opacity-70 text-md">Where to pick up</h1>
+                <div className="flex items-center border mb-3 relative bg-[#fff] text-gray-500">
                   <i className="fa-solid fa-search ml-2 opacity-60"></i>
                   <input
                     type="text"
@@ -179,7 +227,7 @@ export const Dashboard = () => {
                   {isClickedLocation ? (
                     <div
                       onMouseLeave={() => setIsClickedLocation(false)}
-                      className={`absolute top-full left-0 bg-white w-full z-[500] drop-shadow-xl flex items-center flex-wrap`}
+                      className={`absolute top-full left-0 bg-white text-[#141414] w-full z-[500] drop-shadow-xl flex items-center flex-wrap`}
                     >
                       <h1 className="px-3 mb-2 font-bold text-md">
                         Your current location
@@ -225,10 +273,8 @@ export const Dashboard = () => {
                     pickup?.trim() === "" && null
                   )}
                 </div>
-                <h1 className="mb-2 opacity-70 font-bold text-md">
-                  Destination point
-                </h1>
-                <div className="flex items-center border relative">
+                <h1 className="mb-2 opacity-70 text-md">Destination point</h1>
+                <div className="flex items-center border relative bg-[#fff] text-[#333]">
                   <i className="fa-solid fa-search ml-2 opacity-60"></i>
                   <input
                     placeholder="Destination point ?"
@@ -288,28 +334,116 @@ export const Dashboard = () => {
                     destination === "" && null
                   )}
                 </div>
+                <header>
+                  <h1 className="mb-1 mt-3 opacity-70 font-bold text-md">
+                    Pickup information
+                  </h1>
+                </header>
+                <div>
+                  <label htmlFor="firstName" className="mt-2 mb-1 opacity-70">
+                    First Name
+                  </label>
+                  <div className="flex items-center border relative">
+                    <input
+                      id="firstName"
+                      type="text"
+                      placeholder="First name"
+                      value={requestForm.pickupFirstName}
+                      onChange={(e) =>
+                        dispatch(setPickupFirstName(e.target.value))
+                      }
+                      className="outline-none p-2 flex flex-1 text-[#333]"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="lasttName" className="mt-2 mb-1 opacity-70">
+                    Last Name
+                  </label>
+                  <div className="flex items-center border relative">
+                    <input
+                      id="lastName"
+                      type="text"
+                      placeholder="Last name"
+                      value={requestForm.pickupLastName}
+                      onChange={(e) =>
+                        dispatch(setPickupLastName(e.target.value))
+                      }
+                      className="outline-none p-2 flex flex-1 text-[#333]"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="email" className="mt-2 mb-1 opacity-70">
+                    Email
+                  </label>
+                  <div className="flex items-center border relative">
+                    <input
+                      id="email"
+                      type="email"
+                      placeholder="Example@gmail.com"
+                      value={requestForm.pickupEmail}
+                      onChange={(e) => dispatch(setPickupEmail(e.target.value))}
+                      className="outline-none p-2 flex flex-1 text-[#333]"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="mobile" className="mt-2 mb-1 opacity-70">
+                    Phone Number
+                  </label>
+                  <div className="flex items-center border relative">
+                    <input
+                      id="mobile"
+                      type="tel"
+                      placeholder="+27 123 4567"
+                      value={requestForm.pickupPhoneNumber}
+                      onChange={(e) =>
+                        dispatch(setPickupPhoneNumber(e.target.value))
+                      }
+                      className="outline-none p-2 flex flex-1 text-[#333]"
+                    />
+                  </div>
+                </div>
+                <div className="mt-2 w-full">
+                  <label htmlFor="my-textarea" className="mb-1 opacity-70">
+                    Pickup instruction
+                  </label>
+                  <textarea
+                    id="my-textarea"
+                    name="my-textarea"
+                    rows="3"
+                    cols="40"
+                    value={requestForm.pickupInstruction}
+                    onChange={(e) =>
+                      dispatch(setPickupInstructions(e.target.value))
+                    }
+                    className="border outline-none text-[#333] w-full"
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  onClick={handlePickupInformationSubmit}
+                  className="p-2 text-white font-bold mt-2 w-full transition-all duration-700 ease-linear hover:bg-yellow-700 bg-yellow-600"
+                >
+                  Request pickup
+                </button>
               </form>
             </header>
-            <section className="mt-10">
-              <header className="flex items-center justify-between opacity-80">
-                <h1 className="text-lg font-bold">Recent activities</h1>
-                <Link
-                  to=""
-                  className="transition-all duration-700 ease-linear hover:text-yellow-600 font-bold"
-                >
-                  See more
-                </Link>
-              </header>
-              <div className="flex items-center justify-center mt-5 gap-1  opacity-60">
-                <p>No recent activities at the moment</p>
-              </div>
-            </section>
           </section>
-          <section className="dashboard-container__map drop-shadow-2xl bg-white rounded-2xl">
-            <Map defaultCoords={[longitude, latitude]} />
+          <section className="dashboard-container__map w-full h-full">
+            <Map
+              centerPickupPoint={pickupCoords(longitude, latitude)}
+              centerDestinationPoint={destinationCoords(
+                currentSearchDestinationCoords[0],
+                currentSearchDestinationCoords[1]
+              )}
+            />
           </section>
         </section>
       </>
     );
   }
 };
+
+export default Dashboard;

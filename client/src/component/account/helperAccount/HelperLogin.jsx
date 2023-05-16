@@ -3,23 +3,20 @@ import React, { useEffect, useContext } from "react";
 import { InputGroup, Form, Col } from "react-bootstrap";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
-import GoogleLogoImage from "../../assets/google-logo.png";
-import SpotifyLogoImage from "../../assets/spotify-logo.png";
-import { DataToSendContext } from "../context/DataToSendContext";
+import { DataToSendContext } from "../../context/DataTosendContext/DataToSendContext";
 
-export const Login = () => {
+export const HelperLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [messageERROR, setMessageERROR] = useState("");
-  const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const userLanguage = navigator.language;
-  const userSession = localStorage.getItem("session");
-  const { data } = useContext(DataToSendContext);
+  const navigate = useNavigate();
+  const helperSession = localStorage.getItem("helper-session");
+  const { helperData } = useContext(DataToSendContext);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -85,54 +82,36 @@ export const Login = () => {
   const handleLogIn = async (e) => {
     try {
       e.preventDefault();
-      const res = await fetch("/api/v1/auth/signin_user", {
+      const helper = await fetch("/api/v1/auth/helper/login_user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json();
+      const data = await helper.json();
 
-      if (data.exist === false) {
-        toastNotificationError(data.errorMessage);
-        navigate("/account/register", { replace: true });
+      if (data?.exist === false) {
+        toastNotificationError(data?.errorMessage);
+        navigate("/helper/account_register");
       } else if (data?.session) {
-        localStorage.setItem("session", data.session);
-        toastNotificationSuccess(data.message);
-        window.location.href = "/home";
+        toastNotificationSuccess(data?.message);
+        localStorage.setItem("helper-session", data?.session);
+        window.location.href = "/account/helper";
       } else {
-        toastNotificationError(data.errorMessage);
-        navigate("/account/login", { replace: true });
+        toastNotificationError(data?.errorMessage);
+        navigate("/account/helper_register", { replace: true });
       }
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        setMessageERROR("Invalid username or password");
-      } else {
-        setMessageERROR(
-          "An unexpected error occurred. Please try again later. Or refresh the page"
-        );
-      }
+      setMessageERROR(
+        "An unexpected error occurred. Please try again later. Or refresh the page"
+      );
     }
   };
 
-  async function handleGoogleLogin() {
-    const res = await axios.get("/api/auth/passport_success");
-    const clientid = res?.data?.user?.clientID;
-    if (clientid) {
-      window.open("/api/v1/auth/google", "_self");
-      localStorage.setItem("session", clientid);
-    } else {
-      toastNotificationError("account not found register");
-      navigate("/account/register");
-    }
-  }
-
-
   useEffect(() => {
-    if (userSession) {
-      navigate("/home", { replace: true });
+    if (helperSession) {
+      navigate("/account/helper", { replace: true });
     }
-  }, [userSession, navigate]);
-
+  }, [helperSession, navigate]);
 
   return (
     <>
@@ -143,7 +122,7 @@ export const Login = () => {
         >
           <div className="signup-container__top">
             <div className="mb-3">
-              <h1 className="signup-container__top-header">Login</h1>
+              <h1 className="signup-container__top-header">Login for helper</h1>
               <p className="signup-container__top-para">
                 Please provide you details
               </p>
@@ -213,21 +192,10 @@ export const Login = () => {
               <i className="fa-solid fa-envelope text-lg"></i>
               <span className="text-md">Continue with email</span>
             </button>
-            <div className="mt-2">
-              <div className="flex items-center justify-center gap-1 border p-2 mb-2   hover:cursor-pointer rounded-lg hover:bg-gray-200">
-                <img src={GoogleLogoImage} alt="google logo" className="w-5" />
-                <a
-                  onClick={handleGoogleLogin}
-                  className="text-md hover:text-gray-950"
-                >
-                  Continue with google
-                </a>
-              </div>
-            </div>
             <div className="flex items-center justify-center gap-1 p-2 mb-2">
               <p>Don't have an account with us ?</p>
               <Link
-                to="/account/register"
+                to="/helper/account_register"
                 className="text-md text-yellow-500 hover:text-yellow-600 font-bold"
               >
                 Register

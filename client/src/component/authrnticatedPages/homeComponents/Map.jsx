@@ -9,7 +9,6 @@ export const Map = (props) => {
   const [map, setMap] = useState(null);
   const mapContainerRef = useRef(null); // create a ref to the map container
   const directionsRef = useRef(null); // create a ref to the directions control
-  const [routeProgress, setRouteProgress] = useState(null);
   let pickupMarker, destinationMarker;
 
   useEffect(() => {
@@ -69,7 +68,6 @@ export const Map = (props) => {
           controls: {
             inputs: false,
             instructions: false,
-            profileSwitcher: true,
           },
         });
 
@@ -112,54 +110,14 @@ export const Map = (props) => {
           }
         });
 
-        // Inside the useEffect that creates the Mapbox Directions object, add a listener for the routeProgress event, and update the routeProgress state variable:
-        directions.on("routeProgress", (event) => {
-          setRouteProgress(event);
-        });
-        // Modify the code that creates the pickup marker to add a background behind the marker, and set its color based on the route progress:
-        if (centerPickupPoint) {
-          const pickupMarkerEl = document.createElement("div");
-          pickupMarkerEl.className = "marker";
-          pickupMarkerEl.style.background = getMarkerBackground(routeProgress);
-
-          pickupMarker = new mapboxgl.Marker({ element: pickupMarkerEl })
-            .setLngLat(centerPickupPoint)
-            .addTo(map);
-        }
-        // Define the getMarkerBackground function that returns the color of the background based on the route progress:
-        function getMarkerBackground(routeProgress) {
-          if (!routeProgress) {
-            return "#eab308";
-          }
-
-          const distanceRemaining =
-            routeProgress.route.distance - routeProgress.distance;
-          const distanceTraveled = routeProgress.distance;
-          const opacity =
-            distanceTraveled / (distanceRemaining + distanceTraveled);
-          const color = opacity === 1 ? "#8c8c8c" : "#eab308";
-
-          return `rgba(${hexToRgb(color)}, ${opacity})`;
-        }
-
-        function hexToRgb(hex) {
-          const match = hex.slice(1).match(/.{1,2}/g);
-          return `${parseInt(match[0], 16)}, ${parseInt(
-            match[1],
-            16
-          )}, ${parseInt(match[2], 16)}`;
-        }
-
         return () => {
           clearTimeout(timeoutId);
           // Remove the directions object and the directions layer from the map
           map.removeControl(directions);
-          // Remove the destination marker and geofence listener from the map
-          destinationMarker.remove();
         };
       }
     }
   }, [centerPickupPoint, centerDestinationPoint, map]);
 
-  return <div ref={mapContainerRef} className="w-full h-full"></div>;
+  return <div ref={mapContainerRef} className="w-[75%] h-full"></div>;
 };

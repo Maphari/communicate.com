@@ -1,19 +1,31 @@
 import React, { useEffect, useState, useContext } from "react";
-import { DataToSendContext } from "../../../context/DataToSendContext";
-import { Nav } from "./Nav";
+import { DataToSendContext } from "../../../context/DataTosendContext/DataToSendContext";
+import { UserRequestContext } from "../../../context/request/UserRequest";
+import { Nav } from "../Nav";
 import { Link } from "react-router-dom";
-import { Map } from "./Map";
+import { Map } from "../Map";
 import Loader from "../../../animation/Loder";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useSelector, connect } from "react-redux";
+import { useDispatch, useSelector, connect } from "react-redux";
+import {
+  setRequestID,
+  setPickupFirstName,
+  setPickupLastName,
+  setPickupEmail,
+  setPickupPhoneNumber,
+  setPickupInstruction,
+} from "../../../redux/requests/requestSlice";
 
 const Dashboard = () => {
   const isRequest = false;
   const [longitude, setLongitude] = useState(null);
   const [latitude, setLatitude] = useState(null);
-  const { data, helperData } = useContext(DataToSendContext);
-  const [checkRequester, setCheckRequester] = useState([]);
-  const currentRequest = useSelector((state) => state);
+  const [returnedRequest, setReturnedRequest] = useState([]);
+  const { helperData } = useContext(DataToSendContext);
+  const { request, setRequest } = useContext(UserRequestContext);
+  const navigate = useNavigate();
+  const helperSession = localStorage.getItem("helper-session");
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -24,8 +36,20 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    console.log(currentRequest);
-  }, [currentRequest]);
+    const getRequest = async () => {
+      const res = await axios.get("/api/current_user");
+      setReturnedRequest(res.data);
+    };
+    getRequest();
+  }, []);
+
+  useEffect(() => {
+    if (helperSession) {
+      navigate("/account/helper", { replace: true });
+    }
+  }, [helperSession, navigate]);
+
+  console.log(request);
 
   if (!longitude && !latitude) {
     return <Loader />;
@@ -90,18 +114,11 @@ const Dashboard = () => {
               </p>
             </div>
           </section>
-          <section className="h-full w-[75%]">
-            <Map centerPickupPoint={[longitude, latitude]} />
-          </section>
+          <Map centerPickupPoint={[longitude, latitude]} />
         </section>
       </>
     );
   }
 };
-const mapStateToProps = (state) => {
-  return {
-    requests: state.requests,
-  };
-};
 
-export default connect(mapStateToProps)(Dashboard)
+export default Dashboard;

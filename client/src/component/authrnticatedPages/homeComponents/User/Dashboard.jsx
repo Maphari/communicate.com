@@ -1,20 +1,22 @@
 import React, { useEffect, useState, useContext } from "react";
-import { DataToSendContext } from "../../context/DataToSendContext";
-import { Link } from "react-router-dom";
-import { Nav } from "./Nav";
-import { Map } from "./Map";
-import Loader from "../../animation/Loder";
+import { DataToSendContext } from "../../../context/DataTosendContext/DataToSendContext";
+import { UserRequestContext } from "../../../context/request/UserRequest";
+import { Nav } from "../Nav";
+import { Map } from "../Map";
+import Loader from "../../../animation/Loder";
 import axios from "axios";
-import PRIVATEKEY from "../../../../../privateKeys/privateKeys";
+import PRIVATEKEY from "../../../../../../privateKeys/privateKeys";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, connect } from "react-redux";
 import {
+  setRequestID,
   setPickupFirstName,
   setPickupLastName,
   setPickupEmail,
   setPickupPhoneNumber,
-  setPickupInstructions,
-} from "../../redux/requests/requestSlice";
+  setPickupInstruction,
+} from "../../../redux/requests/requestSlice";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [latitude, setLatitude] = useState(null);
@@ -31,9 +33,12 @@ const Dashboard = () => {
   const [currentSearchDestinationCoords, setCurrentSearchDestinationCoords] =
     useState([]);
   const { data } = useContext(DataToSendContext);
+  const { request, setRequest } = useContext(UserRequestContext);
   const requesterUsername = data?.user?.email;
   const requestForm = useSelector((state) => state.request);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const session = localStorage.getItem("session");
 
   const toastNotificationError = (message) => {
     toast.error(message, {
@@ -47,7 +52,6 @@ const Dashboard = () => {
       theme: "dark",
     });
   };
-
   // setting pickup point to the new selected point
   const handleSearchLocation = (
     locationPickup,
@@ -112,17 +116,19 @@ const Dashboard = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          requesterUsername,
-          pickup,
-          destination,
+          requesterUsername: requesterUsername,
+          pickup: pickup,
+          destination: destination,
           pickupFirstName: requestForm.pickupFirstName,
-          pickupLastName,
-          pickupEmail,
-          pickupPhoneNumber,
-          pickupInstruction,
+          pickupLastName: requestForm.pickupLastName,
+          pickupEmail: requestForm.pickupEmail,
+          pickupPhoneNumber: requestForm.pickupPhoneNumber,
+          pickupInstruction: requestForm.pickupInstruction,
         }),
       });
       const request = await createdRequest.json();
+      setRequest(request);
+      dispatch(setRequestID(request?.request?.requestID));
     } catch (error) {
       toastNotificationError(error.message);
     }
@@ -200,6 +206,13 @@ const Dashboard = () => {
   useEffect(() => {
     setPickup(exactLocation?.place_name);
   }, []);
+
+  useEffect(() => {
+    if (session) {
+      navigate("/home", { replace: true });
+    }
+  }, [session, navigate]);
+
 
   if (!longitude && !latitude) {
     return <Loader />;
@@ -416,7 +429,7 @@ const Dashboard = () => {
                     cols="40"
                     value={requestForm.pickupInstruction}
                     onChange={(e) =>
-                      dispatch(setPickupInstructions(e.target.value))
+                      dispatch(setPickupInstruction(e.target.value))
                     }
                     className="border outline-none text-[#333] w-full"
                   ></textarea>
@@ -431,19 +444,23 @@ const Dashboard = () => {
               </form>
             </header>
           </section>
-          <section className="dashboard-container__map w-full h-full">
-            <Map
-              centerPickupPoint={pickupCoords(longitude, latitude)}
-              centerDestinationPoint={destinationCoords(
-                currentSearchDestinationCoords[0],
-                currentSearchDestinationCoords[1]
-              )}
-            />
-          </section>
+          <Map
+            centerPickupPoint={pickupCoords(longitude, latitude)}
+            centerDestinationPoint={destinationCoords(
+              currentSearchDestinationCoords[0],
+              currentSearchDestinationCoords[1]
+            )}
+          />
         </section>
       </>
     );
   }
 };
 
-export default Dashboard;
+const mapStateToProps = (state) => {
+  return {
+    request: state.request,
+  };
+};
+
+export default connect(mapStateToProps)(Dashboard);

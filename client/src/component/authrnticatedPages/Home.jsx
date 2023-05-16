@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import  Dashboard  from "./homeComponents/Dashboard";
-import { DataToSendContext } from "../context/DataToSendContext";
+import Dashboard from "./homeComponents/User/Dashboard";
+import { DataToSendContext } from "../context/DataTosendContext/DataToSendContext";
 import { toast } from "react-toastify";
 
 export const Home = () => {

@@ -50,6 +50,10 @@ const requestsSchema = new Schema({
     type: String,
     required: [true, "pick instruction are required"],
   },
+  createdBY: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
 });
 
 mongoose.model("Requests", requestsSchema);

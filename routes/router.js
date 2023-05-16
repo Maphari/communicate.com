@@ -20,7 +20,6 @@ router.post("/api/request_pickup", async (req, res) => {
     } = req.body;
 
     const theRequest = await User.findOne({ email: requesterUsername });
-    
 
     const createRequest = new Requests({
       requestID: null,
@@ -57,8 +56,8 @@ router.post("/api/request_pickup", async (req, res) => {
 
 router.get("/api/current_user", async (req, res) => {
   try {
-    const theRequest = await Requests.find().exec();
-    res.json(theRequest);
+    const theRequestDB = await Requests.find().exec();
+    res.json(theRequestDB);
   } catch (error) {
     res.json({ errorMessage: error.message });
   }

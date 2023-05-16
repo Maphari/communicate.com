@@ -3,14 +3,14 @@ import { Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { Routes, Route } from "react-router-dom";
 import { LandingPage } from "./landingPage/LandingPage";
-import { Register } from "./account/Register";
-import { Login } from "./account/Login";
+import { Register } from "./account/userAccount/Register";
+import { Login } from "./account/userAccount/Login";
 import { Home } from "./authrnticatedPages/Home";
-import { BankAccount } from "./authrnticatedPages/homeComponents/BankAccount";
-import { HelperRegister } from "./authrnticatedPages/helper/account/HelperRegister";
-import { HelperLogin } from "./authrnticatedPages/helper/account/HelperLogin";
-import { Profile } from "./authrnticatedPages/homeComponents/Profile";
-import { AccountHelperHome } from "./authrnticatedPages/helper/component/AccountHelperHome";
+import { BankAccount } from "./authrnticatedPages/homeComponents/User/BankAccount";
+import { HelperRegister } from "./account/helperAccount/HelperRegister";
+import { HelperLogin } from "./account/helperAccount/HelperLogin";
+import { Profile } from "./authrnticatedPages/homeComponents/User/Profile";
+import { AccountHelperHome } from "./authrnticatedPages/homeComponents/helper/AccountHelperHome";
 import Loader from "./animation/Loder";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -28,13 +28,7 @@ export default function App() {
     return () => clearTimeout(loader);
   }, [loading]);
 
-  useEffect(() => {
-    if (helperSession) {
-      navigate("/account/helper", { replace: true });
-    } else if (userSession) {
-      navigate("/home", { replace: true });
-    }
-  }, [helperSession, userSession, Navigate]);
+
 
   return (
     <>

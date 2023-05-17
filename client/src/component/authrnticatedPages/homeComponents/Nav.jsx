@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DataToSendContext } from "../../context/DataTosendContext/DataToSendContext";
+import logoImage from "../../../assets/logo.png";
 
 export const Nav = () => {
   const dataContext = useContext(DataToSendContext);
@@ -9,17 +10,19 @@ export const Nav = () => {
   const navigate = useNavigate();
   const [isHoverUser, setIsHoverUser] = useState(false);
   const [isHelperHover, setIsHelperHover] = useState(false);
-  const session = localStorage.getItem("session");
-  const helperSession = localStorage.getItem("helper-session");
+  const session = localStorage.getItem("token");
+  const helperSession = localStorage.getItem("token-helper");
 
   const handleUserLogOut = () => {
-    localStorage.removeItem("session");
+    localStorage.removeItem("token");
     navigate("/account/login", { replace: true });
+    window.location.reload();
   };
 
   const handleHeleprLogOut = () => {
-    localStorage.removeItem("helper-session");
+    localStorage.removeItem("token-helper");
     navigate("/account/helper_login", { replace: true });
+    window.location.reload();
   };
 
   return (
@@ -83,17 +86,19 @@ export const Nav = () => {
               <Link
                 to="/profile"
                 onMouseOver={() => setIsHoverUser(true)}
-                className="rounded-full transition-all duration-500 ease-linear border py-[5px] px-2 flex items-center justify-center hover:text-black hover:bg-yellow-400"
+                className=" rounded-full transition-all duration-500 ease-linear border py-[5px] px-2 flex items-center justify-center gap-2 hover:text-black hover:bg-yellow-400"
               >
-                {data?.user?.email}
+                <span>{data?.user?.email} </span>
+                <i className="fa-solid fa-caret-down"></i>
               </Link>
             ) : helperSession ? (
               <Link
-                to="/profile"
-                onMouseOver={() => setIsHover(true)}
-                className="py-[5px] px-2 rounded-full transition-all duration-500 ease-linear border flex items-center justify-center hover:text-black hover:bg-yellow-400"
+                to="/helper/account/profile"
+                onMouseOver={() => setIsHelperHover(true)}
+                className="py-[5px] px-2 rounded-full transition-all duration-500 ease-linear border flex items-center gap-2 justify-center hover:text-black hover:bg-yellow-400"
               >
-                {helperData?.helper?.email}
+                <span>{helperData?.helper?.email}</span>
+                <i className="fa-solid fa-caret-down"></i>
               </Link>
             ) : null}
           </div>
@@ -102,26 +107,88 @@ export const Nav = () => {
         {isHoverUser && session ? (
           <div
             onMouseLeave={() => setIsHoverUser(false)}
-            className="absolute top-full right-8 bg-white w-[12rem] drop-shadow-2xl"
+            className="absolute top-full right-8 bg-white w-[15rem] drop-shadow-2xl"
           >
-            <button
-              className="p-2 transition-all duration-700 ease-linear hover:bg-yellow-500 w-full "
-              onClick={handleUserLogOut}
-            >
-              Log out
-            </button>
+            <div className="flex items-center flex-col w-full">
+              <header className="p-2 w-full flex items-center justify-center bg-slate-300 flex-col">
+                <img
+                  src={logoImage}
+                  alt="logo"
+                  className="h-8 w-8 object-contain"
+                />
+                <div className="mt-2 text-center w-full">
+                  <p className="text-[0.9rem] font-[600]">
+                    {data?.user?.username}
+                  </p>
+                  <p className="text-[0.8rem] font-[500] mt-1">
+                    {data?.user?.email}
+                  </p>
+                </div>
+              </header>
+              <div className="w-full">
+                <Link
+                  to="/profile"
+                  className="flex hover:text-black border-t text-[0.9rem] items-center gap-2 p-2 transition-all duration-700 ease-linear hover:bg-yellow-500"
+                >
+                  <span className="material-symbols-outlined text-[1.3rem]">
+                    account_circle
+                  </span>
+                  <span>Profile</span>
+                </Link>
+                <Link
+                  onClick={handleUserLogOut}
+                  className="flex hover:text-black border-t text-[0.9rem] items-center gap-2 p-2 transition-all duration-700 ease-linear hover:bg-yellow-500"
+                >
+                  <span className="material-symbols-outlined text-[1.3rem]">
+                    logout
+                  </span>
+                  <span>Log out</span>
+                </Link>
+              </div>
+            </div>
           </div>
         ) : isHelperHover && helperSession ? (
           <div
             onMouseLeave={() => setIsHelperHover(false)}
-            className="absolute top-full right-8 bg-white w-[12rem]"
+            className="absolute  top-full right-5 z-50 drop-shadow-xl bg-white w-[15rem]"
           >
-            <button
-              className="p-1 transition-all duration-700 ease-linear hover:bg-yellow-500 w-full "
-              onClick={handleHeleprLogOut}
-            >
-              Log out
-            </button>
+            <div className="flex items-center flex-col w-full">
+              <header className="p-2 w-full flex items-center justify-center bg-slate-300 flex-col">
+                <img
+                  src={logoImage}
+                  alt="logo"
+                  className="h-8 w-8 object-contain"
+                />
+                <div className="mt-2 text-center w-full">
+                  <p className="text-[0.9rem] font-[600]">
+                    {helperData?.helper?.username}
+                  </p>
+                  <p className="text-[0.8rem] font-[500] mt-1">
+                    {helperData?.helper?.email}
+                  </p>
+                </div>
+              </header>
+              <div className="w-full">
+                <Link
+                  to="/account/helper/profile"
+                  className="flex hover:text-black border-t text-[0.9rem] items-center gap-2 p-2 transition-all duration-700 ease-linear hover:bg-yellow-500"
+                >
+                  <span className="material-symbols-outlined text-[1.3rem]">
+                    account_circle
+                  </span>
+                  <span>Profile</span>
+                </Link>
+                <Link
+                  onClick={handleHeleprLogOut}
+                  className="flex hover:text-black border-t text-[0.9rem] items-center gap-2 p-2 transition-all duration-700 ease-linear hover:bg-yellow-500"
+                >
+                  <span className="material-symbols-outlined text-[1.3rem]">
+                    logout
+                  </span>
+                  <span>Log out</span>
+                </Link>
+              </div>
+            </div>
           </div>
         ) : null}
       </section>

@@ -11,8 +11,8 @@ export default class DataToSendProvider extends Component {
 
   async componentDidMount() {
     // GETTING STORED TOKENS ON LOCAL STORAGE
-    const userSession = localStorage.getItem("session");
-    const helpersession = localStorage.getItem("helper-session");
+    const userSession = localStorage.getItem('token');
+    const helpersession = localStorage.getItem('token-helper');
     const passportAuthenticationData = await axios.get(
       "/api/auth/passport_success"
     );

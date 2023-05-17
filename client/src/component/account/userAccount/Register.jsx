@@ -16,7 +16,7 @@ export const Register = () => {
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const userLanguage = navigator.language;
-  const userSession = localStorage.getItem("session");
+  const token = localStorage.getItem("token");
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -81,7 +81,7 @@ export const Register = () => {
         navigate("/account/login");
       } else if (data?.session) {
         toastNotificationSuccess(data?.message);
-        localStorage.setItem("session", data?.session);
+        localStorage.setItem("token", data?.session);
         window.location.href = "/home";
       } else {
         toastNotificationError(data?.message);
@@ -96,14 +96,14 @@ export const Register = () => {
     window.open("/api/v1/auth/google", "_self");
     const res = await axios.get("/api/auth/passport_success");
     const clientid = res?.data?.user?.clientID;
-    localStorage.setItem("session", clientid);
+    localStorage.setItem("token", clientid);
   }
 
   useEffect(() => {
-    if (userSession) {
+    if (token) {
       navigate("/home", { replace: true });
     }
-  }, [userSession, navigate]);
+  }, [token, navigate]);
 
   return (
     <>

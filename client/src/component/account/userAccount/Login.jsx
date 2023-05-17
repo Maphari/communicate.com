@@ -17,8 +17,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const userLanguage = navigator.language;
-  const userSession = localStorage.getItem("session");
-  const { data } = useContext(DataToSendContext);
+  const token = localStorage.getItem("token");
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -49,8 +48,6 @@ export const Login = () => {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: undefined,
-      theme: "dark",
     });
   };
 
@@ -62,22 +59,6 @@ export const Login = () => {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  };
-
-  const toastNotificationInfo = (message) => {
-    toast.info(message, {
-      toastId: "session-expired",
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
     });
   };
 
@@ -95,7 +76,7 @@ export const Login = () => {
         toastNotificationError(data.errorMessage);
         navigate("/account/register", { replace: true });
       } else if (data?.session) {
-        localStorage.setItem("session", data.session);
+        localStorage.setItem("token", data.session);
         toastNotificationSuccess(data.message);
         window.location.href = "/home";
       } else {
@@ -117,8 +98,8 @@ export const Login = () => {
     const res = await axios.get("/api/auth/passport_success");
     const clientid = res?.data?.user?.clientID;
     if (clientid) {
+      cookies.set("token", clientid);
       window.open("/api/v1/auth/google", "_self");
-      localStorage.setItem("session", clientid);
     } else {
       toastNotificationError("account not found register");
       navigate("/account/register");
@@ -126,10 +107,10 @@ export const Login = () => {
   }
 
   useEffect(() => {
-    if (userSession) {
+    if (token) {
       navigate("/home", { replace: true });
     }
-  }, [userSession, navigate]);
+  }, [token, navigate]);
 
   return (
     <>

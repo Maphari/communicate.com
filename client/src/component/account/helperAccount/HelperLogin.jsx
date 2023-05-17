@@ -15,7 +15,7 @@ export const HelperLogin = () => {
   const currentYear = new Date().getFullYear();
   const userLanguage = navigator.language;
   const navigate = useNavigate();
-  const helperSession = localStorage.getItem("helper-session");
+  const token = localStorage.getItem("token-helper");
   const { helperData } = useContext(DataToSendContext);
 
   const handleEmailChange = (e) => {
@@ -47,8 +47,7 @@ export const HelperLogin = () => {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: undefined,
-      theme: "dark",
+
     });
   };
 
@@ -60,22 +59,6 @@ export const HelperLogin = () => {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  };
-
-  const toastNotificationInfo = (message) => {
-    toast.info(message, {
-      toastId: "session-expired",
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
     });
   };
 
@@ -94,7 +77,7 @@ export const HelperLogin = () => {
         navigate("/helper/account_register");
       } else if (data?.session) {
         toastNotificationSuccess(data?.message);
-        localStorage.setItem("helper-session", data?.session);
+        localStorage.setItem("token-helper", data?.session);
         window.location.href = "/account/helper";
       } else {
         toastNotificationError(data?.errorMessage);
@@ -108,10 +91,10 @@ export const HelperLogin = () => {
   };
 
   useEffect(() => {
-    if (helperSession) {
+    if (token) {
       navigate("/account/helper", { replace: true });
-    }
-  }, [helperSession, navigate]);
+    } else navigate("/account/helper_login", { replace: true });
+  }, [token, navigate]);
 
   return (
     <>
@@ -195,7 +178,7 @@ export const HelperLogin = () => {
             <div className="flex items-center justify-center gap-1 p-2 mb-2">
               <p>Don't have an account with us ?</p>
               <Link
-                to="/helper/account_register"
+                to="/account/helper_register"
                 className="text-md text-yellow-500 hover:text-yellow-600 font-bold"
               >
                 Register

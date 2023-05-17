@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const requestsSchema = new Schema({
@@ -52,7 +52,7 @@ const requestsSchema = new Schema({
   },
   createdBY: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: "Requests",
   },
 });
 

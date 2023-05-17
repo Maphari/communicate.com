@@ -1,10 +1,11 @@
-import express from "express";
+const express = require("express");
 const router = express.Router();
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const Requests = mongoose.model("Requests");
 const User = mongoose.model("user");
-import Jwt from "jsonwebtoken";
-import PRIVATEKEYS from "../privateKeys/privateKeys.js";
+const Jwt = require("jsonwebtoken");
+const PRIVATEKEYS = require("../privateKeys/privateKeys");
+
 
 router.post("/api/request_pickup", async (req, res) => {
   try {
@@ -22,6 +23,7 @@ router.post("/api/request_pickup", async (req, res) => {
     const theRequest = await User.findOne({ email: requesterUsername });
 
     const createRequest = new Requests({
+      createdBY: theRequest._id,
       requestID: null,
       requesterUsername: requesterUsername,
       pickupPoint: pickup,
@@ -62,4 +64,5 @@ router.get("/api/current_user", async (req, res) => {
     res.json({ errorMessage: error.message });
   }
 });
-export default router;
+
+module.exports = router;

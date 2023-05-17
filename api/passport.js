@@ -1,8 +1,7 @@
-import privateKeys from "../privateKeys/privateKeys.js";
-import passport from "passport";
-import passportGoogle from "passport-google-oauth20";
-const GoogleStrategy = passportGoogle.Strategy;
-import mongoose from "mongoose";
+const Keys = require("../privateKeys/privateKeys");
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const mongoose = require("mongoose");
 const User = mongoose.model("user");
 
 
@@ -18,8 +17,8 @@ passport.deserializeUser(async (id, done) => {
 passport.use(
   new GoogleStrategy(
     {
-      clientID: privateKeys.GOOGLE_KEY,
-      clientSecret: privateKeys.GOOGLE_SECRET,
+      clientID: Keys.GOOGLE_KEY,
+      clientSecret: Keys.GOOGLE_SECRET,
       callbackURL: "/api/v1/auth/google/callback",
       scope: ["profile", "email"],
     },

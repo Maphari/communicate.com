@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialRequestFormState = {
+  isRequest: false,
+  requester: "",
   requestID: "",
   pickupFirstName: "",
   pickupLastName: "",
@@ -13,6 +15,9 @@ export const requestSclice = createSlice({
   name: "requestForm",
   initialState: initialRequestFormState,
   reducers: {
+    setIsRequest: (state, action) => {
+      state.isRequest = action.payload;
+    },
     setRequestID: (state, action) => {
       state.requestID = action.payload;
     },
@@ -41,6 +46,7 @@ export const {
   setPickupEmail,
   setPickupPhoneNumber,
   setPickupInstruction,
+  setIsRequest,
 } = requestSclice.actions;
 
 export default requestSclice.reducer;

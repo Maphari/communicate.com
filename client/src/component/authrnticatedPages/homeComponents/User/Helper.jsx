@@ -1,55 +1,53 @@
-import React, { useEffect, useState, useContext } from "react";
-import { DataToSendContext } from "../../../context/DataTosendContext/DataToSendContext";
-import { UserRequestContext } from "../../../context/request/UserRequest";
-import { Nav } from "../Nav";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { Map } from "../Map";
+import { Link } from "react-router-dom";
 import Loader from "../../../animation/Loder";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useDispatch, useSelector, connect } from "react-redux";
-import {
-  setRequestID,
-  setPickupFirstName,
-  setPickupLastName,
-  setPickupEmail,
-  setPickupPhoneNumber,
-  setPickupInstruction,
-} from "../../../redux/requests/requestSlice";
+import { Nav } from "../Nav";
 
-const Dashboard = () => {
-  const isRequest = false;
-  const [longitude, setLongitude] = useState(null);
+export const Helper = () => {
+  const [isRequest, setIsRequest] = useState(false);
   const [latitude, setLatitude] = useState(null);
-  const [returnedRequest, setReturnedRequest] = useState([]);
-  const { helperData } = useContext(DataToSendContext);
-  const { request, setRequest } = useContext(UserRequestContext);
-  const navigate = useNavigate();
-  const helperSession = localStorage.getItem("helper-session");
+  const [longitude, setLongitude] = useState(null);
+  const [ws, setWs] = useState(null);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
-      setLatitude(latitude);
+      const { longitude, latitude } = position.coords;
       setLongitude(longitude);
+      setLatitude(latitude);
     });
-  }, []);
+  }, [latitude, longitude]);
 
   useEffect(() => {
-    const getRequest = async () => {
-      const res = await axios.get("/api/current_user");
-      setReturnedRequest(res.data);
+    // Establish a new connection to our websocket server
+    const newWs = new WebSocket("ws://localhost:8080");
+    newWs.onopen = () => {
+      console.log("WebSocket connection established.");
     };
-    getRequest();
+    newWs.onmessage = function (message) {
+      const receivedData = message.data;
+      setData(receivedData);
+    };
+    newWs.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+    newWs.onclose = () => {
+      console.log("WebSocket connection closed.");
+    };
+    setWs(newWs);
+
+    if (ws) {
+      newWs.send("flmlbtgfbfhvoihmrtmbh");
+    }
   }, []);
 
   useEffect(() => {
-    if (helperSession) {
-      navigate("/account/helper", { replace: true });
+    if (data) {
+      // Process the received data and perform any required actions
+      console.log("Received data:", data);
     }
-  }, [helperSession, navigate]);
-
-  console.log(request);
+  }, [data]);
 
   if (!longitude && !latitude) {
     return <Loader />;
@@ -120,5 +118,3 @@ const Dashboard = () => {
     );
   }
 };
-
-export default Dashboard;

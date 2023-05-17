@@ -1,9 +1,9 @@
-import express from "express";
-import mongoose from "mongoose";
-import passport from "passport";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import privateKeys from "../privateKeys/privateKeys.js";
+const express = require("express");
+const mongoose = require("mongoose");
+const passport = require("passport");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const Keys = require("../privateKeys/privateKeys");
 const route = express.Router();
 const User = mongoose.model("user");
 const Helper = mongoose.model("Helper");
@@ -16,8 +16,8 @@ route.get(
 route.get(
   "/api/v1/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: `${privateKeys.CLIENT_ROUTE}/home`,
-    failureRedirect: `${privateKeys.CLIENT_ROUTE}/account/login`,
+    successRedirect: `${Keys.CLIENT_ROUTE}/home`,
+    failureRedirect: `${Keys.CLIENT_ROUTE}/account/login`,
   })
 );
 
@@ -34,7 +34,7 @@ route.post("/api/v1/auth/signup_user", async function (req, res) {
         password: password,
       });
 
-      const token = jwt.sign({ userId: newUser._id }, privateKeys.MY_SECRET, {
+      const token = jwt.sign({ userId: newUser._id }, Keys.MY_SECRET, {
         expiresIn: "24",
       });
       newUser.clientID = token;
@@ -52,7 +52,7 @@ route.post("/api/v1/auth/signup_user", async function (req, res) {
         user: newUser,
       });
     } else {
-      const token = jwt.sign({ userId: user._id }, privateKeys.MY_SECRET, {
+      const token = jwt.sign({ userId: user._id }, Keys.MY_SECRET, {
         expiresIn: "24h",
       });
       user.clientID = token;
@@ -124,7 +124,7 @@ route.post("/api/v1/auth/helper/register_user", async (req, res) => {
         mobile: mobile,
         password: password,
       });
-      const token = jwt.sign({ userId: newHelper._id }, privateKeys.MY_SECRET, {
+      const token = jwt.sign({ userId: newHelper._id }, Keys.MY_SECRET, {
         expiresIn: "24h",
       });
       newHelper.clientID = token;
@@ -145,7 +145,7 @@ route.post("/api/v1/auth/helper/register_user", async (req, res) => {
         helper: newHelper,
       });
     } else {
-      const token = jwt.sign({ userId: helper._id }, privateKeys.MY_SECRET, {
+      const token = jwt.sign({ userId: helper._id }, Keys.MY_SECRET, {
         expiresIn: "24h",
       });
       helper.clientID = token;
@@ -237,4 +237,4 @@ route.get("/api/auth/helper_success", function (req, res) {
   else res.json({ message: "Account is not authenticated" });
 });
 
-export default route;
+module.exports = route;

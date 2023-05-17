@@ -15,7 +15,7 @@ export const Process = () => {
             <br /> a smile to people who need it.
           </p>
           <Link
-            to="/helper/account_register"
+            to="/account/helper_register"
             className="p-[0.6rem] font-bold rounded bg-yellow-500 inline-block hover:bg-yellow-600 hover:text-white transition-all duration-700 ease-linear text-white"
           >
             Register to drive

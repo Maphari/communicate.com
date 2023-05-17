@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
-import bcrypt from "bcrypt";
+const bcrypt = require("bcrypt");
 
 const userSchema = new Schema(
   {

@@ -25,15 +25,15 @@ export const Process = () => {
           <div className="bg-slate-100 rounded py-3 px-4 max-w-[19rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-mobile-button text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Apply</h1>
-            <p className="opacity-80 mb-2">
+            <p className="opacity-80 mb-2 text-[0.9rem]">
               You can start by applying so that we verify your identity.
-              Customes has to feel safe and trust you as a driver
+              Customes has to feel safe and trust you.
             </p>
           </div>
           <div className="bg-slate-100 rounded py-3 px-4 max-w-[19rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-certificate text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Get verified</h1>
-            <p className="opacity-80 mb-2">
+            <p className="opacity-80 mb-2 text-[0.9rem]">
               then we can verify your information so that we know that you are
               the person who you say you are
             </p>
@@ -41,7 +41,7 @@ export const Process = () => {
           <div className="bg-slate-100 rounded py-3 px-4 max-w-[19rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-car text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Start driving</h1>
-            <p className="opacity-80 mb-2">
+            <p className="opacity-80 mb-2 text-[0.9rem]">
               then now you can start driving and add a smile to the to the
               people who really needs the smile.
             </p>

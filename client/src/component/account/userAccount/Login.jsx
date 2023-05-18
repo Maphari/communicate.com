@@ -191,6 +191,12 @@ export const Login = () => {
               <i className="fa-solid fa-envelope text-lg"></i>
               <span className="text-md">Continue with email</span>
             </button>
+            <Link to="/account/helper_login"
+              className=" bg-sky-500 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-sky-600"
+            >
+              <i className="fa-solid fa-car text-lg"></i>
+              <span className="text-md">Continue as a helper</span>
+            </Link>
             <div className="mt-2">
               <div className="flex items-center justify-center gap-1 border p-2 mb-2   hover:cursor-pointer rounded-lg hover:bg-gray-200">
                 <img src={GoogleLogoImage} alt="google logo" className="w-5" />

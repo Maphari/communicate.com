@@ -15,24 +15,9 @@ const requestsSchema = new Schema({
     type: String,
     required: [true, "destination point is required"],
   },
-  firstName: {
+  names: {
     type: String,
     required: [true, "first name is required"],
-  },
-  lastName: {
-    type: String,
-    required: [true, "last name is required"],
-  },
-  email: {
-    type: String,
-    required: [true, "email is required"],
-    lowecase: true,
-    validate: {
-      validator: (email) => {
-        return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
-      },
-      message: "Please enter a valid email address",
-    },
   },
   mobile: {
     type: String,

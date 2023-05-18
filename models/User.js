@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const bcrypt = require("bcrypt");
 
@@ -17,6 +17,18 @@ const userSchema = new Schema(
           return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
         },
         message: "Please enter a valid email address",
+      },
+    },
+    mobile: {
+      type: String,
+      required: [true, "Phone number is required"],
+      validate: {
+        validator: (newPhoneNumber) => {
+          return /^[+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,3}[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,4}$/.test(
+            newPhoneNumber
+          );
+        },
+        message: "Please provide a valid phone Number",
       },
     },
     password: {

@@ -9,8 +9,10 @@ import axios from "axios";
 
 export const Register = () => {
   const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [mobileError, setMobileError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [messageERROR, setMessageERROR] = useState("");
   const navigate = useNavigate();
@@ -26,6 +28,15 @@ export const Register = () => {
       setEmailError("Enter a valid email address");
     } else {
       setEmailError("");
+    }
+  };
+  const handleMobileChange = (e) => {
+    setMobile(e.target.value);
+
+    if (!mobile) {
+      setMobileError("Mobile number is required");
+    } else {
+      setMobileError("");
     }
   };
   const handlePasswordChange = (e) => {
@@ -72,7 +83,7 @@ export const Register = () => {
       const user = await fetch("/api/v1/auth/signup_user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, mobile, password }),
       });
       const data = await user.json();
 
@@ -147,6 +158,31 @@ export const Register = () => {
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               )}
             </InputGroup>
+            <InputGroup as={Col} hasValidation className="mb-3">
+              <InputGroup.Text id="basic-addon2" className="rounded-none">
+                <i className="fa-solid fa-phone"></i>
+              </InputGroup.Text>
+              <Form.Control
+                className="rounded-none"
+                placeholder="+27 79 123 1234"
+                type="tel"
+                aria-label="tel"
+                aria-labelledby="basic-addon2"
+                name="tel"
+                value={mobile}
+                onChange={handleMobileChange}
+                isValid={!!mobileError}
+                isInvalid={mobileError && mobileError}
+                required
+              />
+              {mobileError ? (
+                <Form.Control.Feedback type="invalid">
+                  {mobileError}
+                </Form.Control.Feedback>
+              ) : (
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              )}
+            </InputGroup>
             <InputGroup as={Col} hasValidation>
               <InputGroup.Text id="basic-addon3" className="rounded-none">
                 <i className="fa-solid fa-lock"></i>
@@ -185,6 +221,13 @@ export const Register = () => {
               <i className="fa-solid fa-envelope text-lg"></i>
               <span className="text-md">Continue with email</span>
             </button>
+            <Link
+              to="/account/helper_register"
+              className=" bg-sky-500 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-sky-600"
+            >
+              <i className="fa-solid fa-car text-lg"></i>
+              <span className="text-md">Continue as a helper</span>
+            </Link>
             <div className="mt-2">
               <div className="flex items-center justify-center gap-1 border p-2 mb-2   hover:cursor-pointer rounded-lg hover:bg-gray-200">
                 <img src={GoogleLogoImage} alt="google logo" className="w-5" />

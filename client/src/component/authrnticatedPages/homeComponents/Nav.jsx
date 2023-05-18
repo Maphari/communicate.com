@@ -30,18 +30,22 @@ export const Nav = () => {
       <section className="nav-container border-b bg-white relative z-[99999]">
         <header className="nav-container__header">
           {session ? (
-            <h1 className="font-[900] opacity-90 text-[24px]">
-              Communica<span className="text-yellow-500">tee.</span>
-            </h1>
+            <Link className="hover:text-black" to="/home">
+              <h1 className="font-[900] opacity-90 text-[24px]">
+                Communica<span className="text-yellow-500">tee.</span>
+              </h1>
+            </Link>
           ) : helperSession ? (
-            <h1 className="font-[900] opacity-90 text-[24px]">
-              Communica<span className="text-yellow-500">tee</span> helper
-            </h1>
+            <Link className="hover:text-black" to="/account/helper">
+              <h1 className="font-[900] opacity-90 text-[24px]">
+                Communica<span className="text-yellow-500">tee</span> helper
+              </h1>
+            </Link>
           ) : null}
           <div className="flex items-center flex-wrap gap-1">
             {session ? (
               <Link
-                to={"/home"}
+                to="/home"
                 className={`px-2 py-1 rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[500] opacity-90  ${
                   location.pathname === "/home" ? "nav-link-active" : ""
                 }`}
@@ -50,7 +54,7 @@ export const Nav = () => {
               </Link>
             ) : helperSession ? (
               <Link
-                to="/acccount/helper"
+                to="/account/helper"
                 className={`px-2 py-1 rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[500] opacity-90  ${
                   location.pathname === "/account/helper"
                     ? "nav-link-active"
@@ -93,7 +97,7 @@ export const Nav = () => {
               </Link>
             ) : helperSession ? (
               <Link
-                to="/helper/account/profile"
+                to="/profile"
                 onMouseOver={() => setIsHelperHover(true)}
                 className="py-[5px] px-2 rounded-full transition-all duration-500 ease-linear border flex items-center gap-2 justify-center hover:text-black hover:bg-yellow-400"
               >
@@ -110,7 +114,7 @@ export const Nav = () => {
             className="absolute top-full right-8 bg-white w-[15rem] drop-shadow-2xl"
           >
             <div className="flex items-center flex-col w-full">
-              <header className="p-2 w-full flex items-center justify-center bg-slate-300 flex-col">
+              <header className="px-2 py-4 w-full flex items-center justify-center bg-slate-200 flex-col">
                 <img
                   src={logoImage}
                   alt="logo"
@@ -128,21 +132,21 @@ export const Nav = () => {
               <div className="w-full">
                 <Link
                   to="/profile"
-                  className="flex hover:text-black border-t text-[0.9rem] items-center gap-2 p-2 transition-all duration-700 ease-linear hover:bg-yellow-500"
+                  className="flex hover:text-black border-t justify-between text-[1rem] items-center gap-2 p-[0.74rem] transition-all duration-700 ease-linear hover:bg-yellow-500"
                 >
-                  <span className="material-symbols-outlined text-[1.3rem]">
+                  <span className="font-medium">Profile</span>
+                  <span className="material-symbols-outlined font-bold text-[1.5rem]">
                     account_circle
                   </span>
-                  <span>Profile</span>
                 </Link>
                 <Link
                   onClick={handleUserLogOut}
-                  className="flex hover:text-black border-t text-[0.9rem] items-center gap-2 p-2 transition-all duration-700 ease-linear hover:bg-yellow-500"
+                  className="flex hover:text-black border-t justify-between text-[1rem] items-center gap-2 p-[0.74rem] transition-all duration-700 ease-linear hover:bg-yellow-500"
                 >
-                  <span className="material-symbols-outlined text-[1.3rem]">
+                  <span className="font-medium">Log out</span>
+                  <span className="material-symbols-outlined font-bold text-[1.5rem]">
                     logout
                   </span>
-                  <span>Log out</span>
                 </Link>
               </div>
             </div>
@@ -150,10 +154,13 @@ export const Nav = () => {
         ) : isHelperHover && helperSession ? (
           <div
             onMouseLeave={() => setIsHelperHover(false)}
-            className="absolute  top-full right-5 z-50 drop-shadow-xl bg-white w-[15rem]"
+            className="absolute  top-full right-8 z-50 drop-shadow-xl bg-white w-[15rem]"
           >
             <div className="flex items-center flex-col w-full">
-              <header className="p-2 w-full flex items-center justify-center bg-slate-300 flex-col">
+              <header className="relative px-2 py-4 w-full flex items-center justify-center bg-slate-200 flex-col">
+                <div className="absolute right-3 top-3 bg-white drop-shadow-xl p-2 flex justify-center items-center font-b rounded-full h-6 w-6">
+                  <i className="fa-solid fa-certificate"></i>
+                </div>
                 <img
                   src={logoImage}
                   alt="logo"
@@ -170,22 +177,22 @@ export const Nav = () => {
               </header>
               <div className="w-full">
                 <Link
-                  to="/account/helper/profile"
-                  className="flex hover:text-black border-t text-[0.9rem] items-center gap-2 p-2 transition-all duration-700 ease-linear hover:bg-yellow-500"
+                  to="/profile"
+                  className="flex hover:text-black border-t text-[1rem] justify-between items-center gap-2 p-[0.73rem] transition-all duration-700 ease-linear hover:bg-yellow-500"
                 >
-                  <span className="material-symbols-outlined text-[1.3rem]">
+                  <span className="font-medium">Profile</span>
+                  <span className="material-symbols-outlined font-semibold text-[1.5rem]">
                     account_circle
                   </span>
-                  <span>Profile</span>
                 </Link>
                 <Link
                   onClick={handleHeleprLogOut}
-                  className="flex hover:text-black border-t text-[0.9rem] items-center gap-2 p-2 transition-all duration-700 ease-linear hover:bg-yellow-500"
+                  className="flex hover:text-black border-t text-[1rem] justify-between items-center gap-2 p-[0.74rem] transition-all duration-700 ease-linear hover:bg-yellow-500"
                 >
-                  <span className="material-symbols-outlined text-[1.3rem]">
+                  <span className="font-medium">Log out</span>
+                  <span className="material-symbols-outlined font-semibold text-[1.5rem]">
                     logout
                   </span>
-                  <span>Log out</span>
                 </Link>
               </div>
             </div>

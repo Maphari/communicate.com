@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import Requester from "./Requester";
-import { Helper } from "./Helper";
+import Requester from "./User/Requester";
+import { Helper } from "./helper/Helper";
 
 const Dashboard = () => {
   const session = localStorage.getItem("token");

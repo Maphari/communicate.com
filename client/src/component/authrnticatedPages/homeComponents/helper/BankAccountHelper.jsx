@@ -1,12 +1,12 @@
 import React from "react";
 import { Nav } from "../Nav";
 
-export const BankAccount = () => {
+export const BankAccountHelper = () => {
   return (
     <>
       <Nav />
       <section className="bankaccount-container">
-        <h1>Bank account</h1>
+        bank account
       </section>
     </>
   );

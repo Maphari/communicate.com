@@ -13,9 +13,7 @@ router.post("/api/request_pickup", async (req, res) => {
       requesterUsername,
       pickup,
       destination,
-      pickupFirstName,
-      pickupLastName,
-      pickupEmail,
+      pickupNames,
       pickupPhoneNumber,
       pickupInstruction,
     } = req.body;
@@ -25,12 +23,9 @@ router.post("/api/request_pickup", async (req, res) => {
     const createRequest = new Requests({
       createdBY: theRequest._id,
       requestID: null,
-      requesterUsername: requesterUsername,
       pickupPoint: pickup,
       destinationPoint: destination,
-      firstName: pickupFirstName,
-      lastName: pickupLastName,
-      email: pickupEmail,
+      names: pickupNames,
       mobile: pickupPhoneNumber,
       pickInstruction: pickupInstruction,
     });

@@ -8,13 +8,19 @@ export const Map = (props) => {
   const { centerPickupPoint, centerDestinationPoint } = props;
   const [map, setMap] = useState(null);
   const mapContainerRef = useRef(null); // create a ref to the map container
-  const pickupMarkerRef = useRef(null); // create a ref to the pickup marker
-  const destinationMarkerRef = useRef(null); // create a ref to the destination marker
   const directionsRef = useRef(null); // create a ref to the directions control
+  const [userLocationCoords, setUserLocationCoords] = useState([]);
 
   // Memoize the map and directions objects to prevent unnecessary re-renders
   const memoizedMap = useMemo(() => map, [map]);
   const memoizedDirections = useMemo(() => directionsRef.current, []);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { longitude, latitude } = position.coords;
+      setUserLocationCoords(longitude, latitude);
+    });
+  }, []);
 
   useEffect(() => {
     mapboxgl.accessToken = ClientKeys.MAPBOX_API_KEY;
@@ -63,7 +69,13 @@ export const Map = (props) => {
         },
       });
 
-      memoizedMap.addControl(directions, "top-left");
+      if (userLocationCoords) {
+        const defaultMarker = new mapboxgl.Marker()
+          .setLngLat(userLocationCoords)
+          .addTo(map); // Add the marker to the map
+      }
+
+      map.addControl(directions, "top-left");
 
       directions.setOrigin(centerPickupPoint);
       directions.setDestination(centerDestinationPoint);
@@ -94,7 +106,8 @@ export const Map = (props) => {
     centerDestinationPoint,
     memoizedMap,
     memoizedDirections,
+    userLocationCoords,
   ]);
 
-  return <div ref={mapContainerRef} className="tablet:w-[75%] mobile:w-full h-full" />;
+  return <div ref={mapContainerRef} className="w-full h-full" />;
 };

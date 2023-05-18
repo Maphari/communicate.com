@@ -6,9 +6,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector, connect } from "react-redux";
 import {
   setRequestID,
-  setPickupFirstName,
-  setPickupLastName,
-  setPickupEmail,
+  setPickupNames,
   setPickupPhoneNumber,
   setPickupInstruction,
 } from "../../../redux/requests/requestSlice";
@@ -27,8 +25,8 @@ const Requester = () => {
   const [searchDestination, setSearchDestination] = useState([]);
   const [isClickedLocation, setIsClickedLocation] = useState(false);
   const [isClickedDestination, setIsClickedDestination] = useState(false);
-  const [currentSearchLocationCoords, setCurrentSearchLocationCoords] =
-    useState([]);
+  const [newLongitude, setNewLongitude] = useState([]);
+  const [newLatitude, setNewLatitude] = useState([]);
   const [currentSearchDestinationCoords, setCurrentSearchDestinationCoords] =
     useState([]);
   const { data } = useContext(DataToSendContext);
@@ -50,19 +48,6 @@ const Requester = () => {
     });
   };
 
-  // setting pickup point to the new selected point
-  const handleSearchLocation = (
-    locationPickup,
-    isExactLocation,
-    exactPickupCoords
-  ) => {
-    setPickup(locationPickup);
-    setExactLocation(isExactLocation);
-    // taking the exact coords for clicked pickup point point
-    setCurrentSearchLocationCoords(exactPickupCoords?.center);
-    setLongitude(currentSearchLocationCoords[0]);
-    setLatitude(currentSearchLocationCoords[1]);
-  };
   // setting destination point to the new selected point
   const handleSearchDestination = (
     destinationPickup,
@@ -73,20 +58,6 @@ const Requester = () => {
     setIsClickedDestination(isExactDestination);
     // taking the exact coords for clicked destination point point
     setCurrentSearchDestinationCoords(exactDestinationCoords?.center);
-  };
-  // setting current user pickup coords to the new selected point
-  const handleCurrentLocation = (
-    currentUserLocation,
-    isLocationClicked,
-    exactLocationCoords
-  ) => {
-    setPickup(currentUserLocation);
-    setIsClickedLocation(isLocationClicked);
-    // taking the exact coords for clicked pickup point point
-    setCurrentSearchLocationCoords(exactLocationCoords?.center);
-    setLongitude(currentSearchLocationCoords[0]);
-    setLatitude(currentSearchLocationCoords[1]);
-    console.log(currentSearchLocationCoords);
   };
   // setting current user destination  coords to the new selected point
   const handleCurrentDestination = (
@@ -118,9 +89,7 @@ const Requester = () => {
           requesterUsername: requesterUsername,
           pickup: pickup,
           destination: destination,
-          pickupFirstName: requestForm.pickupFirstName,
-          pickupLastName: requestForm.pickupLastName,
-          pickupEmail: requestForm.pickupEmail,
+          pickupNames: requestForm.pickupNames,
           pickupPhoneNumber: requestForm.pickupPhoneNumber,
           pickupInstruction: requestForm.pickupInstruction,
         }),
@@ -234,6 +203,11 @@ const Requester = () => {
     }
   }, [session, helperSession, navigate]);
 
+  useEffect(() => {
+    setNewLongitude(longitude);
+    setNewLatitude(latitude);
+  }, []);
+
   if (!longitude && !latitude) {
     return <Loader />;
   } else {
@@ -241,8 +215,11 @@ const Requester = () => {
       <>
         <Nav />
         <section className="dashboard-container">
-          <section className="dashboard-container__content">
+          <section className="dashboard-container__content rounded-xl">
             <header className="w-full">
+              <h1 className="mb-3 mt-4 opacity-70 font-bold text-lg">
+                Find your package
+              </h1>
               <form className="w-full" onSubmit={(e) => e.preventDefault()}>
                 <h1 className="mb-2 opacity-70 text-md">Where to pick up</h1>
                 <div className="flex items-center border mb-3 relative bg-[#fff] text-gray-500">
@@ -266,13 +243,10 @@ const Requester = () => {
                         Your current location
                       </h1>
                       <div
-                        onClick={() =>
-                          handleCurrentLocation(
-                            exactLocation.place_name,
-                            false,
-                            exactLocation
-                          )
-                        }
+                        onClick={() => {
+                          setPickup(exactLocation.place_name);
+                          setIsClickedLocation(false);
+                        }}
                         className="opacity-80 hover:cursor-pointer w-full p-2 hover:bg-slate-200"
                       >
                         <div className="flex items-center gap-3">
@@ -287,13 +261,12 @@ const Requester = () => {
                         {searchLocation?.map((place, index) => (
                           <div
                             key={index}
-                            onClick={() =>
-                              handleSearchLocation(
-                                place.place_name,
-                                false,
-                                place
-                              )
-                            }
+                            onClick={() => {
+                              setNewLongitude(place.center[0]);
+                              setNewLatitude(place.center[1]);
+                              setPickup(place.place_name);
+                              setIsClickedLocation(false);
+                            }}
                             className="flex items-center gap-3 hover:cursor-pointer w-full p-2 hover:bg-slate-200"
                           >
                             <i className="fa-solid fa-location-dot text-xl ml-2"></i>
@@ -376,50 +349,16 @@ const Requester = () => {
                 </h1>
               </header>
               <div>
-                <label htmlFor="firstName" className="mt-2 mb-1 opacity-70">
-                  First Name
+                <label htmlFor="names" className="mt-2 mb-1 opacity-70">
+                  Names
                 </label>
                 <div className="flex items-center border relative">
                   <input
-                    id="firstName"
+                    id="names"
                     type="text"
-                    placeholder="First name"
-                    value={requestForm.pickupFirstName}
-                    onChange={(e) =>
-                      dispatch(setPickupFirstName(e.target.value))
-                    }
-                    className="outline-none p-2 flex flex-1 text-[#333]"
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="lasttName" className="mt-2 mb-1 opacity-70">
-                  Last Name
-                </label>
-                <div className="flex items-center border relative">
-                  <input
-                    id="lastName"
-                    type="text"
-                    placeholder="Last name"
-                    value={requestForm.pickupLastName}
-                    onChange={(e) =>
-                      dispatch(setPickupLastName(e.target.value))
-                    }
-                    className="outline-none p-2 flex flex-1 text-[#333]"
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="email" className="mt-2 mb-1 opacity-70">
-                  Email
-                </label>
-                <div className="flex items-center border relative">
-                  <input
-                    id="email"
-                    type="email"
-                    placeholder="Example@gmail.com"
-                    value={requestForm.pickupEmail}
-                    onChange={(e) => dispatch(setPickupEmail(e.target.value))}
+                    placeholder="John Doe"
+                    value={requestForm.names}
+                    onChange={(e) => dispatch(setPickupNames(e.target.value))}
                     className="outline-none p-2 flex flex-1 text-[#333]"
                   />
                 </div>
@@ -468,7 +407,11 @@ const Requester = () => {
             </form>
           </section>
           <Map
-            centerPickupPoint={pickupCoords(longitude, latitude)}
+            centerPickupPoint={
+              newLongitude && newLatitude
+                ? pickupCoords(newLongitude, newLatitude)
+                : pickupCoords(longitude, latitude)
+            }
             centerDestinationPoint={destinationCoords(
               currentSearchDestinationCoords[0],
               currentSearchDestinationCoords[1]

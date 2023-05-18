@@ -21,7 +21,7 @@ export function Features() {
           <div className="bg-slate-100 rounded py-3 px-4 max-w-[20rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-credit-card text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Easy payments</h1>
-            <p className="opacity-80 mb-2">
+            <p className="opacity-80 text-[0.9rem] mb-2">
               With communicatee our system supports all the cards we make a
               better place for you to deliver things.
             </p>
@@ -29,15 +29,15 @@ export function Features() {
           <div className="bg-slate-100 py-3 rounded px-4 max-w-[20rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-map text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Interactive map</h1>
-            <p className="opacity-80 mb-2">
+            <p className="opacity-80 text-[0.9rem] mb-2">
               With communicatee our system allows you to search using the map to
-              tell us where to pick up your item and deliver.
+              tell us where to pick up your item.
             </p>
           </div>
           <div className="bg-slate-100 rounded py-3 px-4 max-w-[20rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-user text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Choose the deliver</h1>
-            <p className="opacity-80 mb-2">
+            <p className="opacity-80 mb-2 text-[0.9rem]">
               With communicatee our system allows you to choose a person to
               deliver we dont choose for you.
             </p>
@@ -45,7 +45,7 @@ export function Features() {
           <div className="bg-slate-100 rounded py-3 px-4 max-w-[20rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-car text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Choose the vehicle</h1>
-            <p className="opacity-80 mb-2">
+            <p className="opacity-80 mb-2 text-[0.9rem]">
               With communicatee our system allows you to choose a vehicle to
               deliver we dont choose for you.
             </p>

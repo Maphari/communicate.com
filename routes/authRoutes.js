@@ -24,13 +24,14 @@ route.get(
 // ROUTES FOR USER TO CREATE ACCOUNT AND LOGIN USING FORMS
 route.post("/api/v1/auth/signup_user", async function (req, res) {
   try {
-    const { email, password } = req.body;
+    const { email, mobile, password } = req.body;
     const user = await User.findOne({ email });
 
     if (!user) {
       const newUser = new User({
         clientID: null,
         email: email,
+        mobile: mobile,
         password: password,
       });
 
@@ -41,6 +42,7 @@ route.post("/api/v1/auth/signup_user", async function (req, res) {
       req.session.user = {
         clientID: newUser.clientID,
         email: newUser.email,
+        mobile: newUser.mobile,
         password: newUser.password,
       };
       await newUser.save();
@@ -60,6 +62,7 @@ route.post("/api/v1/auth/signup_user", async function (req, res) {
       req.session.user = {
         clientID: user.clientID,
         email: user.email,
+        mobile: user.mobile,
         password: user.password,
       };
 

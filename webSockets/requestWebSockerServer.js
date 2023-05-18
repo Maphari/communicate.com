@@ -27,7 +27,7 @@ wsServer.on("request", function (request) {
     } else {
       console.log(false);
     }
-  });
+  }); 
 
   connection.on("close", function (reasonCode, description) {
     console.log("WebSocket connection closed");

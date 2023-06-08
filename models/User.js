@@ -5,7 +5,11 @@ const bcrypt = require("bcrypt");
 const userSchema = new Schema(
   {
     clientID: String,
-    name: String,
+    username: {
+      type: String,
+      required: [true, "username is required"],
+      minlength: [4, "username must be at least 4 characters"],
+    },
     profilePicture: String,
     email: {
       type: String,

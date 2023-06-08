@@ -1,7 +1,7 @@
 require("./webSockets/requestWebSockerServer");
-require("./models/User.js");
-require("./models/Helper.js");
-require("./models/Requests.js");
+require("./models/User");
+require("./models/Helper");
+require("./models/Requests");
 const express = require("express");
 const mongoose = require("mongoose");
 const keys = require("./privateKeys/privateKeys");

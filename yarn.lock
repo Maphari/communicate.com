@@ -843,6 +843,11 @@ mongodb@^5.3.0:
   optionalDependencies:
     saslprep "^1.0.3"
 
+mongoose-geojson-schema@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/mongoose-geojson-schema/-/mongoose-geojson-schema-2.2.4.tgz#0b642b9c37a993fc28105a5797c0897a7a443606"
+  integrity sha512-y91QqplEh/SFQPb7qxmICDwfrD+NW2mfhLJKMb1z24wE74DhqcoiFpGR4vf5TTfvAZrQfF/tLgcRbic6aPAWOw==
+
 mongoose@^7.0.5:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-7.1.0.tgz#ad7f23184a0c19eb8efbbad4f1ff2113ede1515d"
@@ -1395,6 +1400,11 @@ utils-merge@1.0.1, utils-merge@1.x.x, utils-merge@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==
+
+uuid@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
+  integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
 
 vary@^1, vary@~1.1.2:
   version "1.1.2"

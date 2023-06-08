@@ -3,10 +3,6 @@ const { Schema } = mongoose;
 
 const requestsSchema = new Schema({
   requestID: String,
-  requesterUsername: {
-    type: String,
-    required: [true, "request username is required"],
-  },
   pickupPoint: {
     type: String,
     required: [true, "pickup point is required"],
@@ -36,9 +32,11 @@ const requestsSchema = new Schema({
     required: [true, "pick instruction are required"],
   },
   createdBY: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Requests",
+    type: Schema.Types.ObjectId,
+    ref: "user",
   },
+  pickupPerson: { type: Schema.Types.ObjectId, ref: "Helper" },
+  status: { type: String, enum: ["pending", "accepted"], default: "pending" },
 });
 
 mongoose.model("Requests", requestsSchema);

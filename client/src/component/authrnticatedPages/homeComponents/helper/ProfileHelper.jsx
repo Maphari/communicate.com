@@ -35,7 +35,9 @@ export const ProfileHelper = () => {
             <p className="opacity-90 mb-3">{helperData.helper.email}</p>
             <hr className="w-[30rem]" />
           </div>
-          <button className="my-3 p-[0.75rem] bg-yellow-500 font-bold text-white transition-all duration-700 ease-linear hover:bg-yellow-600 rounded">Update information</button>
+          <button className="my-3 w-full p-[0.45rem] bg-yellow-600 font-[400] text-white transition-all duration-700 ease-linear hover:bg-yellow-700 rounded">
+            Update information
+          </button>
         </section>
       </section>
     </>

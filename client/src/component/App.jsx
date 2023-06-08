@@ -6,12 +6,13 @@ import { LandingPage } from "./landingPage/LandingPage";
 import { Register } from "./account/userAccount/Register";
 import { Login } from "./account/userAccount/Login";
 import { BankAccount } from "./authrnticatedPages/homeComponents/User/BankAccount";
-import { ProfileHelper } from "../component/authrnticatedPages/homeComponents/helper/ProfileHelper";
 import { HelperRegister } from "./account/helperAccount/HelperRegister";
 import { HelperLogin } from "./account/helperAccount/HelperLogin";
-import { ProfileUser } from "./authrnticatedPages/homeComponents/User/ProfileUser";
 import { BankAccountHelper } from "./authrnticatedPages/homeComponents/helper/BankAccountHelper";
 import { Profile } from "./authrnticatedPages/Profile";
+import { Accept } from "./authrnticatedPages/homeComponents/helper/Accept";
+import { Decline } from "./authrnticatedPages/homeComponents/helper/Decline";
+import RequestInformation from "./authrnticatedPages/homeComponents/User/RequestInformation";
 import Dashboard from "./authrnticatedPages/homeComponents/Dashboard";
 import Loader from "./animation/Loder";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,6 +21,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
   const tokenHelper = localStorage.getItem("token-helper");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loader = setTimeout(() => {
@@ -28,6 +30,14 @@ export default function App() {
     return () => clearTimeout(loader);
   }, [loading]);
 
+  useEffect(() => {
+    if (token) {
+      navigate("/home", { replace: true });
+    } else if (tokenHelper) {
+      navigate("/account/helper", { replace: true });
+    }
+  }, []);
+
   return (
     <>
       <ToastContainer />
@@ -35,7 +45,18 @@ export default function App() {
         <Loader />
       ) : (
         <Routes>
-          <Route path="/" element={!token ? <LandingPage /> : <Dashboard />} />
+          <Route
+            path="/"
+            element={
+              !token || !tokenHelper ? (
+                <LandingPage />
+              ) : token ? (
+                <Navigate to="/home" replace={true} />
+              ) : tokenHelper ? (
+                <Navigate to="/account/helper" replace={true} />
+              ) : null
+            }
+          />
           <Route
             path="/account/helper"
             element={tokenHelper ? <Dashboard /> : <HelperRegister />}
@@ -58,7 +79,7 @@ export default function App() {
           />
           <Route
             path="/home"
-            element={token ? <Dashboard /> : <LandingPage />}
+            element={token ? <Dashboard /> : <Navigate to="/" replace={true} />}
           />
           <Route
             path="/profile"
@@ -70,7 +91,29 @@ export default function App() {
           />
           <Route
             path="/account/helper/bank_account"
-            element={tokenHelper ? <BankAccountHelper /> : <LandingPage />}
+            element={
+              tokenHelper ? (
+                <BankAccountHelper />
+              ) : (
+                <Navigate to="/account/helper" />
+              )
+            }
+          />
+          <Route
+            path="/account/helper-declined"
+            element={
+              tokenHelper ? <Decline /> : <Navigate to="/account/helper" />
+            }
+          />
+          <Route
+            path="/account/helper-accept"
+            element={
+              tokenHelper ? <Accept /> : <Navigate to="/account/helper" />
+            }
+          />
+          <Route
+            path="/request-information"
+            element={token ? <RequestInformation /> : <Navigate to="/home" />}
           />
         </Routes>
       )}

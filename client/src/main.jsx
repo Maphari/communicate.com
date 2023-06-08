@@ -4,6 +4,7 @@ import App from "./component/App";
 import "./sass/main.scss";
 import { BrowserRouter } from "react-router-dom";
 import DataToSendProvider from "./component/context/DataTosendContext/DataToSendContext";
+import { RequestProvider } from "./component/context/request/RequestContext";
 import { Provider } from "react-redux";
 import store from "./component/redux/store";
 
@@ -12,7 +13,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <BrowserRouter>
         <DataToSendProvider>
+          <RequestProvider>
             <App />
+          </RequestProvider>
         </DataToSendProvider>
       </BrowserRouter>
     </Provider>

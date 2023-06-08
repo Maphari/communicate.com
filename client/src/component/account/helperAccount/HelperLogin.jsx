@@ -1,10 +1,9 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 // BOOTSTRAP IMPORTS
 import { InputGroup, Form, Col } from "react-bootstrap";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { DataToSendContext } from "../../context/DataTosendContext/DataToSendContext";
 
 export const HelperLogin = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +15,7 @@ export const HelperLogin = () => {
   const userLanguage = navigator.language;
   const navigate = useNavigate();
   const token = localStorage.getItem("token-helper");
-  const { helperData } = useContext(DataToSendContext);
+  const helperToken = localStorage.getItem("token-helper");
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -47,7 +46,6 @@ export const HelperLogin = () => {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-
     });
   };
 
@@ -92,9 +90,11 @@ export const HelperLogin = () => {
 
   useEffect(() => {
     if (token) {
+      navigate("/home", { replace: true });
+    } else if (helperToken) {
       navigate("/account/helper", { replace: true });
-    } else navigate("/account/helper_login", { replace: true });
-  }, [token, navigate]);
+    }
+  }, [token, helperToken, navigate]);
 
   return (
     <>
@@ -119,7 +119,7 @@ export const HelperLogin = () => {
               </InputGroup.Text>
               <Form.Control
                 className="rounded-none"
-                placeholder="example@gmail.com"
+                placeholder="someone@example.com"
                 type="email"
                 aria-label="email"
                 aria-labelledby="basic-addon2"
@@ -175,6 +175,13 @@ export const HelperLogin = () => {
               <i className="fa-solid fa-envelope text-lg"></i>
               <span className="text-md">Continue with email</span>
             </button>
+            <Link
+              to="/account/login"
+              className=" bg-sky-500 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-sky-600"
+            >
+              <i className="fa-solid fa-user text-lg"></i>
+              <span className="text-md">Continue as a user</span>
+            </Link>
             <div className="flex items-center justify-center gap-1 p-2 mb-2">
               <p>Don't have an account with us ?</p>
               <Link

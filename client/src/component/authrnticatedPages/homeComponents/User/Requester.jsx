@@ -6,10 +6,15 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector, connect } from "react-redux";
 import {
   setRequestID,
+  setPickupPoint,
+  setDestinationPoint,
   setPickupNames,
-  setPickupPhoneNumber,
+  setPickupMobile,
   setPickupInstruction,
-} from "../../../redux/requests/requestSlice";
+  setRequesterUsername,
+  setRequesterEmail,
+  setRequesterMobile,
+} from "../../../redux/requests/requestHelperSclice";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../../animation/Loder";
 import axios from "axios";
@@ -29,17 +34,36 @@ const Requester = () => {
   const [newLatitude, setNewLatitude] = useState([]);
   const [currentSearchDestinationCoords, setCurrentSearchDestinationCoords] =
     useState([]);
+
   const { data } = useContext(DataToSendContext);
   const requesterUsername = data?.user?.email;
-  const requestForm = useSelector((state) => state.request);
+  const requestForm = useSelector((state) => state.requestHelper);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [ws, setWs] = useState(null);
+
   const session = localStorage.getItem("token");
   const helperSession = localStorage.getItem("token-helper");
 
   const toastNotificationSuccess = (message) => {
     toast.success(message, {
+      toastId: "toast-success",
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+    });
+  };
+  const toastNotificationError = (message) => {
+    toast.error(message, {
+      toastId: "toast-error",
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+    });
+  };
+  const toastNotificationInfo = (message) => {
+    toast.info(message, {
       toastId: "toast-success",
       position: "bottom-right",
       autoClose: 5000,
@@ -80,34 +104,6 @@ const Requester = () => {
     setIsClickedDestination(isDestinationClicked);
   };
 
-  const handlePickupInformationSubmit = async () => {
-    try {
-      const createdRequest = await fetch("/api/request_pickup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          requesterUsername: requesterUsername,
-          pickup: pickup,
-          destination: destination,
-          pickupNames: requestForm.pickupNames,
-          pickupPhoneNumber: requestForm.pickupPhoneNumber,
-          pickupInstruction: requestForm.pickupInstruction,
-        }),
-      });
-      const request = await createdRequest.json();
-      dispatch(setRequestID(request?.request?.requestID));
-
-      const data = JSON.stringify(request);
-
-      if (ws && request) {
-        ws.send(data);
-      } else {
-        toastNotificationError("Something went wrong reload and try again!!");
-      }
-    } catch (error) {
-      toastNotificationError(error.message);
-    }
-  };
   const pickupCoords = (longitude, latitude) => {
     return [longitude, latitude];
   };
@@ -120,22 +116,44 @@ const Requester = () => {
       : null;
   };
 
-  useEffect(() => {
-    const newWs = new WebSocket("ws://localhost:8080");
-    newWs.onopen = () => {
-      console.log("WebSocket connection established.");
-    };
-    newWs.onmessage = (event) => {
-      toastNotificationSuccess("Creating a pick for you");
-    };
-    newWs.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
-    newWs.onclose = () => {
-      console.log("WebSocket connection closed.");
-    };
-    setWs(newWs);
-  }, []);
+  const handlePickupInformationSubmit = async () => {
+    try {
+      const createdRequest = await fetch("/api/request_pickup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          requesterUsername: requesterUsername,
+          pickup: pickup,
+          destination: destination,
+          pickupNames: requestForm.pickupNames,
+          pickupPhoneNumber: requestForm.pickupMobile,
+          pickupInstruction: requestForm.pickupInstruction,
+        }),
+      });
+      const request = await createdRequest.json();
+      // setting request id to redux store
+      dispatch(setRequestID(request?.request?.requestID));
+      //if we have a request id then we can send request
+      if (request?.request?.requestID) {
+        dispatch(setRequestID(request?.request?.requestID));
+        dispatch(setPickupPoint(request?.request?.pickupPoint));
+        dispatch(setDestinationPoint(request?.request?.destinationPoint));
+        dispatch(setPickupNames(request?.request?.names));
+        dispatch(setPickupMobile(request?.request?.mobile));
+        dispatch(setPickupInstruction(request?.request?.pickInstruction));
+        dispatch(setRequesterUsername(request?.requesterInformation?.username));
+        dispatch(setRequesterEmail(request?.requesterInformation?.email));
+        dispatch(setRequesterMobile(request?.requesterInformation?.mobile));
+        navigate("/request-information");
+      } else if (!request?.request?.requestID) {
+        toastNotificationInfo("Please provide information about the pickup");
+      } else {
+        toastNotificationError(request.errorMessage);
+      }
+    } catch (error) {
+      toastNotificationError(error.message);
+    }
+  };
 
   useEffect(() => {
     const handleLocationSearch = async () => {
@@ -215,15 +233,17 @@ const Requester = () => {
       <>
         <Nav />
         <section className="dashboard-container">
-          <section className="dashboard-container__content rounded-xl">
+          <section className="dashboard-container__content bg-white drop-shadow-2xl rounded-xl">
             <header className="w-full">
               <h1 className="mb-3 mt-4 opacity-70 font-bold text-lg">
                 Find your package
               </h1>
               <form className="w-full" onSubmit={(e) => e.preventDefault()}>
-                <h1 className="mb-2 opacity-70 text-md">Where to pick up</h1>
-                <div className="flex items-center border mb-3 relative bg-[#fff] text-gray-500">
-                  <i className="fa-solid fa-search ml-2 opacity-60"></i>
+                <h1 className="mb-2 opacity-70 text-[1rem]">
+                  Where to pick up
+                </h1>
+                <div className="flex rounded items-center border mb-3 relative bg-[#fff] text-gray-500">
+                  <i className="fa-solid fa-map-location-dot ml-2 text-yellow-600 opacity-95"></i>
                   <input
                     type="text"
                     placeholder="Where to pick up ?"
@@ -232,30 +252,33 @@ const Requester = () => {
                     onClick={() =>
                       handleInputLocationAndDestinationCliked(true, false)
                     }
-                    className="outline-none p-2 flex flex-1"
+                    className="outline-none rounded p-[0.3rem] flex flex-1 font-normal text-[0.9rem]"
                   />
                   {isClickedLocation ? (
                     <div
                       onMouseLeave={() => setIsClickedLocation(false)}
-                      className={`absolute top-full left-0 bg-white text-[#141414] w-full z-[500] drop-shadow-xl flex items-center flex-wrap`}
+                      className={`absolute rounded max-h-[19rem] overflow-auto top-full left-0 bg-white text-[#141414] w-full z-[500] drop-shadow-xl flex items-center flex-wrap`}
                     >
-                      <h1 className="px-3 mb-2 font-bold text-md">
+                      <h1 className="px-3 my-2 font-bold text-[0.9rem]">
                         Your current location
                       </h1>
                       <div
                         onClick={() => {
                           setPickup(exactLocation.place_name);
                           setIsClickedLocation(false);
+                          dispatch(setPickupPoint(exactLocation.place_name));
                         }}
                         className="opacity-80 hover:cursor-pointer w-full p-2 hover:bg-slate-200"
                       >
                         <div className="flex items-center gap-3">
-                          <i className="fa-solid fa-location-dot text-xl ml-2"></i>
-                          <span>{exactLocation.place_name}</span>
+                          <i className="fa-solid fa-location-dot text-[1rem] ml-2 text-yellow-600 opacity-95"></i>
+                          <span className="text-[0.9rem]">
+                            {exactLocation.place_name}
+                          </span>
                         </div>
                       </div>
-                      <div className="opacity-80 w-full">
-                        <h1 className="px-3 my-2 font-bold text-md">
+                      <div className="opacity-80 w-full ">
+                        <h1 className="px-3 my-2 font-bold text-[0.9rem]">
                           Search results
                         </h1>
                         {searchLocation?.map((place, index) => (
@@ -266,11 +289,14 @@ const Requester = () => {
                               setNewLatitude(place.center[1]);
                               setPickup(place.place_name);
                               setIsClickedLocation(false);
+                              dispatch(setPickupPoint(place.place_name));
                             }}
                             className="flex items-center gap-3 hover:cursor-pointer w-full p-2 hover:bg-slate-200"
                           >
-                            <i className="fa-solid fa-location-dot text-xl ml-2"></i>
-                            <span>{place?.place_name}</span>
+                            <i className="fa-solid fa-location-dot ml-2 text-yellow-600 opacity-95"></i>
+                            <span className="text-[0.9rem]">
+                              {place?.place_name}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -279,9 +305,11 @@ const Requester = () => {
                     pickup?.trim() === "" && null
                   )}
                 </div>
-                <h1 className="mb-2 opacity-70 text-md">Destination point</h1>
-                <div className="flex items-center border relative bg-[#fff] text-[#333]">
-                  <i className="fa-solid fa-search ml-2 opacity-60"></i>
+                <h1 className="mb-2 opacity-70 text-[1rem]">
+                  Destination point
+                </h1>
+                <div className="flex rounded items-center border relative bg-[#fff] text-[#333]">
+                  <i className="fa-solid fa-location-dot ml-2 text-yellow-600 opacity-95"></i>
                   <input
                     placeholder="Destination point ?"
                     value={destination}
@@ -289,49 +317,57 @@ const Requester = () => {
                     onClick={() =>
                       handleInputLocationAndDestinationCliked(false, true)
                     }
-                    className="outline-none p-2 flex flex-1"
+                    className="rounded outline-none p-[0.3rem] flex flex-1 font-normal text-[0.9rem]"
                   />
                   {isClickedDestination ? (
                     <div
                       onMouseLeave={() => setIsClickedDestination(false)}
-                      className={`absolute top-full left-0 bg-white w-full z-[500] drop-shadow-xl flex items-center flex-wrap`}
+                      className={`absolute rounded max-h-[19rem] overflow-auto top-full left-0 bg-white w-full z-[500] drop-shadow-xl flex items-center flex-wrap`}
                     >
-                      <h1 className="px-3 mb-2 font-bold text-md">
+                      <h1 className="px-3 my-2 font-bold text-[0.9rem]">
                         Your current location
                       </h1>
                       <div
-                        onClick={() =>
+                        onClick={() => {
                           handleCurrentDestination(
                             exactLocation.place_name,
                             false,
                             exactLocation
-                          )
-                        }
+                          );
+                          dispatch(
+                            setDestinationPoint(exactLocation.place_name)
+                          );
+                        }}
                         className="opacity-80 hover:cursor-pointer w-full p-2 hover:bg-slate-200"
                       >
                         <div className="flex items-center gap-3">
-                          <i className="fa-solid fa-location-dot text-xl ml-2"></i>
-                          <span>{exactLocation.place_name}</span>
+                          <i className="fa-solid fa-location-dot text-[1rem] ml-2 text-yellow-600 opacity-95"></i>
+                          <span className="text-[0.9rem]">
+                            {exactLocation.place_name}
+                          </span>
                         </div>
                       </div>
                       <div className="opacity-80 w-full">
-                        <h1 className="px-3 my-2 font-bold text-md">
+                        <h1 className="px-3 my-2 font-bold text-[0.9rem]">
                           Search results
                         </h1>
                         {searchDestination?.map((place, index) => (
                           <div
                             key={index}
-                            onClick={() =>
+                            onClick={() => {
                               handleSearchDestination(
                                 place.place_name,
                                 false,
                                 place
-                              )
-                            }
+                              );
+                              dispatch(setDestinationPoint(place.place_name));
+                            }}
                             className="flex items-center gap-3 hover:cursor-pointer w-full p-2 hover:bg-slate-200"
                           >
-                            <i className="fa-solid fa-location-dot text-xl ml-2"></i>
-                            <span>{place?.place_name}</span>
+                            <i className="fa-solid fa-location-dot ml-2 text-yellow-600 opacity-95"></i>
+                            <span className="text-[0.9rem]">
+                              {place?.place_name}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -349,60 +385,68 @@ const Requester = () => {
                 </h1>
               </header>
               <div>
-                <label htmlFor="names" className="mt-2 mb-1 opacity-70">
+                <label
+                  htmlFor="names"
+                  className="mt-2 mb-1 opacity-70 text-[0.9rem]"
+                >
                   Names
                 </label>
-                <div className="flex items-center border relative">
+                <div className="flex rounded items-center border relative">
+                  <i className="fa-solid fa-user text-[0.9rem] ml-2 text-yellow-600 opacity-95"></i>
                   <input
                     id="names"
                     type="text"
                     placeholder="John Doe"
-                    value={requestForm.names}
+                    value={requestForm.pickupNames}
                     onChange={(e) => dispatch(setPickupNames(e.target.value))}
-                    className="outline-none p-2 flex flex-1 text-[#333]"
+                    className="rounded outline-none p-[0.3rem] flex flex-1 text-[#333] text-[0.9rem] font-normal"
                   />
                 </div>
               </div>
               <div>
-                <label htmlFor="mobile" className="mt-2 mb-1 opacity-70">
+                <label
+                  htmlFor="mobile"
+                  className="mt-2 mb-1 opacity-70 text-[0.9rem]"
+                >
                   Phone Number
                 </label>
-                <div className="flex items-center border relative">
+                <div className="flex items-center border relative rounded">
+                  <i className="fa-solid fa-mobile text-[0.9rem] ml-2 text-yellow-600 opacity-95"></i>
                   <input
                     id="mobile"
                     type="tel"
                     placeholder="+27 123 4567"
                     value={requestForm.pickupPhoneNumber}
-                    onChange={(e) =>
-                      dispatch(setPickupPhoneNumber(e.target.value))
-                    }
-                    className="outline-none p-2 flex flex-1 text-[#333]"
+                    onChange={(e) => dispatch(setPickupMobile(e.target.value))}
+                    className="outline-none rounded p-[0.3rem] flex flex-1 text-[#333] text-[0.9rem] font-normal"
                   />
                 </div>
               </div>
               <div className="mt-2 w-full">
-                <label htmlFor="my-textarea" className="mb-1 opacity-70">
+                <label
+                  htmlFor="my-textarea"
+                  className="mb-1 opacity-70 text-[0.9rem]"
+                >
                   Pickup instruction
                 </label>
                 <textarea
                   id="my-textarea"
                   name="my-textarea"
-                  rows="3"
+                  rows="2"
                   cols="40"
                   value={requestForm.pickupInstruction}
                   onChange={(e) =>
                     dispatch(setPickupInstruction(e.target.value))
                   }
-                  className="border outline-none text-[#333] w-full"
+                  className="border rounded outline-none text-[#333] w-full text-[0.9rem] font-normal"
                 ></textarea>
               </div>
+
               <button
-                type="submit"
                 onClick={handlePickupInformationSubmit}
-                id="requestBTN"
-                className="p-2 text-white font-bold mt-2 w-full transition-all duration-700 ease-linear hover:bg-yellow-700 bg-yellow-600"
+                className="p-[0.3rem] mt-1 w-full bg-yellow-600 font-[400] text-white transition-all duration-700 ease-linear hover:bg-yellow-700 rounded"
               >
-                Request pickup
+                Request For Pickup
               </button>
             </form>
           </section>
@@ -424,7 +468,7 @@ const Requester = () => {
 };
 const mapStateToProps = (state) => {
   return {
-    request: state.request,
+    requestHelper: state.requestHelper,
   };
 };
 

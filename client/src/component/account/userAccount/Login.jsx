@@ -1,12 +1,9 @@
-import React, { useEffect, useContext } from "react";
-// BOOTSTRAP IMPORTS
+import React, { useEffect, useState } from "react";
 import { InputGroup, Form, Col } from "react-bootstrap";
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import GoogleLogoImage from "../../../assets/google-logo.png";
-import { DataToSendContext } from "../../context/DataTosendContext/DataToSendContext";
+import axios from "axios";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,6 +15,7 @@ export const Login = () => {
   const currentYear = new Date().getFullYear();
   const userLanguage = navigator.language;
   const token = localStorage.getItem("token");
+  const helperToken = localStorage.getItem("token-helper");
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -109,8 +107,10 @@ export const Login = () => {
   useEffect(() => {
     if (token) {
       navigate("/home", { replace: true });
+    } else if (helperToken) {
+      navigate("/account/helper", { replace: true });
     }
-  }, [token, navigate]);
+  }, [token, helperToken, navigate]);
 
   return (
     <>
@@ -135,7 +135,7 @@ export const Login = () => {
               </InputGroup.Text>
               <Form.Control
                 className="rounded-none"
-                placeholder="example@gmail.com"
+                placeholder="someone@example.com"
                 type="email"
                 aria-label="email"
                 aria-labelledby="basic-addon2"
@@ -191,7 +191,8 @@ export const Login = () => {
               <i className="fa-solid fa-envelope text-lg"></i>
               <span className="text-md">Continue with email</span>
             </button>
-            <Link to="/account/helper_login"
+            <Link
+              to="/account/helper_login"
               className=" bg-sky-500 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-sky-600"
             >
               <i className="fa-solid fa-car text-lg"></i>

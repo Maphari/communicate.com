@@ -3,25 +3,36 @@ import mapboxgl from "mapbox-gl";
 import MapboxSupported from "@mapbox/mapbox-gl-supported";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import ClientKeys from "../../ClientKeys/ClientKeys";
+import { useSelector, connect } from "react-redux";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export const Map = (props) => {
   const { centerPickupPoint, centerDestinationPoint } = props;
   const [map, setMap] = useState(null);
   const mapContainerRef = useRef(null); // create a ref to the map container
   const directionsRef = useRef(null); // create a ref to the directions control
-  const [userLocationCoords, setUserLocationCoords] = useState([]);
-
+  const [longitude, setLongitude] = useState(null);
+  const [latitude, setLatitude] = useState(null);
+  const [driversLocation, setDriversLocation] = useState([]);
+  const userSession = localStorage.getItem("token");
+  const helperSession = localStorage.getItem("token-helper");
+  // const requestData = useSelector((state) => state.requestHelper);
   // Memoize the map and directions objects to prevent unnecessary re-renders
   const memoizedMap = useMemo(() => map, [map]);
   const memoizedDirections = useMemo(() => directionsRef.current, []);
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { longitude, latitude } = position.coords;
-      setUserLocationCoords(longitude, latitude);
+  const toastNotificationError = (message) => {
+    toast.error(message, {
+      toastId: "toast-error",
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
     });
-  }, []);
+  };
 
+  // DISPLAYING MAP
   useEffect(() => {
     mapboxgl.accessToken = ClientKeys.MAPBOX_API_KEY;
 
@@ -34,9 +45,9 @@ export const Map = (props) => {
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current, // use the ref to the map container
-      style: "mapbox://styles/phumudzo001/clgus2d0v006501qy9ri978xf",
+      style: "mapbox://styles/phumudzo001/cling333700mt01qva0jccn0a",
       center: centerPickupPoint,
-      zoom: 13,
+      zoom: 15,
     });
 
     // create a new NavigationControl and add it to the map
@@ -49,7 +60,7 @@ export const Map = (props) => {
       map.remove();
     };
   }, []);
-
+  // DISPLAYING MAP AND MARKERS
   useEffect(() => {
     if (!memoizedMap) {
       return;
@@ -62,18 +73,12 @@ export const Map = (props) => {
         profile: "mapbox/driving",
         alternatives: true,
         congestion: true,
-        interactive: false,
+        interactive: true,
         controls: {
           inputs: false,
           instructions: false,
         },
       });
-
-      if (userLocationCoords) {
-        const defaultMarker = new mapboxgl.Marker()
-          .setLngLat(userLocationCoords)
-          .addTo(map); // Add the marker to the map
-      }
 
       map.addControl(directions, "top-left");
 
@@ -83,8 +88,6 @@ export const Map = (props) => {
       directions.on("route", ({ route }) => {
         const duration = route[0].duration;
         const distance = route[0].distance;
-        // console.log("Route Distance:", distance, "meters");
-        // console.log("Route Duration:", duration, "seconds");
       });
 
       directionsRef.current = directions;
@@ -106,8 +109,51 @@ export const Map = (props) => {
     centerDestinationPoint,
     memoizedMap,
     memoizedDirections,
-    userLocationCoords,
   ]);
+  // TAKING DRIVERS DATA FROM DATABASE
+  useEffect(() => {
+    const getDriversLocation = async () => {
+      try {
+        const response = await axios.get("/api/get-drivers");
+        if (response.data) {
+          setDriversLocation(response.data && response.data);
+          console.log(driversLocation);
+        } else {
+          toastNotificationError(error.message);
+        }
+      } catch (error) {
+        toastNotificationError(error.message);
+      }
+    };
+    getDriversLocation();
+  }, []);
 
-  return <div ref={mapContainerRef} className="w-full h-full" />;
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { longitude, latitude } = position.coords;
+      setLongitude(longitude);
+      setLatitude(latitude);
+    });
+  }, [longitude, latitude]);
+
+  useEffect(() => {
+    // CUSTOME MARKER
+    const customMarker = document.createElement("div");
+    customMarker.className = "custom-marker";
+
+    const marker = new mapboxgl.Marker({
+      element: customMarker,
+      anchor: "bottom",
+    });
+
+    if (longitude && latitude) {
+      marker.setLngLat([longitude, latitude]).addTo(map);
+    }
+  }, [longitude, latitude]);
+
+  if (!longitude && latitude) {
+    return <p>Loading...</p>;
+  } else {
+    return <div ref={mapContainerRef} className="w-full h-full" />;
+  }
 };

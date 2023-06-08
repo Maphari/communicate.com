@@ -33,13 +33,15 @@ export default class DataToSendProvider extends Component {
     } else if (isPassowrdAuthenticated) {
       this.setState({ data: passportAuthenticationData.data });
     }
-
+    
     if (isHelperAunthenticated) {
       this.setState({helperData: helperData?.data?.helper});
-    }
+    } 
   }
 
+
   render() {
+
     return (
       <DataToSendContext.Provider
         value={{ data: this.state.data, helperData: this.state.helperData }}

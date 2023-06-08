@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import requestReducer from "./requests/requestSlice";
+import requestHelperSclice from "./requests/requestHelperSclice";
 
 export default configureStore({
   reducer: {
-    request: requestReducer,
+    requestHelper: requestHelperSclice,
   },
 });

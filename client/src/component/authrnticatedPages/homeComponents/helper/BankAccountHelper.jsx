@@ -6,7 +6,11 @@ export const BankAccountHelper = () => {
     <>
       <Nav />
       <section className="bankaccount-container">
-        bank account
+        <header className="bankaccount-container__header">
+          <h1 className="bankaccount-container-main text-[1.5rem] font-[600]">
+            Bank account
+          </h1>
+        </header>
       </section>
     </>
   );

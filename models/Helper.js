@@ -1,10 +1,20 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const bcrypt = require("bcrypt");
 
 const helperSchema = new Schema(
   {
     clientID: String,
+    available: { type: Boolean, default: true },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"], // Specify the GeoJSON type
+      },
+      coordinates: {
+        type: [Number], // Array of [longitude, latitude]
+      },
+    },
     username: {
       type: String,
       minLength: [3, "more than 3 characters required"],
@@ -20,6 +30,7 @@ const helperSchema = new Schema(
         message: "Please enter a valid username",
       },
     },
+
     email: {
       type: String,
       required: [true, " email is required"],
@@ -62,6 +73,8 @@ const helperSchema = new Schema(
   },
   { timestamps: true }
 );
+
+// Middleware function hash the password before saving before saving
 helperSchema.pre("save", function (next) {
   const user = this;
   // only hash the password if it has been modified or is new

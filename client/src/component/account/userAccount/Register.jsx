@@ -1,24 +1,37 @@
-import React, { useEffect } from "react";
-// BOOTSTRAP IMPORTS
+import React, { useEffect, useState } from "react";
 import { InputGroup, Form, Col } from "react-bootstrap";
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import GoogleLogoImage from "../../../assets/google-logo.png";
 import axios from "axios";
 
 export const Register = () => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
+  const [usernameError, setUsernameError] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [mobileError, setMobileError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [messageERROR, setMessageERROR] = useState("");
-  const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const userLanguage = navigator.language;
   const token = localStorage.getItem("token");
+  const helperToken = localStorage.getItem("token-helper");
+  const navigate = useNavigate();
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+
+    if (!username) {
+      setUsernameError("Username is required");
+    } else if (username.trim().length < 4) {
+      setUsernameError("Username must be at least 4 characters long");
+    } else {
+      setUsernameError("");
+    }
+  };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -83,7 +96,7 @@ export const Register = () => {
       const user = await fetch("/api/v1/auth/signup_user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, mobile, password }),
+        body: JSON.stringify({ username, email, mobile, password }),
       });
       const data = await user.json();
 
@@ -113,8 +126,11 @@ export const Register = () => {
   useEffect(() => {
     if (token) {
       navigate("/home", { replace: true });
+    } else if (helperToken) {
+      navigate("/account/helper", { replace: true });
     }
-  }, [token, navigate]);
+  }, [token, helperToken, navigate]);
+
 
   return (
     <>
@@ -135,11 +151,36 @@ export const Register = () => {
             )}
             <InputGroup as={Col} hasValidation className="mb-3">
               <InputGroup.Text id="basic-addon2" className="rounded-none">
+                <i className="fa-solid fa-user"></i>
+              </InputGroup.Text>
+              <Form.Control
+                className="rounded-none"
+                placeholder="John Doe"
+                type="text"
+                aria-label="username"
+                aria-labelledby="basic-addon2"
+                name="username"
+                value={username}
+                onChange={handleUsernameChange}
+                isValid={!!usernameError}
+                isInvalid={usernameError && usernameError}
+                required
+              />
+              {usernameError ? (
+                <Form.Control.Feedback type="invalid">
+                  {usernameError}
+                </Form.Control.Feedback>
+              ) : (
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              )}
+            </InputGroup>
+            <InputGroup as={Col} hasValidation className="mb-3">
+              <InputGroup.Text id="basic-addon2" className="rounded-none">
                 <i className="fa-solid fa-envelope"></i>
               </InputGroup.Text>
               <Form.Control
                 className="rounded-none"
-                placeholder="example@gmail.com"
+                placeholder="someone@example.com"
                 type="email"
                 aria-label="email"
                 aria-labelledby="basic-addon2"
@@ -219,7 +260,7 @@ export const Register = () => {
               className=" bg-yellow-500 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-yellow-600"
             >
               <i className="fa-solid fa-envelope text-lg"></i>
-              <span className="text-md">Continue with email</span>
+              <span className="text-md">Continue</span>
             </button>
             <Link
               to="/account/helper_register"

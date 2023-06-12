@@ -1,13 +1,17 @@
-.custom-marker {
-  background-color: $PRIMARY-COLOR;
+.marker-user {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+}
 
-  &::before {
-    content: "";
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    background-color: $PRIMARY-COLOR;
-    border-radius: 100%;
-    z-index: 999;
-  }
+.marker-driver {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: $PRIMARY-COLOR;
+  box-shadow: 0 0 6px rgba(189, 182, 0, 0.5);
 }

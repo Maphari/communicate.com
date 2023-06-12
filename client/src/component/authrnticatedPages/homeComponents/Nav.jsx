@@ -13,7 +13,6 @@ export const Nav = () => {
   const session = localStorage.getItem("token");
   const helperSession = localStorage.getItem("token-helper");
 
-
   const handleUserLogOut = () => {
     localStorage.removeItem("token");
     navigate("/account/login", { replace: true });
@@ -28,17 +27,17 @@ export const Nav = () => {
 
   return (
     <>
-      <section className="nav-container border-b bg-white relative z-[99999]">
+      <section className="nav-container bg-[#161616] drop-shadow-2xl text-white relative z-[99999]">
         <header className="nav-container__header">
           {session ? (
             <Link className="hover:text-black" to="/home">
-              <h1 className="font-[900] opacity-90 text-[22px]">
+              <h1 className="font-[900] opacity-90 text-[22px] hover:text-white">
                 Communica<span className="text-yellow-500">tee.</span>
               </h1>
             </Link>
           ) : helperSession ? (
             <Link className="hover:text-black" to="/account/helper">
-              <h1 className="font-[900] opacity-90 text-[22px]">
+              <h1 className="font-[900] opacity-90 text-[22px] hover:text-white">
                 Communica<span className="text-yellow-500">tee</span> helper
               </h1>
             </Link>
@@ -47,7 +46,7 @@ export const Nav = () => {
             {session ? (
               <Link
                 to="/home"
-                className={`px-2 py-1 rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[500] opacity-90  ${
+                className={`px-2 py-1 rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[300]  ${
                   location.pathname === "/home" ? "nav-link-active" : ""
                 }`}
               >
@@ -56,7 +55,7 @@ export const Nav = () => {
             ) : helperSession ? (
               <Link
                 to="/account/helper"
-                className={`px-2 py-1 rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[500] opacity-90  ${
+                className={`px-2 py-1 rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[300] ${
                   location.pathname === "/account/helper"
                     ? "nav-link-active"
                     : ""
@@ -65,32 +64,30 @@ export const Nav = () => {
                 Home
               </Link>
             ) : null}
-            {session ? (
+            {session || helperSession ? (
               <Link
-                to="/bank_account"
-                className={`px-2 py-1  rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[500] opacity-90  ${
-                  location.pathname === "/bank_account" ? "nav-link-active" : ""
+                to="/message"
+                className={`px-2 py-1  rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[300] ${
+                  location.pathname === "/massage" ? "nav-link-active" : ""
                 }`}
               >
-                Bank Account
-              </Link>
-            ) : helperSession ? (
-              <Link
-                to="/account/helper/bank_account"
-                className={`px-2 py-1  rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[500] opacity-90  ${
-                  location.pathname === "/account/helper/bank_account"
-                    ? "nav-link-active"
-                    : ""
-                }`}
-              >
-                Bank Account
+                Message
               </Link>
             ) : null}
-
+            {session || helperSession ? (
+              <Link
+                to="/latest-news"
+                className={`px-2 py-1  rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[300] ${
+                  location.pathname === "/latest-news" ? "nav-link-active" : ""
+                }`}
+              >
+                Latest News
+              </Link>
+            ) : null}
             {session ? (
               <Link
                 onMouseOver={() => setIsHoverUser(true)}
-                className=" rounded-full transition-all duration-500 ease-linear border py-[5px] px-2 flex items-center justify-center gap-2 hover:text-black hover:bg-yellow-400"
+                className="font-[300] rounded-full transition-all duration-500 ease-linear border-[0.3px] border-[#333] py-[5px] px-2 flex items-center justify-center gap-2 hover:text-black hover:bg-yellow-400"
               >
                 <span>{data?.user?.username} </span>
                 <i className="fa-solid fa-caret-down"></i>
@@ -98,7 +95,7 @@ export const Nav = () => {
             ) : helperSession ? (
               <Link
                 onMouseOver={() => setIsHelperHover(true)}
-                className="py-[5px] px-2 rounded-full transition-all duration-500 ease-linear border flex items-center gap-2 justify-center hover:text-black hover:bg-yellow-400"
+                className="font-[300] py-[5px] px-2 border-[0.3px] border-[#333] rounded-full transition-all duration-500 ease-linear flex items-center gap-2 justify-center hover:text-black hover:bg-yellow-400"
               >
                 <span>{helperData?.helper?.username}</span>
                 <i className="fa-solid fa-caret-down"></i>
@@ -110,35 +107,41 @@ export const Nav = () => {
         {isHoverUser && session ? (
           <div
             onMouseLeave={() => setIsHoverUser(false)}
-            className="absolute rounded-b-xl top-full right-5 bg-white w-[15rem] drop-shadow-2xl"
+            className="absolute rounded-b-xl rounded-t-lg top-full right-5 bg-[#161616] w-[15rem] drop-shadow-2xl"
           >
             <div className="flex items-center flex-col w-full">
-              <header className="px-2 rounded py-2 w-full flex items-center justify-center flex-col">
-                <img
-                  src={logoImage}
-                  alt="logo"
-                  className="h-8 w-8 object-contain"
-                />
-                <div className="mt-2 text-center w-full">
-                  <p className="text-[0.9rem] font-[600]">
-                    {data?.user?.username}
-                  </p>
-                  <p className="text-[0.8rem] font-[500] mt-1">
-                    {data?.user?.email}
-                  </p>
-                </div>
-              </header>
               <div className="w-full">
                 <Link
                   to="/profile"
-                  className="flex rounded-xl border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:bg-yellow-500 hover:text-black"
+                  className="flex border-t border-[#333] justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
                 >
                   <span className="font-[400]">Profile</span>
                   <i className="fa-solid fa-user"></i>
                 </Link>
                 <Link
+                  to="/history"
+                  className="flex border-[#333]  border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
+                >
+                  <span className="font-[400]">History</span>
+                  <i className="fa-solid fa-timeline"></i>
+                </Link>
+                <Link
+                  to="/settings"
+                  className="flex border-[#333]  border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
+                >
+                  <span className="font-[400]">Settings</span>
+                  <i className="fa-solid fa-gear"></i>
+                </Link>
+                <Link
+                  to="/account/helper_register"
+                  className="flex border-[#333]  border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
+                >
+                  <span className="font-[400]">Become a helper</span>
+                  <i className="fa-solid fa-car"></i>
+                </Link>
+                <Link
                   onClick={handleUserLogOut}
-                  className="flex rounded-xl hover:text-black border-t justify-between text-[0.9rem] items-center gap-2 px-[0.74rem] py-[0.45rem]  transition-all duration-700 ease-linear hover:bg-yellow-500"
+                  className="flex hover:text-yellow-500 border-[#333]  border-t justify-between text-[0.9rem] items-center gap-2 px-[0.74rem] py-[0.45rem]  transition-all duration-700 ease-linear"
                 >
                   <span className="font-[400]">Log out</span>
                   <i className="fa-solid fa-right-from-bracket"></i>
@@ -149,38 +152,34 @@ export const Nav = () => {
         ) : isHelperHover && helperSession ? (
           <div
             onMouseLeave={() => setIsHelperHover(false)}
-            className="absolute rounded-b-xl top-full right-5 bg-white w-[15rem] drop-shadow-2xl"
+            className="absolute rounded-b-xl rounded-t-lg top-full right-5 bg-[#161616] w-[15rem] drop-shadow-2xl"
           >
             <div className="flex items-center flex-col w-full">
-              <header className="px-2 rounded py-3 w-full flex items-center justify-center flex-col">
-                <div className="absolute right-3 top-3 bg-white drop-shadow-xl p-2 flex justify-center items-center font-b rounded-full h-6 w-6">
-                  <i className="fa-solid fa-certificate"></i>
-                </div>
-                <img
-                  src={logoImage}
-                  alt="logo"
-                  className="h-8 w-8 object-contain"
-                />
-                <div className="mt-2 text-center w-full">
-                  <p className="text-[0.9rem] font-[600]">
-                    {helperData?.helper?.username}
-                  </p>
-                  <p className="text-[0.8rem] font-[500] mt-1">
-                    {helperData?.helper?.email}
-                  </p>
-                </div>
-              </header>
               <div className="w-full">
                 <Link
                   to="/profile"
-                  className="flex rounded-xl border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:bg-yellow-500 hover:text-black"
+                  className="flex border-[#333] border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
                 >
                   <span className="font-[400]">Profile</span>
                   <i className="fa-solid fa-user"></i>
                 </Link>
                 <Link
+                  to="/history"
+                  className="flex border-[#333] border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
+                >
+                  <span className="font-[400]">History</span>
+                  <i className="fa-solid fa-timeline"></i>
+                </Link>
+                <Link
+                  to="/settings"
+                  className="flex border-[#333] border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
+                >
+                  <span className="font-[400]">Settings</span>
+                  <i className="fa-solid fa-gear"></i>
+                </Link>
+                <Link
                   onClick={handleHeleprLogOut}
-                  className="flex rounded-xl border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:bg-yellow-500 hover:text-black"
+                  className="flex border-[#333] border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
                 >
                   <span className="font-[400]">Log out</span>
                   <i className="fa-solid fa-right-from-bracket"></i>

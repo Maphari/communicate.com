@@ -247,8 +247,8 @@ export const HelperRegister = () => {
               type="submit"
               className=" bg-yellow-500 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-yellow-600"
             >
-              <span className="text-md">Continue</span>
-              <i className="fa-solid fa-arrow-right text-lg"></i>
+              <i className="fa-solid fa-envelope text-lg"></i>
+              <span className="text-md">Continue with email</span>
             </button>
             <Link
               to="/account/register"

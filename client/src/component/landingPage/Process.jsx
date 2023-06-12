@@ -16,13 +16,13 @@ export const Process = () => {
           </p>
           <Link
             to="/account/helper_register"
-            className="p-[0.6rem] font-bold rounded bg-yellow-500 inline-block hover:bg-yellow-600 hover:text-white transition-all duration-700 ease-linear text-white"
+            className="p-[0.5rem] font-normal rounded bg-yellow-500 inline-block hover:bg-yellow-600 hover:text-white transition-all duration-700 ease-linear text-white"
           >
             Register to drive
           </Link>
         </div>
         <div className="process-container__bottom flex items-center flex-wrap gap-2">
-          <div className="bg-slate-100 rounded py-3 px-4 max-w-[19rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
+          <div className="bg-[#333] text-white rounded py-3 px-4 max-w-[19rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-[#333] hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-mobile-button text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Apply</h1>
             <p className="opacity-80 mb-2 text-[0.9rem]">
@@ -30,7 +30,7 @@ export const Process = () => {
               Customes has to feel safe and trust you.
             </p>
           </div>
-          <div className="bg-slate-100 rounded py-3 px-4 max-w-[19rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
+          <div className="bg-[#333] text-white rounded py-3 px-4 max-w-[19rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-[#333] hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-certificate text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Get verified</h1>
             <p className="opacity-80 mb-2 text-[0.9rem]">
@@ -38,7 +38,7 @@ export const Process = () => {
               the person who you say you are
             </p>
           </div>
-          <div className="bg-slate-100 rounded py-3 px-4 max-w-[19rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-white hover:cursor-pointer hover:scale-110 hover:z-[100]">
+          <div className="bg-[#333] text-white rounded py-3 px-4 max-w-[19rem] transition-all duration-700 ease-linear hover:drop-shadow-2xl hover:bg-[#333] hover:cursor-pointer hover:scale-110 hover:z-[100]">
             <i className="fa-solid fa-car text-yellow-500 text-2xl mb-2"></i>
             <h1 className="font-bold text-xl mb-1">Start driving</h1>
             <p className="opacity-80 mb-2 text-[0.9rem]">

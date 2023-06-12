@@ -1,6 +1,6 @@
 import React from "react";
-import { ProfileHelper } from "./homeComponents/helper/ProfileHelper";
-import { ProfileUser } from "./homeComponents/User/ProfileUser";
+import { ProfileHelper } from "./helper/ProfileHelper";
+import { ProfileUser } from "./User/ProfileUser";
 
 export const Profile = () => {
   const userToken = localStorage.getItem("token");

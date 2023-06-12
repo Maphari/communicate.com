@@ -157,7 +157,7 @@ const Helper = () => {
       <>
         <Nav />
         <section className="pt-[3rem] flex flex-wrap h-screen w-full relative">
-          <section className="py-3 px-4 overflow-auto absolute z-[9999] bg-white drop-shadow-2xl rounded-xl top-[12%] left-[1%] max-w-[27rem]">
+          <section className="py-3 px-4 overflow-auto absolute z-[9999] bg-[#161616] text-white drop-shadow-2xl rounded-xl top-[12%] left-[1%] max-w-[27rem]">
             <div className="mb-1 p-2 rounded">
               <h1 className="text-xl font-bold opacity-60">
                 Request information

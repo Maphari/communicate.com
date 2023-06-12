@@ -233,16 +233,16 @@ const Requester = () => {
       <>
         <Nav />
         <section className="dashboard-container">
-          <section className="dashboard-container__content bg-white drop-shadow-2xl rounded-xl">
+          <section className="dashboard-container__content drop-shadow-2xl rounded-xl">
             <header className="w-full">
-              <h1 className="mb-3 mt-4 opacity-70 font-bold text-lg">
+              <h1 className="mb-3 mt-4 text-white opacity-70 font-bold text-lg">
                 Find your package
               </h1>
               <form className="w-full" onSubmit={(e) => e.preventDefault()}>
-                <h1 className="mb-2 opacity-70 text-[1rem]">
+                <h1 className="mb-2 text-white opacity-70 text-[1rem]">
                   Where to pick up
                 </h1>
-                <div className="flex rounded items-center border mb-3 relative bg-[#fff] text-gray-500">
+                <div className={`flex ${isClickedLocation ? "rounded-none" : "rounded"} items-center mb-3 relative bg-[#090909] text-white`}>
                   <i className="fa-solid fa-map-location-dot ml-2 text-yellow-600 opacity-95"></i>
                   <input
                     type="text"
@@ -252,14 +252,14 @@ const Requester = () => {
                     onClick={() =>
                       handleInputLocationAndDestinationCliked(true, false)
                     }
-                    className="outline-none rounded p-[0.3rem] flex flex-1 font-normal text-[0.9rem]"
+                    className={`outline-none ${isClickedLocation ? "rounded-none" : "rounded"} p-[0.3rem] flex flex-1 font-normal text-[0.9rem] bg-[#090909] text-white`}
                   />
                   {isClickedLocation ? (
                     <div
                       onMouseLeave={() => setIsClickedLocation(false)}
-                      className={`absolute rounded max-h-[19rem] overflow-auto top-full left-0 bg-white text-[#141414] w-full z-[500] drop-shadow-xl flex items-center flex-wrap`}
+                      className={`absolute rounded-b max-h-[19rem] overflow-auto top-full left-0 bg-[#090909] text-white w-full z-[500] drop-shadow-xl flex items-center flex-wrap`}
                     >
-                      <h1 className="px-3 my-2 font-bold text-[0.9rem]">
+                      <h1 className="px-3 my-2 font-bold text-[0.9rem] ">
                         Your current location
                       </h1>
                       <div
@@ -268,7 +268,7 @@ const Requester = () => {
                           setIsClickedLocation(false);
                           dispatch(setPickupPoint(exactLocation.place_name));
                         }}
-                        className="opacity-80 hover:cursor-pointer w-full p-2 hover:bg-slate-200"
+                        className="opacity-80 hover:cursor-pointer w-full p-2 hover:bg-[#333]"
                       >
                         <div className="flex items-center gap-3">
                           <i className="fa-solid fa-location-dot text-[1rem] ml-2 text-yellow-600 opacity-95"></i>
@@ -291,7 +291,7 @@ const Requester = () => {
                               setIsClickedLocation(false);
                               dispatch(setPickupPoint(place.place_name));
                             }}
-                            className="flex items-center gap-3 hover:cursor-pointer w-full p-2 hover:bg-slate-200"
+                            className="flex items-center gap-3 hover:cursor-pointer w-full p-2 hover:bg-[#333]"
                           >
                             <i className="fa-solid fa-location-dot ml-2 text-yellow-600 opacity-95"></i>
                             <span className="text-[0.9rem]">
@@ -305,10 +305,10 @@ const Requester = () => {
                     pickup?.trim() === "" && null
                   )}
                 </div>
-                <h1 className="mb-2 opacity-70 text-[1rem]">
+                <h1 className="mb-2 text-white opacity-70 text-[1rem]">
                   Destination point
                 </h1>
-                <div className="flex rounded items-center border relative bg-[#fff] text-[#333]">
+                <div className={`flex ${isClickedDestination ? "rounded-none" : "rounded"} items-center relative bg-[#090909] text-white`}>
                   <i className="fa-solid fa-location-dot ml-2 text-yellow-600 opacity-95"></i>
                   <input
                     placeholder="Destination point ?"
@@ -317,12 +317,12 @@ const Requester = () => {
                     onClick={() =>
                       handleInputLocationAndDestinationCliked(false, true)
                     }
-                    className="rounded outline-none p-[0.3rem] flex flex-1 font-normal text-[0.9rem]"
+                    className={`${isClickedDestination ? "rounded-none" : "rounded"} outline-none p-[0.3rem] flex flex-1 font-normal text-[0.9rem] bg-[#090909] text-white`}
                   />
                   {isClickedDestination ? (
                     <div
                       onMouseLeave={() => setIsClickedDestination(false)}
-                      className={`absolute rounded max-h-[19rem] overflow-auto top-full left-0 bg-white w-full z-[500] drop-shadow-xl flex items-center flex-wrap`}
+                      className={`absolute ${isClickedDestination ? "rounded-none" : "rounded"} max-h-[19rem] overflow-auto top-full left-0 bg-[#090909] text-white w-full z-[500] drop-shadow-xl flex items-center flex-wrap`}
                     >
                       <h1 className="px-3 my-2 font-bold text-[0.9rem]">
                         Your current location
@@ -338,7 +338,7 @@ const Requester = () => {
                             setDestinationPoint(exactLocation.place_name)
                           );
                         }}
-                        className="opacity-80 hover:cursor-pointer w-full p-2 hover:bg-slate-200"
+                        className="opacity-80 hover:cursor-pointer w-full p-2 hover:bg-[#333]"
                       >
                         <div className="flex items-center gap-3">
                           <i className="fa-solid fa-location-dot text-[1rem] ml-2 text-yellow-600 opacity-95"></i>
@@ -362,7 +362,7 @@ const Requester = () => {
                               );
                               dispatch(setDestinationPoint(place.place_name));
                             }}
-                            className="flex items-center gap-3 hover:cursor-pointer w-full p-2 hover:bg-slate-200"
+                            className="flex items-center gap-3 hover:cursor-pointer w-full p-2 hover:bg-[#333]"
                           >
                             <i className="fa-solid fa-location-dot ml-2 text-yellow-600 opacity-95"></i>
                             <span className="text-[0.9rem]">
@@ -380,18 +380,18 @@ const Requester = () => {
             </header>
             <form onSubmit={(e) => e.preventDefault()}>
               <header>
-                <h1 className="mb-1 mt-3 opacity-70 font-bold text-md">
+                <h1 className="mb-1 mt-3 text-white opacity-70 font-bold text-md">
                   Pickup information
                 </h1>
               </header>
               <div>
                 <label
                   htmlFor="names"
-                  className="mt-2 mb-1 opacity-70 text-[0.9rem]"
+                  className="mt-2 mb-1 text-white opacity-70 text-[0.9rem]"
                 >
                   Names
                 </label>
-                <div className="flex rounded items-center border relative">
+                <div className="flex rounded items-center relative bg-[#090909] text-white">
                   <i className="fa-solid fa-user text-[0.9rem] ml-2 text-yellow-600 opacity-95"></i>
                   <input
                     id="names"
@@ -399,18 +399,18 @@ const Requester = () => {
                     placeholder="John Doe"
                     value={requestForm.pickupNames}
                     onChange={(e) => dispatch(setPickupNames(e.target.value))}
-                    className="rounded outline-none p-[0.3rem] flex flex-1 text-[#333] text-[0.9rem] font-normal"
+                    className="rounded outline-none p-[0.3rem] flex flex-1 bg-[#090909] text-[0.9rem] font-normal"
                   />
                 </div>
               </div>
               <div>
                 <label
                   htmlFor="mobile"
-                  className="mt-2 mb-1 opacity-70 text-[0.9rem]"
+                  className="mt-2 mb-1 text-white opacity-70 text-[0.9rem]"
                 >
                   Phone Number
                 </label>
-                <div className="flex items-center border relative rounded">
+                <div className="flex bg-[#090909] text-white items-center relative rounded">
                   <i className="fa-solid fa-mobile text-[0.9rem] ml-2 text-yellow-600 opacity-95"></i>
                   <input
                     id="mobile"
@@ -418,14 +418,14 @@ const Requester = () => {
                     placeholder="+27 123 4567"
                     value={requestForm.pickupPhoneNumber}
                     onChange={(e) => dispatch(setPickupMobile(e.target.value))}
-                    className="outline-none rounded p-[0.3rem] flex flex-1 text-[#333] text-[0.9rem] font-normal"
+                    className="outline-none rounded p-[0.3rem] flex flex-1 bg-[#090909] text-white text-[0.9rem] font-normal"
                   />
                 </div>
               </div>
-              <div className="mt-2 w-full">
+              <div className="mt-2 w-full text-white">
                 <label
                   htmlFor="my-textarea"
-                  className="mb-1 opacity-70 text-[0.9rem]"
+                  className="mb-1 text-white opacity-70 text-[0.9rem]"
                 >
                   Pickup instruction
                 </label>
@@ -438,13 +438,13 @@ const Requester = () => {
                   onChange={(e) =>
                     dispatch(setPickupInstruction(e.target.value))
                   }
-                  className="border rounded outline-none text-[#333] w-full text-[0.9rem] font-normal"
+                  className="rounded outline-none bg-[#090909] text-white w-full text-[0.9rem] font-normal"
                 ></textarea>
               </div>
 
               <button
                 onClick={handlePickupInformationSubmit}
-                className="p-[0.3rem] mt-1 w-full bg-yellow-600 font-[400] text-white transition-all duration-700 ease-linear hover:bg-yellow-700 rounded"
+                className="p-[0.3rem] mt-1 w-full bg-yellow-700 font-[400] text-white transition-all duration-700 ease-linear hover:bg-yellow-800 rounded"
               >
                 Request For Pickup
               </button>

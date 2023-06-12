@@ -5,11 +5,14 @@ import { Routes, Route } from "react-router-dom";
 import { LandingPage } from "./landingPage/LandingPage";
 import { Register } from "./account/userAccount/Register";
 import { Login } from "./account/userAccount/Login";
-import { BankAccount } from "./authrnticatedPages/homeComponents/User/BankAccount";
 import { HelperRegister } from "./account/helperAccount/HelperRegister";
 import { HelperLogin } from "./account/helperAccount/HelperLogin";
 import { BankAccountHelper } from "./authrnticatedPages/homeComponents/helper/BankAccountHelper";
-import { Profile } from "./authrnticatedPages/Profile";
+import { Profile } from "./authrnticatedPages/homeComponents/Profile";
+import { History } from "./authrnticatedPages/homeComponents/History";
+import { Settings } from "./authrnticatedPages/homeComponents/Settings";
+import { Messages } from "./authrnticatedPages/MessageComponents/Message";
+import { NewsFeed } from "./authrnticatedPages/newsFeedComponents/NewsFeed";
 import { Accept } from "./authrnticatedPages/homeComponents/helper/Accept";
 import { Decline } from "./authrnticatedPages/homeComponents/helper/Decline";
 import RequestInformation from "./authrnticatedPages/homeComponents/User/RequestInformation";
@@ -86,10 +89,6 @@ export default function App() {
             element={token || tokenHelper ? <Profile /> : <LandingPage />}
           />
           <Route
-            path="/bank_account"
-            element={token ? <BankAccount /> : <LandingPage />}
-          />
-          <Route
             path="/account/helper/bank_account"
             element={
               tokenHelper ? (
@@ -114,6 +113,46 @@ export default function App() {
           <Route
             path="/request-information"
             element={token ? <RequestInformation /> : <Navigate to="/home" />}
+          />
+          <Route
+            path="/history"
+            element={
+              token || tokenHelper ? (
+                <History />
+              ) : (
+                <Navigate to="/" replace={true} />
+              )
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              token || tokenHelper ? (
+                <Settings />
+              ) : (
+                <Navigate to="/" replace={true} />
+              )
+            }
+          />
+          <Route
+            path="/message"
+            element={
+              token || tokenHelper ? (
+                <Messages />
+              ) : (
+                <Navigate to="/" replace={true} />
+              )
+            }
+          />
+          <Route
+            path="/latest-news"
+            element={
+              token || tokenHelper ? (
+                <NewsFeed />
+              ) : (
+                <Navigate to="/" replace={true} />
+              )
+            }
           />
         </Routes>
       )}

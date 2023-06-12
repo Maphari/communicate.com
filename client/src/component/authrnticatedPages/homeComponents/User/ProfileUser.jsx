@@ -7,7 +7,7 @@ export const ProfileUser = () => {
   return (
     <>
       <Nav />
-      <section className="profile-container">
+      <section className="profile-container text-white">
         <header className="profile-container__header">
           <h1 className="profile-container__header-main">
             Account information
@@ -15,7 +15,7 @@ export const ProfileUser = () => {
         </header>
 
         <div className="profile-container__user">
-          <i className="fa-solid fa-user"></i>
+          <i className="fa-solid fa-user text-[#333]"></i>
         </div>
         <section className="profile-container__basic">
           <h2 className="profile-container__basic-header">Basic information</h2>
@@ -34,7 +34,7 @@ export const ProfileUser = () => {
             <p className="opacity-90 mb-3">{data.user.email}</p>
             <hr className="w-[30rem]" />
           </div>
-          <button className="my-3 p-[0.45rem] w-full bg-yellow-600 font-[400] text-white transition-all duration-700 ease-linear hover:bg-yellow-700 rounded">
+          <button className="my-3 p-[0.45rem] w-full bg-yellow-700 font-[400] text-white transition-all duration-700 ease-linear hover:bg-yellow-800 rounded">
             Update information
           </button>
         </section>

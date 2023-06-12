@@ -3,7 +3,7 @@ import { Navigation } from "./Navigation";
 import { Features } from "./Features";
 import { Process } from "./Process";
 import { WhyChoose } from "./WhyChoose";
-import { VehicleShowcase } from "./VehicleShowcase";
+import { MobileShowcase } from "./MobileShowcase";
 import { Fotter } from "./Fotter";
 
 export function LandingPage() {
@@ -13,7 +13,7 @@ export function LandingPage() {
       <Features />
       <Process />
       <WhyChoose />
-      <VehicleShowcase />
+      <MobileShowcase />
       <Fotter />
     </>
   );

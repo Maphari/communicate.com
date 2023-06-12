@@ -14,7 +14,7 @@ export const Map = (props) => {
   const directionsRef = useRef(null); // create a ref to the directions control
   const [longitude, setLongitude] = useState(null);
   const [latitude, setLatitude] = useState(null);
-  const [driversLocation, setDriversLocation] = useState([]);
+  const [drivers, setDrivers] = useState([]);
   const userSession = localStorage.getItem("token");
   const helperSession = localStorage.getItem("token-helper");
   // const requestData = useSelector((state) => state.requestHelper);
@@ -45,9 +45,9 @@ export const Map = (props) => {
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current, // use the ref to the map container
-      style: "mapbox://styles/phumudzo001/cling333700mt01qva0jccn0a",
+      style: "mapbox://styles/phumudzo001/cliosatjf001r01o1h8fwb0s7",
       center: centerPickupPoint,
-      zoom: 15,
+      zoom: 16,
     });
 
     // create a new NavigationControl and add it to the map
@@ -60,6 +60,7 @@ export const Map = (props) => {
       map.remove();
     };
   }, []);
+
   // DISPLAYING MAP AND MARKERS
   useEffect(() => {
     if (!memoizedMap) {
@@ -76,7 +77,7 @@ export const Map = (props) => {
         interactive: true,
         controls: {
           inputs: false,
-          instructions: false,
+          instructions: helperSession ? true : false,
         },
       });
 
@@ -110,14 +111,14 @@ export const Map = (props) => {
     memoizedMap,
     memoizedDirections,
   ]);
+
   // TAKING DRIVERS DATA FROM DATABASE
   useEffect(() => {
     const getDriversLocation = async () => {
       try {
         const response = await axios.get("/api/get-drivers");
         if (response.data) {
-          setDriversLocation(response.data && response.data);
-          console.log(driversLocation);
+          setDrivers(response.data && response.data);
         } else {
           toastNotificationError(error.message);
         }
@@ -136,20 +137,36 @@ export const Map = (props) => {
     });
   }, [longitude, latitude]);
 
+// HELPER MARKER
   useEffect(() => {
     // CUSTOME MARKER
     const customMarker = document.createElement("div");
-    customMarker.className = "custom-marker";
+    customMarker.className = "marker-user";
 
     const marker = new mapboxgl.Marker({
       element: customMarker,
       anchor: "bottom",
     });
 
-    if (longitude && latitude) {
+    if (longitude && latitude)
       marker.setLngLat([longitude, latitude]).addTo(map);
-    }
   }, [longitude, latitude]);
+
+//SHOWING USERS WHERE DRIVERS ARE
+useEffect(() => {
+   // CUSTOME MARKER
+   const customMarker = document.createElement("div");
+   customMarker.className = "marker-driver";
+
+   const marker = new mapboxgl.Marker({
+     element: customMarker,
+     anchor: "bottom",
+   });
+
+  if(latitude && longitude && drivers && userSession) 
+    drivers.map(location => marker.setLngLat(location.location?.coordinates).addTo(map));
+
+}, [longitude, latitude, drivers]);
 
   if (!longitude && latitude) {
     return <p>Loading...</p>;

@@ -10,7 +10,7 @@
 @import "./component/loader";
 @import "./component/whychoose";
 @import "./component/process";
-@import "./component/vehicleShowcase";
+@import "./component/mobileShowcase";
 @import "./component/mapbox";
 @import "./component/declined";
 @import "./component/request-info";
@@ -25,6 +25,7 @@
 // GLOBAL AND DEFAULT STYLES
 body {
   font-family: $SECONDARY-FONT-POPPINS;
+  background-color: $BLACK-COLOR;
 }
 
 /* Set the width and height of the scrollbar */

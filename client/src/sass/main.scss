@@ -1,5 +1,5 @@
-@import "./tailwindcss";
 // VARIABLES
+@import "./base/tailwindcss";
 @import "./base/variables";
 @import "./base/mixins";
 // COMPONENT
@@ -13,12 +13,15 @@
 @import "./component/mobileShowcase";
 @import "./component/mapbox";
 @import "./component/declined";
-@import "./component/request-info";
 // PAGES
 @import "./page/home";
 @import "./page/bankaccount";
 @import "./page/helperRegister";
 @import "./page/profile";
+@import "./page/settings";
+@import "./page/history";
+@import "./page/message";
+@import "./page/posts";
 // MEDIA
 @import "./media/landingPage-m";
 

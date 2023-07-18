@@ -17,9 +17,9 @@
   }
 
   &__user {
-    background-color: white;
-    width: 10rem;
-    height: 10rem;
+    $SIZE: 8rem;
+    width: $SIZE;
+    height: $SIZE;
     border-radius: 100%;
     margin-top: 2rem;
 

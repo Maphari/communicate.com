@@ -1,0 +1,20 @@
+.message-container {
+  color: $WHITE-COLOR;
+  padding: 1.5rem;
+  height: 100vh;
+
+  display: flex;
+
+  &__aside {
+    border-right: 0.1px solid #252525;
+    padding-right: 1rem;
+    width: 25%;
+  }
+  &__main {
+    padding-left: 1rem;
+    width: 75%;
+  }
+  &__message {
+    font-size: 1.5rem;
+  }
+}

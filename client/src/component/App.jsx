@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate, Navigate, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { Routes, Route } from "react-router-dom";
 import { LandingPage } from "./landingPage/LandingPage";
@@ -7,24 +7,52 @@ import { Register } from "./account/userAccount/Register";
 import { Login } from "./account/userAccount/Login";
 import { HelperRegister } from "./account/helperAccount/HelperRegister";
 import { HelperLogin } from "./account/helperAccount/HelperLogin";
-import { BankAccountHelper } from "./authrnticatedPages/homeComponents/helper/BankAccountHelper";
-import { Profile } from "./authrnticatedPages/homeComponents/Profile";
-import { History } from "./authrnticatedPages/homeComponents/History";
-import { Settings } from "./authrnticatedPages/homeComponents/Settings";
-import { Messages } from "./authrnticatedPages/MessageComponents/Message";
-import { NewsFeed } from "./authrnticatedPages/newsFeedComponents/NewsFeed";
-import { Accept } from "./authrnticatedPages/homeComponents/helper/Accept";
-import { Decline } from "./authrnticatedPages/homeComponents/helper/Decline";
-import RequestInformation from "./authrnticatedPages/homeComponents/User/RequestInformation";
-import Dashboard from "./authrnticatedPages/homeComponents/Dashboard";
+import { BankAccountHelper } from "./AuthenticatedPages/Home/BankAccountHelper";
+import { Profile } from "./AuthenticatedPages/Home/Profile";
+import { History } from "./AuthenticatedPages/Home/History";
+import { Settings } from "./AuthenticatedPages/Home/Settings";
+import { Messages } from "./AuthenticatedPages/Message/Message";
+import { Accept } from "./AuthenticatedPages/Home/helper/Accept";
+import { Decline } from "./AuthenticatedPages/Home/helper/Decline";
+import { DataToSendContext } from "./context/DataTosendContext/DataToSendContext";
+import { Equipment } from "./AuthenticatedPages/Home/helper/Equipment";
+import { Post } from "./AuthenticatedPages/Posts/Post";
+import Dashboard from "./AuthenticatedPages/Home/Dashboard";
 import Loader from "./animation/Loder";
 import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
   const tokenHelper = localStorage.getItem("token-helper");
+  // const { data, helperData } = useContext(DataToSendContext);
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const toastNotificationError = (message) => {
+    toast.error(message, {
+      toastId: "session",
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
+  const toastNotificationSuccess = (message) => {
+    toast.success(message, {
+      toastId: "session",
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
 
   useEffect(() => {
     const loader = setTimeout(() => {
@@ -33,12 +61,55 @@ export default function App() {
     return () => clearTimeout(loader);
   }, [loading]);
 
+  // THIS USEEFFECT WILL DISABLE CHANGING TO HOME PAGE AFTER USER REFRESHES THE WEBPAGE WHEN USER IS IN DIFFERENT ROUTE
   useEffect(() => {
-    if (token) {
+    // FOR USER ACCOUNT
+    if (location.pathname === "/home" && token) {
       navigate("/home", { replace: true });
-    } else if (tokenHelper) {
+    } else if (location.pathname === "/account/helper" && tokenHelper) {
       navigate("/account/helper", { replace: true });
+    } else if (
+      (location.pathname === "/message" && token) ||
+      (location.pathname === "/message" && tokenHelper)
+    ) {
+      navigate("/message");
+    } else if (
+      (location.pathname === "/profile" && token) ||
+      (location.pathname === "/profile" && tokenHelper)
+    ) {
+      navigate("/profile");
+    } else if (
+      (location.pathname === "/setting" && token) ||
+      (location.pathname === "/setting" && tokenHelper)
+    ) {
+      navigate("/setting");
+    } else if (
+      (location.pathname === "/history" && token) ||
+      (location.pathname === "/history" && tokenHelper)
+    ) {
+      navigate("/history");
+    } else if (location.pathname === "/account/helper_bank-account") {
+      navigate("/account/helper_bank-account");
     }
+  }, []);
+
+  // THIS USEEFFECT WILL TAKE URL AND CHECK IF THE SESSION IS ACTIVE OR NOT
+  useEffect(() => {
+    axios
+      .get("/api/authentication")
+      .then((response) => {
+        // Handle successful response
+        if (response.status === 200)
+          toastNotificationSuccess("Auntention successful");
+      })
+      .catch((error) => {
+        // Handle failed response
+        if (error.response.status === 401 && error.response.data.errorMessage) {
+          toastNotificationError(error.response.data.errorMessage);
+          localStorage.clear();
+          navigate("/account/login");
+        }
+      });
   }, []);
 
   return (
@@ -51,13 +122,13 @@ export default function App() {
           <Route
             path="/"
             element={
-              !token || !tokenHelper ? (
-                <LandingPage />
-              ) : token ? (
+              token ? (
                 <Navigate to="/home" replace={true} />
               ) : tokenHelper ? (
                 <Navigate to="/account/helper" replace={true} />
-              ) : null
+              ) : (
+                <LandingPage />
+              )
             }
           />
           <Route
@@ -89,13 +160,9 @@ export default function App() {
             element={token || tokenHelper ? <Profile /> : <LandingPage />}
           />
           <Route
-            path="/account/helper/bank_account"
+            path="/bank-account"
             element={
-              tokenHelper ? (
-                <BankAccountHelper />
-              ) : (
-                <Navigate to="/account/helper" />
-              )
+              tokenHelper || token ? <BankAccountHelper /> : <Navigate to="/" />
             }
           />
           <Route
@@ -109,10 +176,6 @@ export default function App() {
             element={
               tokenHelper ? <Accept /> : <Navigate to="/account/helper" />
             }
-          />
-          <Route
-            path="/request-information"
-            element={token ? <RequestInformation /> : <Navigate to="/home" />}
           />
           <Route
             path="/history"
@@ -145,10 +208,16 @@ export default function App() {
             }
           />
           <Route
-            path="/latest-news"
+            path="/equipment"
             element={
-              token || tokenHelper ? (
-                <NewsFeed />
+              tokenHelper ? <Equipment /> : <Navigate to="/" replace={true} />
+            }
+          />
+          <Route
+            path="/news-feed"
+            element={
+              tokenHelper || token ? (
+                <Post />
               ) : (
                 <Navigate to="/" replace={true} />
               )

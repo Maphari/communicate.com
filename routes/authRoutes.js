@@ -4,16 +4,17 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Keys = require("../privateKeys/privateKeys");
-const route = express.Router();
+const authRoutes = express.Router();
 const User = mongoose.model("user");
 const Helper = mongoose.model("Helper");
+const checkSession = require("../middleware/authMiddleware");
 
 // GOOGLE AUTHENTICATION ROUTES
-route.get(
+authRoutes.get(
   "/api/v1/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
-route.get(
+authRoutes.get(
   "/api/v1/auth/google/callback",
   passport.authenticate("google", {
     successRedirect: `${Keys.CLIENT_ROUTE}/home`,
@@ -22,9 +23,9 @@ route.get(
 );
 
 // ROUTES FOR USER TO CREATE ACCOUNT AND LOGIN USING FORMS
-route.post("/api/v1/auth/signup_user", async function (req, res) {
+authRoutes.post("/api/v1/auth/signup_user", async function (req, res) {
   try {
-    const {username, email, mobile, password } = req.body;
+    const { username, email, mobile, password } = req.body;
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -82,7 +83,7 @@ route.post("/api/v1/auth/signup_user", async function (req, res) {
   }
 });
 
-route.post("/api/v1/auth/signin_user", async function (req, res) {
+authRoutes.post("/api/v1/auth/signin_user", async function (req, res) {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -117,7 +118,7 @@ route.post("/api/v1/auth/signin_user", async function (req, res) {
   }
 });
 // HELPER ROUTES
-route.post("/api/v1/auth/helper/register_user", async (req, res) => {
+authRoutes.post("/api/v1/auth/helper/register_user", async (req, res) => {
   try {
     const { username, email, mobile, password } = req.body;
     const helper = await Helper.findOne({ email });
@@ -177,7 +178,7 @@ route.post("/api/v1/auth/helper/register_user", async (req, res) => {
   }
 });
 
-route.post("/api/v1/auth/helper/login_user", async (req, res) => {
+authRoutes.post("/api/v1/auth/helper/login_user", async (req, res) => {
   try {
     const { email, password } = req.body;
     const helper = await Helper.findOne({ email });
@@ -210,7 +211,7 @@ route.post("/api/v1/auth/helper/login_user", async (req, res) => {
 });
 
 // ROUTER AFTER USER SUCCESS ON AUTHENTICATION
-route.get("/api/auth/passport_success", (req, res) => {
+authRoutes.get("/api/auth/passport_success", checkSession, (req, res) => {
   if (req.isAuthenticated())
     res.json({
       user: req.user,
@@ -220,7 +221,7 @@ route.get("/api/auth/passport_success", (req, res) => {
   else res.json({ message: "User not authenticated" });
 });
 
-route.get("/api/auth/account_success", function (req, res) {
+authRoutes.get("/api/auth/account_success", checkSession, function (req, res) {
   const user = req.session.user;
   if (user)
     res.json({
@@ -231,7 +232,7 @@ route.get("/api/auth/account_success", function (req, res) {
   else res.json({ message: "User not authenticated" });
 });
 
-route.get("/api/auth/helper_success", function (req, res) {
+authRoutes.get("/api/auth/helper_success", checkSession, function (req, res) {
   const helper = req.session.user;
 
   if (helper)
@@ -243,4 +244,12 @@ route.get("/api/auth/helper_success", function (req, res) {
   else res.json({ message: "Account is not authenticated" });
 });
 
-module.exports = route;
+authRoutes.get("/api/authentication", checkSession, (req, res, next) => {
+  if ((req.session.user && req.session) || req.isAuthenticated()) next();
+  else
+    res
+      .status(401)
+      .send({ errorMessage: "Session has expired or is not authenticated" });
+});
+
+module.exports = authRoutes;

@@ -2,13 +2,14 @@ require("./webSockets/requestWebSockerServer");
 require("./models/User");
 require("./models/Helper");
 require("./models/Requests");
+require("./models/HelperEquipment");
 const express = require("express");
 const mongoose = require("mongoose");
 const keys = require("./privateKeys/privateKeys");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
-const route = require("./routes/authRoutes");
-const router = require("./routes/router");
+const authRoutes = require("./routes/authRoutes");
+const requestRouter = require("./routes/requestRouter");
 const cors = require("cors");
 
 const app = express();
@@ -26,6 +27,6 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(route);
-app.use(router);
+app.use(authRoutes);
+app.use(requestRouter);
 app.listen(keys.PORT);

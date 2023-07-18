@@ -83,7 +83,9 @@ export function Features() {
                 click of a button the your package is taken care of by out hard
                 working professionals.
               </p>
-              <button className="mb-4 text-white font-[400] rounded p-2 bg-yellow-500 transition-all duration-700 ease-linear hover:bg-yellow-600">Learn more</button>
+              <button className="mb-4 text-white font-[400] rounded p-2 bg-yellow-500 transition-all duration-700 ease-linear hover:bg-yellow-600">
+                Learn more
+              </button>
               <div>
                 <h1 className="font-[800] mb-3 text-2xl">
                   Meet our{" "}

@@ -8,3 +8,9 @@
   background-color: $PRIMARY-COLOR;
   border-radius: 50px;
 }
+
+@mixin padding-top-left-color {
+  padding-top: $PADDING-TOP-NAV-M;
+  padding-left: 1.5rem;
+  color: $WHITE-COLOR;
+}

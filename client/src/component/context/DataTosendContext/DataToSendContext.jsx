@@ -11,8 +11,8 @@ export default class DataToSendProvider extends Component {
 
   async componentDidMount() {
     // GETTING STORED TOKENS ON LOCAL STORAGE
-    const userSession = localStorage.getItem('token');
-    const helpersession = localStorage.getItem('token-helper');
+    const userSession = localStorage.getItem("token");
+    const helpersession = localStorage.getItem("token-helper");
     const passportAuthenticationData = await axios.get(
       "/api/auth/passport_success"
     );
@@ -23,25 +23,23 @@ export default class DataToSendProvider extends Component {
 
     const isEmailAndPassowrdAuthenticated =
       userSession === emailAndPassowrdAuthenticatedData?.data?.user?.session;
-    const isPassowrdAuthenticated =
+    const isPassportAuthenticated =
       userSession === passportAuthenticationData?.data?.session;
     const isHelperAunthenticated =
       helperData?.data?.helper?.session === helpersession;
 
     if (isEmailAndPassowrdAuthenticated) {
       this.setState({ data: emailAndPassowrdAuthenticatedData?.data?.user });
-    } else if (isPassowrdAuthenticated) {
+    } else if (isPassportAuthenticated) {
       this.setState({ data: passportAuthenticationData.data });
     }
-    
+
     if (isHelperAunthenticated) {
-      this.setState({helperData: helperData?.data?.helper});
-    } 
+      this.setState({ helperData: helperData?.data?.helper });
+    }
   }
 
-
   render() {
-
     return (
       <DataToSendContext.Provider
         value={{ data: this.state.data, helperData: this.state.helperData }}

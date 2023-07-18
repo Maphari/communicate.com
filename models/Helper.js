@@ -70,6 +70,7 @@ const helperSchema = new Schema(
           "Password must be at least 8 characters long, one uppercase letter, and one lowercase letter and special characters",
       },
     },
+    
   },
   { timestamps: true }
 );

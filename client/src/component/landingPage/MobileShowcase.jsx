@@ -1,5 +1,4 @@
 import React from "react";
-import carsImage from "../../assets/cars.png";
 
 export const MobileShowcase = () => {
   return (

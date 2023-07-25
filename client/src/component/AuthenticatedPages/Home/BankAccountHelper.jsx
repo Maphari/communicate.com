@@ -7,6 +7,8 @@ export class BankAccountHelper extends Component {
   }
 
   render() {
+    const userToken = localStorage.getItem("token");
+    const helperToken = localStorage.getItem("token-helper");
     return (
       <>
         <Nav />
@@ -24,17 +26,19 @@ export class BankAccountHelper extends Component {
                 <i className="fa-solid fa-add mr-2"></i>
                 <span>Add funds</span>
               </button>
-              <button className="transition-all duration-700 ease-linear bg-violet-700 hover:bg-violet-900 p-2 rounded">
-                <i className="fa-solid fa-money-bill-transfer mr-2"></i>
-                <span>withdraw funds</span>
-              </button>
+              {helperToken && (
+                <button className="transition-all duration-700 ease-linear bg-violet-700 hover:bg-violet-900 p-2 rounded">
+                  <i className="fa-solid fa-money-bill-transfer mr-2"></i>
+                  <span>withdraw funds</span>
+                </button>
+              )}
               <button className="transition-all duration-700 ease-linear bg-purple-700 hover:bg-purple-900 p-2 rounded">
                 <i className="fa-solid fa-credit-card mr-2"></i>
                 <span>Add banking card</span>
               </button>
             </section>
           </section>
-          <hr  className="text-white mt-5 ml-[2rem] mr-[2rem]"/>
+          <hr className="text-white mt-5 ml-[2rem] mr-[2rem]" />
           <section className="bankaccount-container__history my-4">
             <h1 className="text-xl">Transaction history</h1>
             <p className="opacity-40 my-2">No transaction at the moment</p>

@@ -1,13 +1,14 @@
 import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DataToSendContext } from "../../context/DataTosendContext/DataToSendContext";
-import logoImage from "../../../assets/logo.png";
+import applicationVersion from "../../../../package.json";
 
 export const Nav = () => {
   const dataContext = useContext(DataToSendContext);
   const { data, helperData } = dataContext || {};
   const [isHoverUser, setIsHoverUser] = useState(false);
   const [isHelperHover, setIsHelperHover] = useState(false);
+  const [isSmallScreenMenuOpen, setIsSmallScreenMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const session = localStorage.getItem("token");
@@ -37,12 +38,13 @@ export const Nav = () => {
             </Link>
           ) : helperSession ? (
             <Link className="hover:text-black" to="/account/helper">
-              <h1 className="font-[900] opacity-90 text-[22px] hover:text-white">
-                Communica<span className="text-yellow-500">tee</span> helper
+              <h1 className="head-help font-[900] opacity-90 text-[22px] hover:text-white">
+                Communica<span className="text-yellow-500">tee</span>
+                <i className="fa-solid fa-truck ml-1 text-lg -rotate-12"></i>
               </h1>
             </Link>
           ) : null}
-          <div className="flex items-center flex-wrap gap-1">
+          <div className="links flex items-center flex-wrap gap-1">
             {session ? (
               <Link
                 to="/home"
@@ -84,19 +86,10 @@ export const Nav = () => {
                 Bank account
               </Link>
             ) : null}
-            {helperSession || session ? (
-              <Link
-                to="/news-feed"
-                className={`px-2 py-1  rounded hover:text-yellow-600 transition-all duration-500 ease-linear relative text-md font-[300] ${
-                  location.pathname === "/news-feed" ? "nav-link-active" : ""
-                }`}
-              >
-                News feed
-              </Link>
-            ) : null}
             {session ? (
               <Link
                 onMouseOver={() => setIsHoverUser(true)}
+                onClick={() => setIsHoverUser(true)}
                 className="font-[300] rounded-full transition-all duration-500 ease-linear border-[0.3px] border-[#333] py-[5px] px-2 flex items-center justify-center gap-2 hover:text-black hover:bg-yellow-400"
               >
                 <span>{data?.user?.username} </span>
@@ -105,6 +98,7 @@ export const Nav = () => {
             ) : helperSession ? (
               <Link
                 onMouseOver={() => setIsHelperHover(true)}
+                onClick={() => setIsHelperHover(true)}
                 className="font-[300] py-[5px] px-2 border-[0.3px] border-[#333] rounded-full transition-all duration-500 ease-linear flex items-center gap-2 justify-center hover:text-black hover:bg-yellow-400"
               >
                 <span>{helperData?.helper?.username}</span>
@@ -113,28 +107,24 @@ export const Nav = () => {
             ) : null}
           </div>
         </header>
-
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 border-[0.1px] border-[#2b2b2b] menu px-2 py-1 transition-all duration-700 ease-linear hover:bg-[#2b2b2b]">
+            <i className="fa-solid fa-envelope menu text-xl"></i>
+          </div>
+          <div
+            onClick={() => setIsSmallScreenMenuOpen(true)}
+            className="flex items-center gap-2 border-[0.1px] border-[#2b2b2b] menu px-2 py-1 transition-all duration-700 ease-linear hover:bg-[#2b2b2b]"
+          >
+            <i className="fa-solid fa-bars menu text-xl"></i>
+          </div>
+        </div>
         {isHoverUser && session ? (
           <div
             onMouseLeave={() => setIsHoverUser(false)}
-            className="absolute rounded-b-xl rounded-t-lg top-full right-5 bg-[#161616] w-[15rem] drop-shadow-2xl"
+            className="absolute rounded-b-xl rounded-t-lg top-full right-5 bg-[#312e2e] w-[15rem] drop-shadow-2xl"
           >
             <div className="flex items-center flex-col w-full">
               <div className="w-full">
-                {/* <Link
-                  to="/profile"
-                  className="flex border-t border-[#333] justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
-                >
-                  <span className="font-[400]">Profile</span>
-                  <i className="fa-solid fa-user"></i>
-                </Link>
-                <Link
-                  to="/history"
-                  className="flex border-[#333]  border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
-                >
-                  <span className="font-[400]">History</span>
-                  <i className="fa-solid fa-timeline"></i>
-                </Link> */}
                 <Link
                   to="/settings"
                   className="flex border-[#333]  border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
@@ -142,44 +132,23 @@ export const Nav = () => {
                   <span className="font-[400]">Settings</span>
                   <i className="fa-solid fa-gear"></i>
                 </Link>
-                {/* <Link
-                  to="/account/helper_register"
-                  className="flex border-[#333]  border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
-                >
-                  <span className="font-[400]">Become a helper</span>
-                  <i className="fa-solid fa-car"></i>
-                </Link> */}
-                {/* <Link
+                <Link
                   onClick={handleUserLogOut}
                   className="flex hover:text-yellow-500 border-[#333]  border-t justify-between text-[0.9rem] items-center gap-2 px-[0.74rem] py-[0.45rem]  transition-all duration-700 ease-linear"
                 >
                   <span className="font-[400]">Log out</span>
                   <i className="fa-solid fa-right-from-bracket"></i>
-                </Link> */}
+                </Link>
               </div>
             </div>
           </div>
         ) : isHelperHover && helperSession ? (
           <div
             onMouseLeave={() => setIsHelperHover(false)}
-            className="absolute rounded-b-xl rounded-t-lg top-full right-5 bg-[#161616] w-[15rem] drop-shadow-2xl"
+            className="absolute rounded-b-xl rounded-t-lg top-full right-5 bg-[#312e2e] w-[15rem] drop-shadow-2xl"
           >
             <div className="flex items-center flex-col w-full">
               <div className="w-full">
-                {/* <Link
-                  to="/profile"
-                  className="flex border-[#333] border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
-                >
-                  <span className="font-[400]">Profile</span>
-                  <i className="fa-solid fa-user"></i>
-                </Link>
-                <Link
-                  to="/history"
-                  className="flex border-[#333] border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
-                >
-                  <span className="font-[400]">History</span>
-                  <i className="fa-solid fa-timeline"></i>
-                </Link> */}
                 <Link
                   to="/settings"
                   className="flex border-[#333] border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
@@ -187,32 +156,102 @@ export const Nav = () => {
                   <span className="font-[400]">Settings</span>
                   <i className="fa-solid fa-gear"></i>
                 </Link>
-                {/* <Link
-                  to="/account/register"
-                  className="flex border-[#333]  border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
-                >
-                  <span className="font-[400]">Become a user</span>
-                  <i className="fa-solid fa-user-tie"></i>
-                </Link>
                 <Link
-                  to="/equipment"
-                  className="flex border-[#333]  border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
-                >
-                  <span className="font-[400]">Equipment</span>
-                  <i className="fa-solid fa-gears"></i>
-                </Link> */}
-                {/* <Link
                   onClick={handleHeleprLogOut}
                   className="flex border-[#333] border-t justify-between text-[0.9rem] items-center gap-2 px-[0.9rem] py-[0.45rem] transition-all duration-700 ease-linear hover:text-yellow-500"
                 >
                   <span className="font-[400]">Log out</span>
                   <i className="fa-solid fa-right-from-bracket"></i>
-                </Link> */}
+                </Link>
               </div>
             </div>
           </div>
         ) : null}
       </section>
+      {isSmallScreenMenuOpen && (
+        <div className="absolute h-full w-full bg-[#161616] z-[999999] text-white transition-all duration-700 ease-linear">
+          <header className="flex items-center justify-between pt-2 py-4 px-3">
+            <h1 className="font-bold text-xl">
+              Communica<span className="text-yellow-500">tee.</span>
+            </h1>
+            <div
+              className="border-[0.3px] border-[#2b2b2b] p-2 flex items-center gap-1"
+              onClick={() => setIsSmallScreenMenuOpen(false)}
+            >
+              <i className="fa-solid fa-xmark"></i>
+              <span>CLOSE</span>
+            </div>
+          </header>
+          <section className="px-3 flex justify-center items-center flex-col">
+            <Link
+              to="/profile"
+              className="p-[0.73rem] hover:bg-[#2b2b2b] bg-[#1f1f1f] hover:text-white font-[500] w-full flex items-center justify-between rounded mb-2 transition-all duration-500 ease-linear hover:ml-3"
+            >
+              <span>Profile</span>
+              <i className="fa-solid fa-user"></i>
+            </Link>
+            <Link
+              to="/history"
+              className="p-[0.73rem] hover:bg-[#2b2b2b] bg-[#1f1f1f] hover:text-white font-[500] w-full flex items-center justify-between rounded mb-2 transition-all duration-500 ease-linear hover:ml-3"
+            >
+              <span>History</span>
+              <i className="fa-solid fa-timeline"></i>
+            </Link>
+            {helperSession && (
+              <Link
+                to="/equipment"
+                className="p-[0.73rem] hover:bg-[#2b2b2b] bg-[#1f1f1f] hover:text-white font-[500] w-full flex items-center justify-between rounded mb-2 transition-all duration-500 ease-linear hover:ml-3"
+              >
+                <span>Equipment</span>
+                <i className="fa-solid fa-gears"></i>
+              </Link>
+            )}
+            <Link
+              to={
+                session
+                  ? "/account/register"
+                  : helperSession
+                  ? "/account/helper_register"
+                  : null
+              }
+              className="p-[0.73rem] hover:bg-[#2b2b2b] bg-[#1f1f1f] hover:text-white font-[500] w-full flex items-center justify-between rounded mb-2 transition-all duration-500 ease-linear hover:ml-3"
+            >
+              <span>
+                {session
+                  ? "Become a user"
+                  : helperSession
+                  ? "Become a helper"
+                  : null}
+              </span>
+              <i
+                className={`fa-solid fa-${
+                  session ? "user" : helperSession ? "car" : ""
+                }`}
+              ></i>
+            </Link>
+            <Link
+              onClick={
+                session
+                  ? handleUserLogOut
+                  : helperSession
+                  ? handleHeleprLogOut
+                  : null
+              }
+              className="p-[0.73rem] hover:bg-[#2b2b2b] bg-[#1f1f1f] hover:text-white font-[500] w-full flex items-center justify-between rounded mb-2 transition-all duration-500 ease-linear hover:ml-3"
+            >
+              <span>Log out</span>
+              <i
+                className={`fa-solid fa-${
+                  session ? "user" : helperSession ? "car" : ""
+                }`}
+              ></i>
+            </Link>
+            <p className="opacity-40">
+              Comminicatee version - {applicationVersion.version}
+            </p>
+          </section>
+        </div>
+      )}
     </>
   );
 };

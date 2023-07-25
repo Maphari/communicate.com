@@ -11,9 +11,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <DataToSendProvider>
-          <App />
-        </DataToSendProvider>
+          <DataToSendProvider>
+            <App />
+          </DataToSendProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>

@@ -42,7 +42,7 @@
     position: absolute;
     z-index: 999;
     background-color: $BLACK-COLOR;
-    top: 15%;
+    top: 10%;
     left: 1.7%;
   }
   &__content {
@@ -50,7 +50,7 @@
     padding: 0 1.7rem 1.4rem 1.7rem;
   }
   &__content_ride {
-    max-width: 27rem;
+    max-width: 25rem;
     padding: 0 1.4rem 1.4rem 1.4rem;
   }
 }
@@ -61,7 +61,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100vh;
+  height: 90vh;
 
   &__header {
     display: flex;
@@ -90,25 +90,3 @@
   }
 }
 
-.overlay-equipment {
-  background-color: #161616;
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 9999999;
-  opacity: 0.9;
-  color: $WHITE-COLOR;
-  width: 100vw;
-  height: 100vh;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.overlay-equipment__inner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 999999999;
-}

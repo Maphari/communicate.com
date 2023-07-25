@@ -17,9 +17,8 @@ import {
 } from "../../../redux/requests/requestHelperSclice";
 import { useDispatch, connect } from "react-redux";
 import axios from "axios";
-import PRIVATEKEY from "../../../ClientKeys/ClientKeys";
+import PRIVATEKEY from "../../../keys/ClientKeys";
 import { DataToSendContext } from "../../../context/DataTosendContext/DataToSendContext";
-
 
 const Helper = () => {
   const { helperData } = useContext(DataToSendContext);
@@ -79,7 +78,6 @@ const Helper = () => {
     });
   };
 
-
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       const { longitude, latitude } = position.coords;
@@ -136,7 +134,6 @@ const Helper = () => {
     getExactLocation();
   }, [latitude, longitude]);
 
-
   if (data) {
     dispatch(setRequestID(requestData?.request?.requestID));
     dispatch(setPickupPoint(requestData?.request?.pickupPoint));
@@ -148,7 +145,7 @@ const Helper = () => {
     dispatch(setRequesterEmail(requestData?.requesterInformation?.email));
     dispatch(setRequesterMobile(requestData?.requesterInformation?.mobile));
   }
-  
+
   if (!longitude && !latitude) {
     return <Loader />;
   } else {

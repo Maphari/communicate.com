@@ -6,6 +6,7 @@ const helperSchema = new Schema(
   {
     clientID: String,
     available: { type: Boolean, default: true },
+    state: { type: String, default: "helper" },
     location: {
       type: {
         type: String,

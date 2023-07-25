@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import PRIVATEKEY from "../../../ClientKeys/ClientKeys";
+import PRIVATEKEY from "../../../keys/ClientKeys";
 import { useNavigate, Link } from "react-router-dom";
 import { DataToSendContext } from "../../../context/DataTosendContext/DataToSendContext";
 import { Nav } from "../Nav";
@@ -18,6 +18,7 @@ import {
   setRequesterMobile,
 } from "../../../redux/requests/requestHelperSclice";
 import { PickupRide } from "./PickupRide";
+import { DistanceCalculator } from "./DistanceCalculator";
 import Loader from "../../../animation/Loder";
 import axios from "axios";
 
@@ -238,22 +239,22 @@ const Requester = () => {
     setNewLatitude(latitude);
   }, []);
 
-  useEffect(() => {
-    const newWs = new WebSocket("ws://localhost:8080");
-    newWs.onopen = () => {
-      console.log("WebSocket connection established.");
-    };
-    newWs.onmessage = (event) => {
-      toastNotificationSuccess("Creating and checking available pickup");
-    };
-    newWs.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
-    newWs.onclose = () => {
-      console.log("WebSocket connection closed.");
-    };
-    setWs(newWs);
-  }, []);
+  // useEffect(() => {
+  //   const newWs = new WebSocket("ws://localhost:8080");
+  //   newWs.onopen = () => {
+  //     console.log("WebSocket connection established.");
+  //   };
+  //   newWs.onmessage = (event) => {
+  //     toastNotificationSuccess("Creating and checking available pickup");
+  //   };
+  //   newWs.onerror = (error) => {
+  //     console.error("WebSocket error:", error);
+  //   };
+  //   newWs.onclose = () => {
+  //     console.log("WebSocket connection closed.");
+  //   };
+  //   setWs(newWs);
+  // }, []);
 
   if (!longitude && !latitude) {
     return <Loader />;
@@ -497,25 +498,17 @@ const Requester = () => {
               </form>
             </section>
           ) : (
-            <section className="dashboard-container__content_ride drop-shadow-2xl rounded-xl">
-              <header className="w-full">
-                <h1 className="mb-[0.2rem] mt-4 text-white opacity-70 font-bold text-lg">
-                  Choose a pickup ride
-                </h1>
-                <p className="text-white font-normal opacity-50 text-sm">
-                  Choose your ride wisely
-                </p>
-              </header>
-              <section>
-                <PickupRide
-                  onSelectRide
-                  iconName="motorcycle"
-                  header="bike"
-                  price="R 300.00"
-                  discription="Motorcycles are exclusively designed to transport packages and for delivering small parcels."
-                />
-              </section>
-            </section>
+            <DistanceCalculator
+              pickupPointCoords={
+                newLongitude && newLatitude
+                  ? [newLongitude, newLatitude]
+                  : [longitude, latitude]
+              }
+              destinationPointCoords={[
+                currentSearchDestinationCoords[0],
+                currentSearchDestinationCoords[1],
+              ]}
+            />
           )}
           <Map
             centerPickupPoint={

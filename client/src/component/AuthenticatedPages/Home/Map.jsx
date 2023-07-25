@@ -2,7 +2,7 @@ import { useRef, useEffect, useState, useMemo } from "react";
 import mapboxgl from "mapbox-gl";
 import MapboxSupported from "@mapbox/mapbox-gl-supported";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
-import ClientKeys from "../../ClientKeys/ClientKeys";
+import ClientKeys from "../../keys/ClientKeys";
 import { useSelector, connect } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -74,7 +74,7 @@ export const Map = (props) => {
         profile: "mapbox/driving",
         alternatives: true,
         congestion: true,
-        interactive: true,
+        interactive: false,
         controls: {
           inputs: false,
           instructions: helperSession ? true : false,
@@ -137,23 +137,23 @@ export const Map = (props) => {
     });
   }, [longitude, latitude]);
 
-// HELPER MARKER
+  // HELPER MARKER
   useEffect(() => {
-    const marker = new mapboxgl.Marker({color: "red"});
+    const marker = new mapboxgl.Marker({ color: "red" });
 
     if (longitude && latitude)
       marker.setLngLat([longitude, latitude]).addTo(map);
   }, [longitude, latitude]);
 
-//SHOWING USERS WHERE DRIVERS ARE
-useEffect(() => {
+  //SHOWING USERS WHERE DRIVERS ARE
+  useEffect(() => {
+    const marker = new mapboxgl.Marker({ color: "#a16207" });
 
-   const marker = new mapboxgl.Marker({color: "#a16207"});
-
-  if(latitude && longitude && drivers && userSession) 
-    drivers.map(location => marker.setLngLat(location.location?.coordinates).addTo(map));
-
-}, [longitude, latitude, drivers]);
+    if (latitude && longitude && drivers && userSession)
+      drivers.map((location) =>
+        marker.setLngLat(location.location?.coordinates).addTo(map)
+      );
+  }, [longitude, latitude, drivers]);
 
   if (!longitude && latitude) {
     return <p>Loading...</p>;

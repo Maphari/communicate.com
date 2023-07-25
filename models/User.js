@@ -11,6 +11,7 @@ const userSchema = new Schema(
       minlength: [4, "username must be at least 4 characters"],
     },
     profilePicture: String,
+    state: { type: String, default: "user" },
     email: {
       type: String,
       required: [true, "email is required"],

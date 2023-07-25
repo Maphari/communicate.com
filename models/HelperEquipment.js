@@ -7,19 +7,23 @@ const helperEquipmentSchema = new Schema(
     equipmentOwner: {
       type: Schema.Types.ObjectId,
       ref: "Helper",
-      unique: true,
     },
     carType: {
       type: String,
+      required: [true, "Car model is required"],
     },
     plateNumber: {
       type: String,
+      unique: [true, "Number plate has already been registered"],
+      required: [true, "Number plate is required"],
     },
     carColor: {
       type: String,
+      required: [true, "Car color is required"],
     },
-    profilePicture: {
+    vihicleType: {
       type: String,
+      required: [true, "vihicle Type is required"],
     },
   },
   { timestamps: true }

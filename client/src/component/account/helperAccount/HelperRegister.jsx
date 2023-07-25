@@ -127,7 +127,7 @@ export const HelperRegister = () => {
           <div className="signup-container__top">
             <div className="mb-3">
               <h1 className="signup-container__top-header">
-                Register for helper
+                Register helper
               </h1>
               <p className="signup-container__top-para">
                 Please provide you details
@@ -242,20 +242,19 @@ export const HelperRegister = () => {
               <span className="text-sky-600">terms</span> and{" "}
               <span className="text-sky-600">conditions</span>
             </p>
-
             <button
               type="submit"
-              className=" bg-yellow-500 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-yellow-600"
+              className="transition-all duration-700 ease-linear bg-yellow-600 hover:bg-yellow-700 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg"
             >
-              <i className="fa-solid fa-envelope text-lg"></i>
+              <i className="fa-solid fa-envelope text-sm"></i>
               <span className="text-md">Continue with email</span>
             </button>
             <Link
               to="/account/register"
-              className=" bg-sky-500 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-sky-600"
+              className="transition-all duration-700 ease-linear bg-violet-600 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-violet-700"
             >
-              <i className="fa-solid fa-user text-lg"></i>
-              <span className="text-md">Continue as a user</span>
+              <i className="fa-solid fa-car text-sm"></i>
+              <span className="text-md">Continue as a helper</span>
             </Link>
             <div className="flex items-center justify-center gap-1 p-2 mb-2">
               <p>Already have an account with us ?</p>

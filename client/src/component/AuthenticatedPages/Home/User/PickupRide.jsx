@@ -6,18 +6,18 @@ export const PickupRide = (props) => {
   return (
     <Link
       onClick={onSelectRide}
-      className="flex my-2 hover:text-white hover:bg-[#1b1b1b] p-[0.6rem] rounded-xl"
+      className="flex flex-wrap my-2 hover:text-white transition-all duration-700 ease-linear hover:bg-[#1f1f1f] bg-[#050505] py-[0.7rem] px-3 rounded-xl"
     >
-      <div className="flex items-center justify-center bg-[#050505] p-2 rounded-xl w-[65px] mr-3">
-        <i className={`fa-solid fa-${iconName} text-3xl text-white`}></i>
+      <div className="flex items-center justify-between mb-1  w-full">
+        <header className="flex items-center justify-between text-white">
+          <i
+            className={`fa-solid fa-${iconName} text-2xl text-white bg-[#1f1f1f] p-2 rounded-xl mr-3`}
+          ></i>
+          <h1 className="mr-5 text-[1.1rem] font-bold ride_header">{header}</h1>
+        </header>
+        <p className="text-lg font-bold text-yellow-500 price_ride">{price}</p>
       </div>
       <div>
-        <header className="flex items-center justify-between text-white">
-          <h1 className="mr-5 text-[1.1rem] font-bold">
-            Communica<span className="text-yellow-600">tee.</span> {header}
-          </h1>
-          <p className="text-lg font-bold text-yellow-500">{price}</p>
-        </header>
         <p className="text-white opacity-30 text-xs">{discription}</p>
       </div>
     </Link>

@@ -244,12 +244,4 @@ authRoutes.get("/api/auth/helper_success", checkSession, function (req, res) {
   else res.json({ message: "Account is not authenticated" });
 });
 
-authRoutes.get("/api/authentication", checkSession, (req, res, next) => {
-  if ((req.session.user && req.session) || req.isAuthenticated()) next();
-  else
-    res
-      .status(401)
-      .send({ errorMessage: "Session has expired or is not authenticated" });
-});
-
 module.exports = authRoutes;

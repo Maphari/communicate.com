@@ -16,7 +16,6 @@ import { Accept } from "./AuthenticatedPages/Home/helper/Accept";
 import { Decline } from "./AuthenticatedPages/Home/helper/Decline";
 import { DataToSendContext } from "./context/DataTosendContext/DataToSendContext";
 import { Equipment } from "./AuthenticatedPages/Home/helper/Equipment";
-import { Post } from "./AuthenticatedPages/Posts/Post";
 import Dashboard from "./AuthenticatedPages/Home/Dashboard";
 import Loader from "./animation/Loder";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,23 +26,12 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
   const tokenHelper = localStorage.getItem("token-helper");
-  // const { data, helperData } = useContext(DataToSendContext);
+  const { data, helperData, error } = useContext(DataToSendContext);
   const location = useLocation();
   const navigate = useNavigate();
 
   const toastNotificationError = (message) => {
     toast.error(message, {
-      toastId: "session",
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  };
-  const toastNotificationSuccess = (message) => {
-    toast.success(message, {
       toastId: "session",
       position: "bottom-right",
       autoClose: 5000,
@@ -93,24 +81,26 @@ export default function App() {
     }
   }, []);
 
-  // THIS USEEFFECT WILL TAKE URL AND CHECK IF THE SESSION IS ACTIVE OR NOT
+  if (!data.session === token || !helperData.session === tokenHelper) {
+    toastNotificationError("You have to be logged in to access this page.");
+    localStorage.clear();
+    navigate("/account/login");
+  }
+
   useEffect(() => {
-    axios
-      .get("/api/authentication")
-      .then((response) => {
-        // Handle successful response
-        if (response.status === 200)
-          toastNotificationSuccess("Auntention successful");
-      })
-      .catch((error) => {
-        // Handle failed response
-        if (error.response.status === 401 && error.response.data.errorMessage) {
-          toastNotificationError(error.response.data.errorMessage);
-          localStorage.clear();
-          navigate("/account/login");
-        }
-      });
-  }, []);
+    const response = error?.response;
+
+    if (
+      response?.status === 401 &&
+      response?.statusText === "Unauthorized" &&
+      response?.data?.error === "Session expired or user not authenticated" &&
+      (token || tokenHelper)
+    ) {
+      toastNotificationError("You have to be logged in to access this page");
+      localStorage.clear();
+      navigate("/account/login");
+    }
+  }, [error]);
 
   return (
     <>
@@ -211,16 +201,6 @@ export default function App() {
             path="/equipment"
             element={
               tokenHelper ? <Equipment /> : <Navigate to="/" replace={true} />
-            }
-          />
-          <Route
-            path="/news-feed"
-            element={
-              tokenHelper || token ? (
-                <Post />
-              ) : (
-                <Navigate to="/" replace={true} />
-              )
             }
           />
         </Routes>

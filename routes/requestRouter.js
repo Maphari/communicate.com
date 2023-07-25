@@ -8,6 +8,14 @@ const Equipment = mongoose.model("HelperEquipment");
 const { v4: uuidv4 } = require("uuid");
 const checkSession = require("../middleware/authMiddleware");
 
+
+const toUppercaseFields = function(str) {
+  return str.toUpperCase();
+}
+const toUppercaseFirstLetter = function(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 requestRouter.post("/api/request_pickup", checkSession, async (req, res) => {
   try {
     const {
@@ -56,84 +64,73 @@ requestRouter.post("/api/request_pickup", checkSession, async (req, res) => {
   }
 });
 
-requestRouter.post("/api/update-helper-location", checkSession, async (req, res) => {
-  try {
-    const { email, long, lat } = req.body;
-    const findDriver = await Driver.findOne({ email });
-
-    if (findDriver) {
-      findDriver.location = {
-        type: "Point",
-        coordinates: [long, lat],
-      };
-      // Save the updated helper to the database
-      await findDriver.save();
-    } else {
-      res.status(404).send({ message: "Cannot find driver" });
-    }
-  } catch (error) {
-    res.status(500).json({ errorMessage: error.message });
-  }
-});
-
-requestRouter.get("/api/get-drivers", async (req, res) => {
-  try {
-    const foundDrivers = await Driver.find().exec();
-    if (foundDrivers) {
-      res.status(200).json(foundDrivers);
-    }
-  } catch (error) {
-    res.status(500).json({ errorMessage: error.message });
-  }
-});
-
 requestRouter.post(
-  "/api/update_driver-information",
+  "/api/update-helper-location",
   checkSession,
   async (req, res) => {
     try {
-      const { carType, plateNumber, carColor, profilePicture, email } =
-        req.body;
+      const { email, long, lat } = req.body;
+      const findDriver = await Driver.findOne({ email });
 
-      const foundDriver = await Driver.findOne({ email });
-      if (!foundDriver) {
-        return res.status(404).send({ message: "Driver not found" });
-      }
-
-      const foundEquipment = await Equipment.findOne({
-        equipmentOwner: foundDriver._id,
-      });
-
-      if (foundEquipment) {
-        // if equipment object exist and status is true
-        res.status(200).send({ equipment: existingEquipment });
+      if (findDriver) {
+        findDriver.location = {
+          type: "Point",
+          coordinates: [long, lat],
+        };
+        // Save the updated helper to the database
+        await findDriver.save();
       } else {
-        // creating unique id
-        const equpmentId = uuidv4();
-        // creating new schema if no schema
-        const newEquipment = new Equipment({
-          equipmentID: equpmentId,
-          equipmentOwner: foundDriver._id,
-          carType: carType,
-          carColor: carColor,
-          plateNumber: plateNumber,
-          profilePicture: profilePicture,
-        });
-
-        await newEquipment.save();
-        res.status(200).send({ equipment: newEquipment });
+        res.status(404).send({ message: "Cannot find driver" });
       }
     } catch (error) {
-      console.error(error);
-      return res.status(500).send({ message: "Internal server error" });
+      res.status(500).json({ errorMessage: error.message });
     }
   }
 );
-// getting equipment information
-requestRouter.get("/api/getDriver", checkSession, async (req, res) => {
-  const driver = await Equipment.find().exec();
-  if (driver) res.status(200).send({ driver: driver });
-  else res.status(404).send({ message: "Driver not found" });
+
+
+requestRouter.post("/api/add-equipment", checkSession, async (req, res) => {
+  try {
+    const { carType, plateNumber, carColor, vihicle, email } = req.body;
+
+    const foundDriver = await Driver.findOne({ email });
+    const foundEquipment = await Equipment.findOne({
+      equipmentOwner: foundDriver._id,
+    });
+
+    if (!foundDriver) {
+      return res.status(404).send({ message: "Driver not found" });
+    }
+
+    if (!foundEquipment && foundDriver) {
+      const equipmentId = uuidv4().toString();
+
+      const newEquipment = new Equipment({
+        equipmentID: equipmentId,
+        equipmentOwner: foundDriver._id,
+        carType: toUppercaseFirstLetter(carType),
+        plateNumber: toUppercaseFields(plateNumber),
+        carColor: toUppercaseFirstLetter(carColor),
+        vihicleType: vihicle,
+      });
+
+      await newEquipment.save();
+      res.status(200).send({
+        message: "Equipment added successfully",
+        equipment: newEquipment,
+      });
+    } else {
+      res
+        .status(200)
+        .send({
+          equipment: foundEquipment,
+          message: "Equipment already added",
+        });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal server error" });
+  }
 });
+
 
 module.exports = requestRouter;

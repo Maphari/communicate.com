@@ -7,7 +7,7 @@ export const ProfileHelper = () => {
 
   return (
     <>
-      <Nav />
+      {/* <Nav /> */}
       <section className="profile-container text-white">
         <header className="profile-container__header">
           <h1 className="profile-container__header-main">

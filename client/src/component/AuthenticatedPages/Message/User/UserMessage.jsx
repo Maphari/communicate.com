@@ -28,7 +28,7 @@ export class UserMessage extends Component {
               All your messages will be availabe here
             </p>
 
-            <section className="mt-4 flex items-center gap-2 transition-all duration-700 ease-linear hover:cursor-pointer hover:bg-[#1f1f1f] rounded-xl">
+            <section className=" mt-4 flex items-center gap-2 transition-all duration-700 ease-linear hover:cursor-pointer hover:bg-[#1f1f1f] rounded-xl">
               <div className="bg-yellow-700 h-14 max-w-[4.3rem] w-[4.3rem] rounded-full flex justify-center items-center">
                 <i className="fa-solid fa-user text-2xl"></i>
               </div>
@@ -58,6 +58,16 @@ export class UserMessage extends Component {
               <header className="bg-slate-800 p-2">header information</header>
             </section>
           )}
+        </main>
+        <main className="message-small-screen  text-white">
+          <section>
+            <h1 className="message-container__message mt-2 text-2xl">
+              Messages
+            </h1>
+            <p className="opacity-30 text-sm mt-1">
+              All your messages will be availabe here
+            </p>
+          </section>
         </main>
       </>
     );

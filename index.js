@@ -9,7 +9,8 @@ const keys = require("./privateKeys/privateKeys");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
 const authRoutes = require("./routes/authRoutes");
-const requestRouter = require("./routes/requestRouter");
+const requestRoutes = require("./routes/requestRouter");
+const getDBRoutes = require("./routes/getDBRoutes");
 const cors = require("cors");
 
 const app = express();
@@ -28,5 +29,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(authRoutes);
-app.use(requestRouter);
+app.use(requestRoutes);
+app.use(getDBRoutes);
 app.listen(keys.PORT);

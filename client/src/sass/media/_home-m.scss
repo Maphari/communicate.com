@@ -1,0 +1,82 @@
+@media (width <= 1114px) {
+  .message-container {
+    display: none;
+  }
+  .message-small-screen {
+    padding: 4rem 0 0 1.5rem;
+  }
+  .settings-container {
+    display: none;
+  }
+  .settings-small-screen {
+    padding: 5rem 0 0 1.5rem;
+    color: $WHITE-COLOR;
+  }
+}
+@media (width > 1114px) {
+  .message-small-screen {
+    display: none;
+  }
+  .settings-small-screen {
+    display: none;
+  }
+}
+
+@media (width <= 700px) {
+  .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem;
+
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    &__header {
+      .links {
+        display: none !important;
+      }
+    }
+  }
+  .settings-small-screen {
+    padding: 5rem 0 0 1rem;
+  }
+
+  .dashboard-container {
+    &__content_ride {
+      height: 100vh;
+      left: 0;
+      top: 9%;
+      border-radius: 0 !important;
+      padding: 0 1rem;
+    }
+    &__content {
+      top: 50%; 
+      left: 50%; 
+      transform: translate(-50%, -50%);
+      width: 100%;
+    }
+  }
+}
+@media (width > 700px) {
+  .menu {
+    display: none;
+  }
+}
+
+@media (width <= 400px) {
+  .bankaccount-container__main {
+    button {
+      width: 100%;
+    }
+  }
+}
+
+@media (width <= 320px) {
+  .head-help {
+    font-size: 6vw;
+  }
+  .message-small-screen {
+    padding: 0.3rem 1rem 1rem;
+  }
+}

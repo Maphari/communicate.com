@@ -66,11 +66,11 @@ export function Navigation() {
                 Subscribe to our{" "}
                 <span className="text-yellow-500">news letter</span>
               </h1>
-              <form className="flex items-center flex-1 w-full form">
+              <form className="flex flex-wrap items-center flex-1 w-full form">
                 <input
                   type="email"
                   placeholder="Enter email address"
-                  className="p-3 outline-none text-gray-500 flex items-center flex-1 rounded-l"
+                  className="p-3 outline-none text-gray-500 flex items-center flex-1"
                 />
                 <button className="p-3 font-[600] bg-yellow-500 hover:bg-yellow-600 transition-all duration-700 ease-linear">
                   Subscribe

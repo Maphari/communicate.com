@@ -146,3 +146,35 @@
     gap: 1rem;
   }
 }
+
+@media (width <= 550px) {
+  .form {
+   // gap: .5rem;
+ 
+   button {
+     width: 100%;
+   }
+  }
+  .features-container__header__h1 {
+   font-size: 1.7rem;
+  }
+  .signup-container {
+    form {
+      width: 100%;
+    }
+  }
+ }
+
+@media (width <= 450px) {
+ .form {
+  // gap: .5rem;
+
+  button {
+    width: 100vw;
+    height: 100vh;
+  }
+ }
+ .features-container__header__h1 {
+  font-size: 1.7rem;
+ }
+}

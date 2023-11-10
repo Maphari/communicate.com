@@ -176,11 +176,11 @@ export const HelperLogin = () => {
               <span className="text-md">Continue with email</span>
             </button>
             <Link
-              to="/account/helper_login"
+              to="/account/login"
               className="transition-all duration-700 ease-linear bg-violet-600 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-violet-700"
             >
-              <i className="fa-solid fa-car text-sm"></i>
-              <span className="text-md">Continue as a helper</span>
+              <i className="fa-solid fa-user text-sm"></i>
+              <span className="text-md">Continue as a user</span>
             </Link>
             <div className="flex items-center justify-center gap-1 p-2 mb-2">
               <p>Don't have an account with us ?</p>

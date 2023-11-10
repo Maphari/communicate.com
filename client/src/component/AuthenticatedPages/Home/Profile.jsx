@@ -5,5 +5,5 @@ import { ProfileUser } from "./User/ProfileUser";
 export const Profile = () => {
   const userToken = localStorage.getItem("token");
   const helperToken = localStorage.getItem("token-helper");
-  return userToken ? <ProfileUser /> : helperToken ? <ProfileHelper /> : null;
+  return (userToken && <ProfileUser />) || (helperToken && <ProfileHelper />);
 };

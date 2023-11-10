@@ -11,11 +11,11 @@ const checkSession = require("../middleware/authMiddleware");
 
 // GOOGLE AUTHENTICATION ROUTES
 authRoutes.get(
-  "/api/v1/auth/google",
+  "/api/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 authRoutes.get(
-  "/api/v1/auth/google/callback",
+  "/api/auth/google/callback",
   passport.authenticate("google", {
     successRedirect: `${Keys.CLIENT_ROUTE}/home`,
     failureRedirect: `${Keys.CLIENT_ROUTE}/account/login`,

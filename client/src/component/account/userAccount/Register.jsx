@@ -93,7 +93,7 @@ export const Register = () => {
     try {
       e.preventDefault();
 
-      const user = await fetch("/api/v1/auth/signup_user", {
+      const user = await fetch("/api/auth/signup_user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, mobile, password }),
@@ -117,7 +117,7 @@ export const Register = () => {
   };
 
   async function handleGoogleLogin() {
-    window.open("/api/v1/auth/google", "_self");
+    window.open("/api/auth/google", "_self");
     const res = await axios.get("/api/auth/passport_success");
     const clientid = res?.data?.user?.clientID;
     localStorage.setItem("token", clientid);

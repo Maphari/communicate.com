@@ -63,7 +63,7 @@ export const Login = () => {
   const handleLogIn = async (e) => {
     try {
       e.preventDefault();
-      const res = await fetch("/api/v1/auth/signin_user", {
+      const res = await fetch("/api/auth/signin_user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -97,7 +97,7 @@ export const Login = () => {
     const clientid = res?.data?.user?.clientID;
     if (clientid) {
       cookies.set("token", clientid);
-      window.open("/api/v1/auth/google", "_self");
+      window.open("/api/auth/google", "_self");
     } else {
       toastNotificationError("account not found register");
       navigate("/account/register");

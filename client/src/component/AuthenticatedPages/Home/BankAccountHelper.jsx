@@ -22,10 +22,10 @@ export class BankAccountHelper extends Component {
             </header>
 
             <section className="bankaccount-container__main">
-              <button className="transition-all duration-700 ease-linear bg-cyan-700 hover:bg-cyan-900 p-2 rounded">
+             { userToken && <button className="transition-all duration-700 ease-linear bg-cyan-700 hover:bg-cyan-900 p-2 rounded">
                 <i className="fa-solid fa-add mr-2"></i>
                 <span>Add funds</span>
-              </button>
+              </button>}
               {helperToken && (
                 <button className="transition-all duration-700 ease-linear bg-violet-700 hover:bg-violet-900 p-2 rounded">
                   <i className="fa-solid fa-money-bill-transfer mr-2"></i>

@@ -178,8 +178,7 @@ export const Nav = () => {
               className="border-[0.3px] border-[#2b2b2b] p-2 flex items-center gap-1"
               onClick={() => setIsSmallScreenMenuOpen(false)}
             >
-              <i className="fa-solid fa-xmark"></i>
-              <span>CLOSE</span>
+              <i className="fa-solid fa-xmark text-xl"></i>
             </div>
           </header>
           <section className="px-3 flex justify-center items-center flex-col">

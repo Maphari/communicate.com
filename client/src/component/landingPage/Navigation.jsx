@@ -1,9 +1,48 @@
-import React from "react";
+import React, {useState} from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export function Navigation() {
+  const [email, setEmail] = useState("");
   const location = useLocation();
+
+  const toastNotificationSuccess = (message) => {
+    toast.success(message, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
+
+  const toastNotificationError = (message) => {
+    toast.error(message, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
+
+  const handeEmailSubscription = async(e) => {
+    try {
+      e.preventDefault();
+      const subscriber = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({  email }),
+      });
+      const data = await subscriber.json();
+      toastNotificationSuccess(data.message)
+    } catch (error) {
+      toastNotificationError(error.message)
+    } 
+  }
 
   return (
     <>
@@ -66,10 +105,13 @@ export function Navigation() {
                 Subscribe to our{" "}
                 <span className="text-yellow-500">news letter</span>
               </h1>
-              <form className="flex flex-wrap items-center flex-1 w-full form">
+              <form onSubmit={handeEmailSubscription} className="flex flex-wrap items-center flex-1 w-full form">
                 <input
                   type="email"
                   placeholder="Enter email address"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  required
                   className="p-3 outline-none text-gray-500 flex items-center flex-1"
                 />
                 <button className="p-3 font-[600] bg-yellow-500 hover:bg-yellow-600 transition-all duration-700 ease-linear">

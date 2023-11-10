@@ -7,15 +7,16 @@ const userSchema = new Schema(
     clientID: String,
     username: {
       type: String,
-      required: [true, "username is required"],
+      required: true,
       minlength: [4, "username must be at least 4 characters"],
     },
     profilePicture: String,
+    gander: String,
     state: { type: String, default: "user" },
     email: {
       type: String,
-      required: [true, "email is required"],
-      unique: [true, "Email already taken"],
+      required: true,
+      unique: true,
       lowecase: true,
       validate: {
         validator: (email) => {
@@ -26,7 +27,7 @@ const userSchema = new Schema(
     },
     mobile: {
       type: String,
-      required: [true, "Phone number is required"],
+      required: true,
       validate: {
         validator: (newPhoneNumber) => {
           return /^[+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,3}[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,4}$/.test(
@@ -38,6 +39,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
+      required: true,
       validate: {
         validator: (password) => {
           return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/.test(
@@ -45,7 +47,7 @@ const userSchema = new Schema(
           );
         },
         message:
-          "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+          "Please Enter a Strong Password",
       },
     },
   },

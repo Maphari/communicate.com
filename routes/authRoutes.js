@@ -7,9 +7,20 @@ const Keys = require("../privateKeys/privateKeys");
 const authRoutes = express.Router();
 const User = mongoose.model("user");
 const Helper = mongoose.model("Helper");
-const checkSession = require("../middleware/authMiddleware");
 
-// GOOGLE AUTHENTICATION ROUTES
+
+
+const isAllowedToContinue = (req, res, next) => {
+  if (req.isAuthenticated() || req.session && req.session.user) {
+    next();
+  } else {
+    res
+      .status(401)
+      .json({ error: "Session expired or user not authenticated" });
+  }
+};
+
+// GOOGLE AUTH ROUTES
 authRoutes.get(
   "/api/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
@@ -17,10 +28,11 @@ authRoutes.get(
 authRoutes.get(
   "/api/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: `${Keys.CLIENT_ROUTE}/home`,
-    failureRedirect: `${Keys.CLIENT_ROUTE}/account/login`,
+    successRedirect: isAllowedToContinue ? Keys.CLIENT_ROUTE + "/home" : Keys.CLIENT_ROUTE + "/account/register",
+    failureRedirect: Keys.CLIENT_ROUTE + "/account/register",
   })
 );
+
 
 // ROUTES FOR USER TO CREATE ACCOUNT AND LOGIN USING FORMS
 authRoutes.post("/api/v1/auth/signup_user", async function (req, res) {
@@ -211,7 +223,7 @@ authRoutes.post("/api/v1/auth/helper/login_user", async (req, res) => {
 });
 
 // ROUTER AFTER USER SUCCESS ON AUTHENTICATION
-authRoutes.get("/api/auth/passport_success", checkSession, (req, res) => {
+authRoutes.get("/api/auth/passport_success", isAllowedToContinue, (req, res) => {
   if (req.isAuthenticated())
     res.json({
       user: req.user,
@@ -221,7 +233,7 @@ authRoutes.get("/api/auth/passport_success", checkSession, (req, res) => {
   else res.json({ message: "User not authenticated" });
 });
 
-authRoutes.get("/api/auth/account_success", checkSession, function (req, res) {
+authRoutes.get("/api/auth/account_success", isAllowedToContinue, function (req, res) {
   const user = req.session.user;
   if (user)
     res.json({
@@ -232,7 +244,7 @@ authRoutes.get("/api/auth/account_success", checkSession, function (req, res) {
   else res.json({ message: "User not authenticated" });
 });
 
-authRoutes.get("/api/auth/helper_success", checkSession, function (req, res) {
+authRoutes.get("/api/auth/helper_success", isAllowedToContinue, function (req, res) {
   const helper = req.session.user;
 
   if (helper)

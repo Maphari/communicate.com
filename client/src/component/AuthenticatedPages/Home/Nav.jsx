@@ -108,9 +108,9 @@ export const Nav = () => {
           </div>
         </header>
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 border-[0.1px] border-[#2b2b2b] menu px-2 py-1 transition-all duration-700 ease-linear hover:bg-[#2b2b2b]">
+          <Link to="/message" className="flex hover:text-white items-center gap-2 border-[0.1px] border-[#2b2b2b] menu px-2 py-1 transition-all duration-700 ease-linear hover:bg-[#2b2b2b]">
             <i className="fa-solid fa-envelope menu text-xl"></i>
-          </div>
+          </Link>
           <div
             onClick={() => setIsSmallScreenMenuOpen(true)}
             className="flex items-center gap-2 border-[0.1px] border-[#2b2b2b] menu px-2 py-1 transition-all duration-700 ease-linear hover:bg-[#2b2b2b]"
@@ -190,10 +190,17 @@ export const Nav = () => {
               <i className="fa-solid fa-user"></i>
             </Link>
             <Link
-              to="/history"
+              to="/bank-account"
               className="p-[0.73rem] hover:bg-[#2b2b2b] bg-[#1f1f1f] hover:text-white font-[500] w-full flex items-center justify-between rounded mb-2 transition-all duration-500 ease-linear hover:ml-3"
             >
-              <span>History</span>
+              <span>Bank account</span>
+              <i className="fa-solid fa-wallet"></i>
+            </Link>
+            <Link
+              to="/feed"
+              className="p-[0.73rem] hover:bg-[#2b2b2b] bg-[#1f1f1f] hover:text-white font-[500] w-full flex items-center justify-between rounded mb-2 transition-all duration-500 ease-linear hover:ml-3"
+            >
+              <span>Feed</span>
               <i className="fa-solid fa-timeline"></i>
             </Link>
             {helperSession && (

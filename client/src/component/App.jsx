@@ -9,7 +9,7 @@ import { HelperRegister } from "./account/helperAccount/HelperRegister";
 import { HelperLogin } from "./account/helperAccount/HelperLogin";
 import { BankAccountHelper } from "./AuthenticatedPages/Home/BankAccountHelper";
 import { Profile } from "./AuthenticatedPages/Home/Profile";
-import { History } from "./AuthenticatedPages/Home/History";
+import { Feed } from "./AuthenticatedPages/Home/Feed";
 import { Settings } from "./AuthenticatedPages/Home/Settings";
 import { Messages } from "./AuthenticatedPages/Message/Message";
 import { Accept } from "./AuthenticatedPages/Home/helper/Accept";
@@ -87,20 +87,20 @@ export default function App() {
     navigate("/account/login");
   }
 
-  useEffect(() => {
-    const response = error?.response;
+  // useEffect(() => {
+  //   const response = error?.response;
 
-    if (
-      response?.status === 401 &&
-      response?.statusText === "Unauthorized" &&
-      response?.data?.error === "Session expired or user not authenticated" &&
-      (token || tokenHelper)
-    ) {
-      toastNotificationError("You have to be logged in to access this page");
-      localStorage.clear();
-      navigate("/account/login");
-    }
-  }, [error]);
+  //   if (
+  //     response?.status === 401 &&
+  //     response?.statusText === "Unauthorized" &&
+  //     response?.data?.error === "Session expired or user not authenticated" &&
+  //     (token || tokenHelper)
+  //   ) {
+  //     toastNotificationError("You have to be logged in to access this page");
+  //     localStorage.clear();
+  //     navigate("/account/login");
+  //   }
+  // }, [error]);
 
   return (
     <>
@@ -168,10 +168,10 @@ export default function App() {
             }
           />
           <Route
-            path="/history"
+            path="/feed"
             element={
               token || tokenHelper ? (
-                <History />
+                <Feed />
               ) : (
                 <Navigate to="/" replace={true} />
               )

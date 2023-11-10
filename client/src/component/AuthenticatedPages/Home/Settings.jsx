@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import packageJSON from "../../../../package.json";
 import { Profile } from "./Profile";
 import { Equipment } from "./helper/Equipment";
-import { History } from "./History";
+import { Feed } from "./Feed";
 
 export const Settings = () => {
   const { data, helperData } = useContext(DataToSendContext);
@@ -54,7 +54,7 @@ export const Settings = () => {
     } else if (isProfileSelected) {
       return <Profile />;
     } else if (isHistorySelected) {
-      return <History />;
+      return <Feed />;
     } else if (isEquipmentSelected) {
       return <Equipment />;
     }

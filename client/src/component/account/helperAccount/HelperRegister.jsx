@@ -126,9 +126,7 @@ export const HelperRegister = () => {
         >
           <div className="signup-container__top">
             <div className="mb-3">
-              <h1 className="signup-container__top-header">
-                Register helper
-              </h1>
+              <h1 className="signup-container__top-header">Register helper</h1>
               <p className="signup-container__top-para">
                 Please provide you details
               </p>
@@ -242,20 +240,23 @@ export const HelperRegister = () => {
               <span className="text-sky-600">terms</span> and{" "}
               <span className="text-sky-600">conditions</span>
             </p>
-            <button
-              type="submit"
-              className="transition-all duration-700 ease-linear bg-yellow-600 hover:bg-yellow-700 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg"
-            >
-              <i className="fa-solid fa-envelope text-sm"></i>
-              <span className="text-md">Continue with email</span>
-            </button>
-            <Link
-              to="/account/register"
-              className="transition-all duration-700 ease-linear bg-violet-600 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-violet-700"
-            >
-              <i className="fa-solid fa-car text-sm"></i>
-              <span className="text-md">Continue as a helper</span>
-            </Link>
+            <div className="flex items-center gap-2">
+              <button
+                type="submit"
+                className="transition-all duration-700 ease-linear bg-yellow-600 hover:bg-yellow-700 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg"
+              >
+                <i className="fa-solid fa-envelope text-sm"></i>
+                <span className="text-md">Continue with email</span>
+              </button>
+              <Link
+                to="/account/register"
+                className="transition-all duration-700 ease-linear bg-violet-600 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-violet-700"
+              >
+                <i className="fa-solid fa-user text-sm"></i>
+                <span className="text-md">Continue as a User</span>
+              </Link>
+            </div>
+
             <div className="flex items-center justify-center gap-1 p-2 mb-2">
               <p>Already have an account with us ?</p>
               <Link
@@ -267,11 +268,6 @@ export const HelperRegister = () => {
             </div>
           </div>
         </Form>
-        <p className="absolute mb-3 bottom-0 font-[500] text-l flex items-center gap-2 z-[400]">
-          <span className="text-yellow-600 font-bold">Communicatee.</span>{" "}
-          copyright &copy;
-          <span>{currentYear}</span> <span>{userLanguage}</span>
-        </p>
       </section>
     </>
   );

@@ -68,48 +68,61 @@ export class DistanceCalculator extends Component {
 
   bikePriceDistanceChecker = () => {
     const chargePerKM = 20;
-    const baseCharge = 10;
+    const baseCharge = 5;
     const distance = this.state.distance;
-
-    if (distance > 1000) {
-      return chargePerKM * (distance / 1000).toFixed(0);
-    } else {
-      return baseCharge * (distance / 1000).toFixed(0);
-    }
+    const timeInMinutes = this.state.duration; 
+  
+    const distanceCharge = chargePerKM * (distance / 1000);
+    const timeCharge = 0.5 * timeInMinutes; // Assuming a rate of 0.5 per minute.
+  
+    // Calculate the total fare by adding base fare, distance charge, and time charge.
+    const totalFare = baseCharge + distanceCharge + timeCharge;
+  
+    return totalFare.toFixed(2); // Return the total fare with two decimal places.
   };
+  
   buckyPriceDistanceChecker = () => {
     const chargePerKM = 30;
-    const baseCharge = 15;
+    const baseCharge = 10;
     const distance = this.state.distance;
-
-    if (distance > 1000) {
-      return chargePerKM * (distance / 1000).toFixed(0);
-    } else {
-      return baseCharge * (distance / 1000).toFixed(0);
-    }
+    const timeInMinutes = this.state.duration; 
+  
+    const distanceCharge = chargePerKM * (distance / 1000);
+    const timeCharge = 0.5 * timeInMinutes; // Assuming a rate of 0.5 per minute.
+  
+    // Calculate the total fare by adding base fare, distance charge, and time charge.
+    const totalFare = baseCharge + distanceCharge + timeCharge;
+  
+    return totalFare.toFixed(2); // Return the total fare with two decimal places.
   };
   vanPriceDistanceChecker = () => {
     const chargePerKM = 35;
-    const baseCharge = 20;
+    const baseCharge = 15;
     const distance = this.state.distance;
-
-    if (distance > 1000) {
-      return chargePerKM * (distance / 1000).toFixed(0);
-    } else {
-      return baseCharge * (distance / 1000).toFixed(0);
-    }
+    const timeInMinutes = this.state.duration; 
+  
+    const distanceCharge = chargePerKM * (distance / 1000);
+    const timeCharge = 0.5 * timeInMinutes; // Assuming a rate of 0.5 per minute.
+  
+    // Calculate the total fare by adding base fare, distance charge, and time charge.
+    const totalFare = baseCharge + distanceCharge + timeCharge;
+  
+    return totalFare.toFixed(2); // Return the total fare with two decimal places.
   };
 
   truckPriceDistanceChecker = () => {
     const chargePerKM = 40;
-    const baseCharge = 25;
+    const baseCharge = 20;
     const distance = this.state.distance;
-
-    if (distance > 1000) {
-      return chargePerKM * (distance / 1000).toFixed(0);
-    } else {
-      return baseCharge * (distance / 1000).toFixed(0);
-    }
+    const timeInMinutes = this.state.duration; 
+  
+    const distanceCharge = chargePerKM * (distance / 1000);
+    const timeCharge = 0.5 * timeInMinutes; // Assuming a rate of 0.5 per minute.
+  
+    // Calculate the total fare by adding base fare, distance charge, and time charge.
+    const totalFare = baseCharge + distanceCharge + timeCharge;
+  
+    return totalFare.toFixed(2); // Return the total fare with two decimal places.
   };
 
   componentDidMount() {
@@ -156,28 +169,28 @@ export class DistanceCalculator extends Component {
                 }
                 iconName="motorcycle"
                 header="Bike"
-                price={`R${this.bikePriceDistanceChecker()}.00`}
+                price={`R${this.bikePriceDistanceChecker()}`}
                 discription="Motorcycles are exclusively designed to transport packages and for delivering small parcels."
               />
               <PickupRide
                 onSelectRide
                 iconName="truck-pickup"
                 header="Bucky"
-                price={`R${this.buckyPriceDistanceChecker()}.00`}
+                price={`R${this.buckyPriceDistanceChecker()}`}
                 discription="The Van is a versatile mid-sized delivery vehicle known for its ample cargo space."
               />
               <PickupRide
                 onSelectRide
                 iconName="van-shuttle"
                 header="Van"
-                price={`R${this.vanPriceDistanceChecker()}.00`}
+                price={`R${this.vanPriceDistanceChecker()}`}
                 discription="The Van is a versatile mid-sized delivery vehicle known for its ample cargo space."
               />
               <PickupRide
                 onSelectRide
                 iconName="truck"
                 header="Truck"
-                price={`R${this.truckPriceDistanceChecker()}.00`}
+                price={`R${this.truckPriceDistanceChecker()}`}
                 discription="Trucks are heavy-duty vehicles designed to transport large and bulky items"
               />
             </section>

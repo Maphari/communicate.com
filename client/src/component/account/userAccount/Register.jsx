@@ -3,6 +3,8 @@ import { InputGroup, Form, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import GoogleLogoImage from "../../../assets/google-logo.png";
+import FacebookLogoImage from "../../../assets/facebook-logo.png"
+import SpotifyLogoImage from "../../../assets/spotify-logo.png"
 import axios from "axios";
 
 export const Register = () => {
@@ -93,7 +95,7 @@ export const Register = () => {
     try {
       e.preventDefault();
 
-      const user = await fetch("/api/auth/signup_user", {
+      const user = await fetch("/api/v1/auth/signup_user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, mobile, password }),
@@ -112,7 +114,13 @@ export const Register = () => {
         navigate("/account/register", { replace: true });
       }
     } catch (error) {
-      setMessageERROR(error.message);
+      if (error.response && error.response.status === 401) {
+        setMessageERROR("Invalid username or password");
+      } else {
+        setMessageERROR(
+          "An unexpected error occurred. Please try again later. Or refresh the page"
+        );
+      }
     }
   };
 
@@ -253,30 +261,34 @@ export const Register = () => {
               <span className="text-sky-600">terms</span> and{" "}
               <span className="text-sky-600">conditions</span>
             </p>
+            <div className="flex items-center gap-2">
             <button
               type="submit"
-              className="transition-all duration-700 ease-linear bg-yellow-600 hover:bg-yellow-700 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg"
+              className="w-full transition-all duration-700 ease-linear bg-yellow-600 hover:bg-yellow-700 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg"
             >
               <i className="fa-solid fa-envelope text-sm"></i>
-              <span className="text-md">Continue with email</span>
+              <span className="text-[0.90rem]">Continue with email</span>
             </button>
             <Link
               to="/account/helper_login"
-              className="transition-all duration-700 ease-linear bg-violet-600 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-violet-700"
+              className="w-full transition-all duration-700 ease-linear bg-violet-600 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-violet-700"
             >
               <i className="fa-solid fa-car text-sm"></i>
-              <span className="text-md">Continue as a helper</span>
+              <span className="text-[0.90rem]">Continue as a helper</span>
             </Link>
-            <div className="mt-2">
+            </div>
+           <div className="flex gap-1">
+            <div className="mt-0 w-full">
               <div className="transition-all duration-700 ease-linear flex items-center justify-center gap-1 border p-2 mb-2   hover:cursor-pointer rounded-lg hover:bg-gray-200">
-                <img src={GoogleLogoImage} alt="google logo" className="w-5" />
+                <img src={GoogleLogoImage} alt="google logo" className="w-4" />
                 <a
                   onClick={handleGoogleLogin}
-                  className="text-md hover:text-gray-950"
+                  className="text-[0.90rem] hover:text-gray-950"
                 >
-                  Continue with google
+                  Continue with Google
                 </a>
               </div>
+            </div>
             </div>
             <div className="flex items-center justify-center gap-1 p-2 mb-2">
               <p>Already have an account with us ?</p>
@@ -289,11 +301,6 @@ export const Register = () => {
             </div>
           </div>
         </Form>
-        <p className="absolute mb-3 bottom-0 font-[500] text-l flex items-center gap-2 z-[400]">
-          <span className="text-yellow-600 font-bold">Communicatee.</span>{" "}
-          copyright &copy;
-          <span>{currentYear}</span> <span>{userLanguage}</span>
-        </p>
       </div>
     </>
   );

@@ -150,9 +150,10 @@ export const Map = (props) => {
     const marker = new mapboxgl.Marker({ color: "#a16207" });
 
     if (latitude && longitude && drivers && userSession)
-      drivers.map((location) =>
-        marker.setLngLat(location.location?.coordinates).addTo(map)
-      );
+      if (drivers)
+        drivers.map((location) =>
+          marker.setLngLat(location.location?.coordinates).addTo(map)
+        );
   }, [longitude, latitude, drivers]);
 
   if (!longitude && latitude) {

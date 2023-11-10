@@ -3,6 +3,8 @@ import { InputGroup, Form, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import GoogleLogoImage from "../../../assets/google-logo.png";
+import FacebookLogoImage from "../../../assets/facebook-logo.png";
+import SpotifyLogoImage from "../../../assets/spotify-logo.png";
 import axios from "axios";
 
 export const Login = () => {
@@ -63,7 +65,7 @@ export const Login = () => {
   const handleLogIn = async (e) => {
     try {
       e.preventDefault();
-      const res = await fetch("/api/auth/signin_user", {
+      const res = await fetch("/api/v1/auth/signin_user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -112,6 +114,8 @@ export const Login = () => {
     }
   }, [token, helperToken, navigate]);
 
+  messageERROR && toastNotificationError(messageERROR)
+
   return (
     <>
       <div className="signup-container">
@@ -126,9 +130,6 @@ export const Login = () => {
                 Please provide you details
               </p>
             </div>
-            {messageERROR && (
-              <p className="text-red-500 mb-1">{messageERROR}</p>
-            )}
             <InputGroup as={Col} hasValidation className="mb-3">
               <InputGroup.Text id="basic-addon2" className="rounded-none">
                 <i className="fa-solid fa-envelope"></i>
@@ -184,30 +185,38 @@ export const Login = () => {
               <span className="text-sky-600">terms</span> and{" "}
               <span className="text-sky-600">conditions</span>
             </p>
-            <button
-              type="submit"
-              className="transition-all duration-700 ease-linear bg-yellow-600 hover:bg-yellow-700 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg"
-            >
-              <i className="fa-solid fa-envelope text-sm"></i>
-              <span className="text-md">Continue with email</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="submit"
+                className="w-full transition-all duration-700 ease-linear bg-yellow-600 hover:bg-yellow-700 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg"
+              >
+                <i className="fa-solid fa-envelope text-sm"></i>
+                <span className="text-[0.90rem]">Continue with email</span>
+              </button>
 
-            <Link
-              to="/account/helper_login"
-              className="transition-all duration-700 ease-linear bg-violet-600 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-violet-700"
-            >
-              <i className="fa-solid fa-car text-sm"></i>
-              <span className="text-md">Continue as a helper</span>
-            </Link>
-            <div className="mt-2">
-              <div className="transition-all duration-700 ease-linear flex items-center justify-center gap-1 border p-2 mb-2   hover:cursor-pointer rounded-lg hover:bg-gray-200">
-                <img src={GoogleLogoImage} alt="google logo" className="w-5" />
-                <a
-                  onClick={handleGoogleLogin}
-                  className="text-md hover:text-gray-950"
-                >
-                  Continue with google
-                </a>
+              <Link
+                to="/account/helper_login"
+                className="w-full transition-all duration-700 ease-linear bg-violet-600 text-white mt-1 flex items-center justify-center  gap-2 border p-2 mb-2 hover:cursor-pointer rounded-lg hover:bg-violet-700"
+              >
+                <i className="fa-solid fa-car text-sm"></i>
+                <span className="text-[0.90rem]">Continue as a helper</span>
+              </Link>
+            </div>
+            <div className="flex gap-1">
+              <div className="mt-0 w-full">
+                <div className="w-full transition-all duration-700 ease-linear flex items-center justify-center gap-1 border p-2 mb-2   hover:cursor-pointer rounded-lg hover:bg-gray-200">
+                  <img
+                    src={GoogleLogoImage}
+                    alt="google logo"
+                    className="w-4"
+                  />
+                  <a
+                    onClick={handleGoogleLogin}
+                    className="text-[0.90rem] hover:text-gray-950"
+                  >
+                    Continue with Google
+                  </a>
+                </div>
               </div>
             </div>
             <div className="flex items-center justify-center gap-1 p-2 mb-2">
@@ -221,11 +230,6 @@ export const Login = () => {
             </div>
           </div>
         </Form>
-        <p className="absolute mb-3 bottom-0 font-[500] text-l flex items-center gap-2 z-[400]">
-          <span className="text-yellow-600 font-bold">Communicatee.</span>{" "}
-          copyright &copy;
-          <span>{currentYear}</span> <span>{userLanguage}</span>
-        </p>
       </div>
     </>
   );

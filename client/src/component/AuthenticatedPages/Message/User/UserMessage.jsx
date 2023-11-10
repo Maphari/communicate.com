@@ -68,6 +68,36 @@ export class UserMessage extends Component {
               All your messages will be availabe here
             </p>
           </section>
+          <section className="mt-3 mr-4">
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="bg-[#1f1f1f] flex items-center rounded-lg"
+            >
+              <i className="fa-solid fa-search ml-3"></i>
+              <input
+                type="text"
+                placeholder="Search for messages"
+                className="bg-[#1f1f1f] flex-1 p-2 rounded-r-lg outline-none placeholder:opacity-60 placeholder:font-normal"
+              />
+            </form>
+            <section className="mt-4">
+              <div className="flex items-center gap-2 w-full transition-all duration-1000 ease-linear p-2 rounded-xl hover:bg-[#1f1f1f]">
+                <header className="bg-yellow-500 text-white flex items-center justify-center h-[3rem] w-[3.5rem] rounded-full">
+                  <i className="fa-solid fa-user text-xl"></i>
+                </header>
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex-1">
+                    <h4 className="mb-1">username</h4>
+                    <p className="opacity-30 text-sm">message</p>
+                  </div>
+                  <div>
+                    <p className="opacity-30">15:00</p>
+                    <p className="opacity-30"><i className="fa-solid fa-paper-plane text-sm"></i></p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </section>
         </main>
       </>
     );
